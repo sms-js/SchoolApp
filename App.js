@@ -1,32 +1,11 @@
-import React,{useState, Component} from 'react';
-import { StyleSheet, Text, View ,TextInput,Button, CheckBox, TouchableOpacity} from 'react-native';
-import LoginNavigator from './Navigation/LoginNavigator';
-import Login from './Screens/Login';
+import React, { Component } from "react";
+import Navigator from "./Navigation";
 
-export default class App extends Component{
-  constructor(){
+export default class App extends Component {
+  constructor() {
     super();
   }
-  render(){
-    return (
-      <LoginNavigator/>
-    );
+  render() {
+    return <Navigator />;
   }
 }
-
-const styles = StyleSheet.create({
-  view :{
-
-  },
-  textinput :{
-    borderColor:'lightblue',
-    borderWidth: 1,
-    padding: 5,
-    borderRadius: 0
-  },
-  button: {
-  
-  }
-});
-
-
