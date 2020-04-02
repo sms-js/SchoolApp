@@ -21,7 +21,7 @@ export default function Login(props) {
 
   const loginhandler = () => {
     fetchLogin(em_un, pw)
-      .then(res => {})
+      .then(res => {alert(res)})
       .catch(error => {});
   };
 
