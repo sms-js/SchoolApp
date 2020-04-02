@@ -1,10 +1,16 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, ScrollView, Button, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  ScrollView,
+  Button,
+  TouchableOpacity
+} from "react-native";
 
 export default function Terms(props) {
   const [terms, set_terms] = useState("");
 
-  fetch("http://192.168.1.5/school/app/api/TermsController.php", {
+  fetch("http://192.168.1.7/school/app/api/TermsController.php", {
     method: "post",
     header: {
       Accept: "application/json",
