@@ -1,22 +1,21 @@
-import {createStackNavigator} from 'react-navigation-stack';
-import {createAppContainer} from 'react-navigation';
+import { createStackNavigator } from "react-navigation-stack";
+import { createAppContainer } from "react-navigation";
 //import Login from './Screens/Login';
-import App from '../App';
-import Terms from '../Screens/Terms';
-import Login from '../Screens/Login';
-import RegisterTeacher from '../Screens/RegisterTeacher';
-import RegisterStudent from '../Screens/RegisterStudent';
-import RegisterParent from '../Screens/RegisterParent';
+import App from "../App";
+import Terms from "../Screens/Terms";
+import Login from "../Screens/Login";
+import RegisterTeacher from "../Screens/RegisterTeacher";
+import RegisterStudent from "../Screens/RegisterStudent";
+import RegisterParent from "../Screens/RegisterParent";
 //import RestorePassword from '../Screens/RestorePassword';
 
-const login_navigator=createStackNavigator({
-    //app: App,
-    Login: Login,
-    Terms: Terms,
-    RegisterTeacher: RegisterTeacher,
-    RegisterStudent: RegisterStudent,
-    RegisterParent: RegisterParent
-    //Restore: RestorePassword
+const login_navigator = createStackNavigator({
+  Login,
+  Terms,
+  RegisterTeacher,
+  RegisterStudent,
+  RegisterParent
+  //Restore: RestorePassword
 });
 export default createAppContainer(login_navigator);
 //export default login_navigator;
