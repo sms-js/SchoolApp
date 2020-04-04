@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, ScrollView, Button, TouchableOpacity } from "react-native";
-import { fetchTerms } from "../api/terms";
+import { fetchTerms } from "../api/fetchTerms";
 
 export default function Terms(props) {
   const [terms, set_terms] = useState("");
