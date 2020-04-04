@@ -8,7 +8,7 @@ export default function Login(props) {
   const [rememberMe, setRememberMe] = useState(false);
 
   const userNameHandler = userName => {
-    setUserName(userName);console.log('')
+    setUserName(userName);
   };
 
   const passwordHandler = password => {
