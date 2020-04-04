@@ -13,6 +13,17 @@ import Dialog from "react-native-dialog";
 //var values=[{id: 1,value: 'Student1'},{id: 2,value: 'Student2'}];
 
 export default function RegisterParent(props) {
+  const [un, set_un] = useState("");
+  const [eml, set_eml] = useState("");
+  const [pw, set_pw] = useState("");
+  const [fn, set_fn] = useState("");
+  const [bd, set_bd] = useState("");
+  const [g, set_g] = useState("");
+  const [adr, set_adr] = useState("");
+  const [pn, set_pn] = useState("");
+  const [mn, set_mn] = useState("");
+  const [p, set_p] = useState("");
+  const [of, set_of] = useState("");
 
 
   const [userName, setUserName] = useState('');
@@ -301,61 +312,62 @@ export default function RegisterParent(props) {
               </View>
 
             </View>
+          </View>
 
+          <View style={{
+            margin: 10,
+            borderColor: 'lightblue',
+            borderWidth: 1,
+          }}>
+            <FlatList
+              data={children}
+              renderItem={
+                ({ item }) =>
+                  (
+                    <TouchableOpacity
+                      onPress={() => {
+                        studentPressHandler(item.id);
+                      }}
+                    >
+                      <Text>{item.value}</Text>
+                    </TouchableOpacity>
+                  )
+              }
+              keyExtractor={item => item.value}
+            />
+          </View>
+
+          <View style={{
+            width: '100%',
+            padding: 10,
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+
+            <View style={{ width: '15%' }} />
             <View style={{
-              margin: 10,
-              borderColor: 'lightblue',
-              borderWidth: 1,
+              width: '70%'
             }}>
-              <FlatList
-                data={children}
-                renderItem={
-                  ({ item }) =>
-                    (
-                      <TouchableOpacity
-                        onPress={() => {
-                          studentPressHandler(item.id);
-                        }}
-                      >
-                        <Text>{item.value}</Text>
-                      </TouchableOpacity>
-                    )
-                }
-                keyExtractor={item => item.value}
-              />
+              <Button title="Remove All" onPress={studentRemoveAllHandler} />
             </View>
-
-            <View style={{
-              width: '100%',
-              padding: 10,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-
-              <View style={{ width: '15%' }} />
-              <View style={{
-                width: '70%'
-              }}>
-                <Button title="Remove All" onPress={studentRemoveAllHandler} />
-              </View>
-              <View style={{ width: '10%' }} />
-
-
-            </View>
+            <View style={{ width: '10%' }} />
 
 
           </View>
-          <Text style={{ margin: 0 }} />
-          <Button title="Register" onPress={registerhandler} />
-          <Text style={{ margin: 10 }} />
-
 
 
         </View>
+        <Text style={{ margin: 0 }} />
+        <Button title="Register" onPress={registerhandler} />
+        <Text style={{ margin: 10 }} />
 
 
 
-      </ScrollView>
+
+
+
+
+      </ScrollView >
       <View>
         <Dialog.Container visible={dialogVisible}>
           <Dialog.Title>Parent Relation</Dialog.Title>
