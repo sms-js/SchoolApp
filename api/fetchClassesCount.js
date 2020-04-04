@@ -1,22 +1,20 @@
 import { BASE_URL } from "../utils/config";
 
-export async function fetchLogin(userName, password) {
+export async function fetchClassesCount() {
   try {
-    const response = await fetch(BASE_URL + "/Usercontroller.php", {
+    const response = await fetch(BASE_URL + "/ClassesController.php", {
       method: "post",
       header: {
         Accept: "application/json",
         "Content-type": "application/json"
       },
       body: JSON.stringify({
-        view: "login",
-        userName: userName,
-        password: password
+        view: "count"
       })
     });
     //if (response.ok) {
       const responseJson = await response.json();
-      return responseJson["status"];
+      return parseInt(responseJson["classes count"][0]["count(*)"]);
     /*}else{
       return('error !');
     }*/

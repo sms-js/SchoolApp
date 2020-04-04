@@ -3,67 +3,67 @@ import { StyleSheet, Text,CheckBox, View ,ScrollView,TextInput,Button,Alert,Pick
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import {Dropdown} from 'react-native-material-dropdown';
 import ClassesPicker from '../Components/ClassesPicker';
+import {registerStudent} from '../api/registerStudent'
 
 
 export default function RegisterStudent(props) {
 
   
-  const [un,set_un]=useState('');
-  const [eml,set_eml]=useState('');
-  const [pw,set_pw]=useState('');
-  const [fn,set_fn]=useState('');
-  const [bd,set_bd]=useState('');
-  const [g,set_g]=useState('');
-  const [adr,set_adr]=useState('');
-  const [pn,set_pn]=useState('');
-  const [mn,set_mn]=useState('');
-  const [ri,set_ri]=useState('');
-  const [cl,set_cl]=useState('');
+  const [userName,setUserName]=useState('');
+  const [email,setEmail]=useState('');
+  const [password,setPassword]=useState('');
+  const [fullName,setFullName]=useState('');
+  const [birthDay,setBirthDay]=useState('');
+  const [gender,setGender]=useState();
+  const [adress,setAdress]=useState('');
+  const [phoneNumber,setPhoneNumber]=useState('');
+  const [mobileNumber,setMobileNumber]=useState('');
+  const [rollingId,setRollingId]=useState('');
+  const [classId,setClassId]=useState('');
   
   
-  const un_handler = (un) => {
-    set_un(un);
+  const userNameHandler = (userName) => {
+    setUserName(userName);
     };
 
-    const eml_handler = (eml) => {
-        set_eml(eml);
+    const emailHandler = (email) => {
+        setEmail(email);
         };
 
-        const pw_handler = (pw) => {
-            set_pw(pw);
+        const passwordHandler = (password) => {
+            setPassword(password);
             };
 
-            const fn_handler = (fn) => {
-                set_fn(fn);
+            const fullNameHandler = (fullName) => {
+                setFullName(fullName);
                 };
 
-                const bd_handler = (bd) => {
-                    set_bd(bd);
+                const birthDayHandler = (birthDay) => {
+                    setBirthDay(birthDay);
                     };
 
-                    const g_handler = (g) => {
-                      set_g(g);
-                      console.log(g);
+                    const genderHandler = (gender) => {
+                      setGender(gender);
                       };
 
-                        const adr_handler = (adr) => {
-                            set_adr(adr);
+                        const adressHandler = (adress) => {
+                            setAdress(adress);
                             };
 
-                            const pn_handler = (pn) => {
-                                set_pn(pn);
+                            const phoneNumberHandler = (phoneNumber) => {
+                                setPhoneNumber(phoneNumber);
                                 };
 
-                                const mn_handler = (mn) => {
-                                    set_mn(mn);
-                                    };
+                                const mobileNumberHandler = (mobileNumber) => {
+                                    setMobileNumber(mobileNumber);
+                                    }; 
 
-                                    const ri_handler = (ri) => {
-                                        set_ri(ri);
+                                    const rollingIdHandler = (rollingId) => {
+                                        setRollingId(rollingId);
                                         };
 
-                                        const cl_handler = (cl) => {
-                                            set_cl(cl);
+                                        const classIdHandler = (classId) => {
+                                            setClassId(classId);
                                             };
 
                       
@@ -72,66 +72,29 @@ export default function RegisterStudent(props) {
               {label: 'Male', value: 'male' },
               {label: 'Female', value: 'female' }
             ];
-
             
-     
-  
 
-    const registerhandler = () => {
-      console.log(un);
-      console.log(eml);
-      console.log(pw);
-      console.log(fn);
-      console.log(bd);
-      console.log(ri);
-      console.log(g);
-      console.log(adr);
-      console.log(pn);
-      console.log(mn);
-      console.log(cl);
-      
-      fetch('http://192.168.1.5/school/app/api/StudentRegistrationController.php',{
-      method: 'post',
-      header: {
-        'Accept': 'application/json',
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify({
-      view: 'register_student',
-      un: un,
-      eml: eml,
-      pw: pw,
-      fn :fn,
-      ri: ri,
-      bd: bd,
-      g: g,
-      adr: adr,
-      pn: pn,
-      mn: mn,
-      cl: cl
-      })
-      }).then((response)=> response.json()).then((responseJson)=>{
-        if(responseJson["status"]==='New record created successfully'){
-          Alert.alert(
-            'Status',
-            'Registered Successfully',
-            [
-              //{text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
-              //{text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-              {text: 'OK', onPress: () => console.log(props.navigation.navigate('Login'))},
-            ],
-            { cancelable: false }
-          )
-        }else{
-          console.log(responseJson["status"]);
-        }
-      
-      
-      }).catch((error)=>{
-        alert(error/*'Error !'*/);
-        console.log(error);
-      })
-      };
+            const registerhandler = () => {
+              registerStudent(userName,email,password,fullName,birthDay, rollingId, classId,gender,adress,phoneNumber,mobileNumber)
+              .then(res => {
+                if(res==='New record created successfully'){
+                  Alert.alert(
+                    'Status',
+                    'Registered Successfully',
+                    [
+                      //{text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+                      //{text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                      {text: 'OK', onPress: () => props.navigation.navigate('Login')},
+                    ],
+                    { cancelable: false }
+                  )
+                }else{
+                  console.log(res);
+                }
+              })
+              .catch(error => {});
+              
+              };
 
   return (
     <ScrollView style={{
@@ -139,16 +102,16 @@ export default function RegisterStudent(props) {
       height:'100%'
     }}>
         <View style={{alignContent:'center'}}>
-        <TextInput placeholder="Username" style={styles.textinput} onChangeText={un_handler}/>
-        <TextInput placeholder="Email" style={styles.textinput} onChangeText={eml_handler}/>
-        <TextInput placeholder="Password" style={styles.textinput} onChangeText={pw_handler}/>
-        <TextInput placeholder="Full name" style={styles.textinput} onChangeText={fn_handler}/>
-        <TextInput placeholder="Birthday" style={styles.textinput} onChangeText={bd_handler}/>
+        <TextInput placeholder="Username" style={styles.textinput} onChangeText={userNameHandler}/>
+        <TextInput placeholder="Email" style={styles.textinput} onChangeText={emailHandler}/>
+        <TextInput placeholder="Password" style={styles.textinput} onChangeText={passwordHandler}/>
+        <TextInput placeholder="Full name" style={styles.textinput} onChangeText={fullNameHandler}/>
+        <TextInput placeholder="Birthday" style={styles.textinput} onChangeText={birthDayHandler}/>
         
-<TextInput placeholder="Rolling ID" style={styles.textinput} onChangeText={ri_handler}/>
+<TextInput placeholder="Rolling ID" style={styles.textinput} onChangeText={rollingIdHandler}/>
 
 <ClassesPicker set_class={(value)=>{
-  cl_handler(value);
+  classIdHandler(value);
   }}/>
 
         <View style={{borderColor: 'lightblue',borderWidth:1,margin:10}}>
@@ -159,15 +122,14 @@ export default function RegisterStudent(props) {
                 radio_props={radio_props}
                 initial={0}
                 onPress={(value) => {
-                  set_g(value);
-                  console.log(g);
+                  genderHandler(value);
                 }}
               />
             </View>
 
-       <TextInput placeholder="Adresse" style={styles.textinput} onChangeText={adr_handler}/>
-       <TextInput placeholder="Phone number" style={styles.textinput} onChangeText={pn_handler}/>
-       <TextInput placeholder="Mobile number" style={styles.textinput} onChangeText={mn_handler}/>
+       <TextInput placeholder="Adresse" style={styles.textinput} onChangeText={adressHandler}/>
+       <TextInput placeholder="Phone number" style={styles.textinput} onChangeText={phoneNumberHandler}/>
+       <TextInput placeholder="Mobile number" style={styles.textinput} onChangeText={mobileNumberHandler}/>
        <Text style={{margin: 0}}/>
       <Button title="Register" onPress={registerhandler}/>
       <Text style={{margin: 10}}/>

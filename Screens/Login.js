@@ -3,24 +3,24 @@ import { StyleSheet, Text, View, TextInput, Button, CheckBox, TouchableOpacity }
 import { fetchLogin } from "../api/login";
 
 export default function Login(props) {
-  const [em_un, set_em_un] = useState("");
-  const [pw, set_pw] = useState("");
-  const [ck, set_ck] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
 
-  const em_un_handler = em_un => {
-    set_em_un(em_un);
+  const userNameHandler = userName => {
+    setUserName(userName);
   };
 
-  const pw_handler = pw => {
-    set_pw(pw);
+  const passwordHandler = password => {
+    setPassword(password);
   };
 
-  const rm_handler = () => {
-    set_ck(!ck);
+  const RememberMeHandler = () => {
+    setRememberMe(!rememberMe);
   };
 
   const loginhandler = () => {
-    fetchLogin(em_un, pw)
+    fetchLogin(userName, password)
       .then(res => {alert(res)})
       .catch(error => {});
   };
@@ -35,12 +35,12 @@ export default function Login(props) {
       }}
     >
       <View style={styles.view}>
-        <TextInput placeholder="Email / Username" style={styles.textinput} onChangeText={em_un_handler} />
+        <TextInput placeholder="Email / Username" style={styles.textinput} onChangeText={userNameHandler} />
 
-        <TextInput placeholder="Password" style={styles.textinput} onChangeText={pw_handler} secureTextEntry={true} />
+        <TextInput placeholder="Password" style={styles.textinput} onChangeText={passwordHandler} secureTextEntry={true} />
 
         <View style={{ flexDirection: "row" }}>
-          <CheckBox title="remember_me" value={ck} onValueChange={rm_handler} />
+          <CheckBox title="remember_me" value={rememberMe} onValueChange={RememberMeHandler} />
           <Text style={{ textAlignVertical: "center" }}> Remember me</Text>
         </View>
         <Text style={{ margin: 0 }} />
