@@ -6,6 +6,7 @@ import ClassesPicker from '../Components/ClassesPicker';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import SwipeView from 'react-native-swipeview';
 import { fetchChild } from '../api/fetchChild';
+//import { relationModal } from '../Components/relationModal';
 //import Prompt from 'react-native-prompt';
 import Dialog from "react-native-dialog";
 
@@ -13,17 +14,6 @@ import Dialog from "react-native-dialog";
 //var values=[{id: 1,value: 'Student1'},{id: 2,value: 'Student2'}];
 
 export default function RegisterParent(props) {
-  const [un, set_un] = useState("");
-  const [eml, set_eml] = useState("");
-  const [pw, set_pw] = useState("");
-  const [fn, set_fn] = useState("");
-  const [bd, set_bd] = useState("");
-  const [g, set_g] = useState("");
-  const [adr, set_adr] = useState("");
-  const [pn, set_pn] = useState("");
-  const [mn, set_mn] = useState("");
-  const [p, set_p] = useState("");
-  const [of, set_of] = useState("");
 
 
   const [userName, setUserName] = useState('');
@@ -40,6 +30,8 @@ export default function RegisterParent(props) {
   const [SearchedUserName, setSearchedUserName] = useState('');
   const [dialogVisible, setDialogVisible] = useState(false);
   const [parentRelation, setParentRelation] = useState([]);
+  const [infoRelatio, setInfoRelation] = useState([]);
+  const [promptRelation, setPromptRelation] = useState('');
   const [children, setChildren] = useState([]);
 
 
@@ -95,8 +87,8 @@ export default function RegisterParent(props) {
     setDialogVisible(!dialogVisible);
   };
 
-  const parentRelationHandler = (parentRelation) => {
-    setParentRelation(parentRelation);
+  const promptRelationHandler = (promptRelation) => {
+    setPromptRelation(promptRelation);
   };
 
   const studentPressHandler = (id) => {
@@ -104,6 +96,24 @@ export default function RegisterParent(props) {
       return prevChildren.filter(child => child.id != id);
     });
   }
+
+  /*const infoPressHandler = (id) => {
+    setInfoRelation((prevInfoRelation) => {
+      return prevInfoRelation.filter(child => child.id != id);
+    });
+  }
+
+  const addInfoPressHandler = (id, value, relation) => {
+    setInfoRelation((prevChildren) => {
+      return [...prevChildren,
+      {
+        id: id,
+        value: value,
+        relation: relation
+      }
+      ]
+    });
+  }*/
 
   const studentRemoveAllHandler = () => {
     setChildren((prevChildren) => {
@@ -122,14 +132,9 @@ export default function RegisterParent(props) {
     });
   }
 
-  const addParentRelationHandler = (id, relation) => {
+  const addParentRelationHandler = (relation) => {
     setParentRelation((prevRelations) => {
-      return [...prevRelations,
-      {
-        id: id,
-        relation: relation
-      }
-      ]
+      return [...prevRelations, relation]
     });
   }
 
@@ -174,7 +179,27 @@ export default function RegisterParent(props) {
           [
             //{text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
             //{text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-            { text: 'OK', onPress: () => dialogVisibleHandler },
+            {
+              text: 'OK', onPress: () => {
+                //dialogVisibleHandler();
+                Alert.prompt(
+                  "Enter password",
+                  "Enter your password to claim your $1.5B in lottery winnings",
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel"
+                    },
+                    {
+                      text: "OK",
+                      onPress: password => console.log("OK Pressed, password: " + password)
+                    }
+                  ],
+                  "secure-text"
+                );
+              }
+            },
           ],
           { cancelable: false }
         )
@@ -211,6 +236,9 @@ export default function RegisterParent(props) {
       parentRelationHandler(value);
       dialogVisibleHandler();
     } }/>
+  */
+  /*
+  
   */
 
   return (
@@ -288,9 +316,8 @@ export default function RegisterParent(props) {
                             //{text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
                             {
                               text: 'OK', onPress: () => {
-                                setDialogVisible(true);
-                                //dialogVisibleHandler();
-                                //addStudentPressHandler(res[0], res[1]);
+                                dialogVisibleHandler();
+                                addStudentPressHandler(res[0], res[1]);
                               }
                             },
                           ],
@@ -368,19 +395,19 @@ export default function RegisterParent(props) {
 
 
       </ScrollView >
-      <View>
-        <Dialog.Container visible={dialogVisible}>
-          <Dialog.Title>Parent Relation</Dialog.Title>
-          <Dialog.Description>
-            Enter your relation to student
-          </Dialog.Description>
-          <Dialog.Button label="Cancel" onPress={dialogVisibleHandler} />
-          <Dialog.Button label="Submit" onPress={() => {
-            parentRelationHandler();
-            dialogVisibleHandler();
-          }} />
-        </Dialog.Container>
-      </View>
+      <Dialog.Container visible={dialogVisible}>
+        <Dialog.Title>Parent Relation</Dialog.Title>
+        <Dialog.Description>
+          Enter your relation to student
+           </Dialog.Description>
+        <Dialog.Input label="Relation" onChangeText={(text) => { promptRelationHandler(text) }} />
+        <Dialog.Button label="Cancel" onPress={dialogVisibleHandler} />
+        <Dialog.Button label="Submit" onPress={() => {
+          promptRelationHandler(promptRelation);
+          alert(promptRelation);
+          dialogVisibleHandler();
+        }} />
+      </Dialog.Container>
     </>
   );
 
