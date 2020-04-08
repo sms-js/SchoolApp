@@ -8,90 +8,89 @@ import {
   TextInput,
   Button,
   Alert,
-  Picker
+  Picker,
 } from "react-native";
 import RadioForm, {
   RadioButton,
   RadioButtonInput,
-  RadioButtonLabel
+  RadioButtonLabel,
 } from "react-native-simple-radio-button";
-import { Dropdown } from "react-native-material-dropdown";
 import ClassesPicker from "../Components/ClassesPicker";
 
 export default function RegisterStudent(props) {
-  const [un, set_un] = useState("");
-  const [eml, set_eml] = useState("");
-  const [pw, set_pw] = useState("");
-  const [fn, set_fn] = useState("");
-  const [bd, set_bd] = useState("");
-  const [g, set_g] = useState("");
-  const [adr, set_adr] = useState("");
-  const [pn, set_pn] = useState("");
-  const [mn, set_mn] = useState("");
-  const [ri, set_ri] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [fullname, setFullname] = useState("");
+  const [birthday, setBirthday] = useState("");
+  const [gender, setGender] = useState("");
+  const [adresse, setAdresse] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [rolingID, setRolingID] = useState("");
   const [cl, set_cl] = useState("");
 
-  const un_handler = un => {
-    set_un(un);
+  const un_handler = (username) => {
+    setUsername(username);
   };
 
-  const eml_handler = eml => {
-    set_eml(eml);
+  const eml_handler = (email) => {
+    setEmail(email);
   };
 
-  const pw_handler = pw => {
-    set_pw(pw);
+  const pw_handler = (password) => {
+    setPassword(password);
   };
 
-  const fn_handler = fn => {
-    set_fn(fn);
+  const fn_handler = (fullname) => {
+    setFullname(fullname);
   };
 
-  const bd_handler = bd => {
-    set_bd(bd);
+  const bd_handler = (birthday) => {
+    setBirthday(birthday);
   };
 
-  const g_handler = g => {
-    set_g(g);
-    console.log(g);
+  const g_handler = (gender) => {
+    setGender(gender);
+    console.log(gender);
   };
 
-  const adr_handler = adr => {
-    set_adr(adr);
+  const adr_handler = (adresse) => {
+    setAdresse(adresse);
   };
 
-  const pn_handler = pn => {
-    set_pn(pn);
+  const pn_handler = (phoneNumber) => {
+    setPhoneNumber(phoneNumber);
   };
 
-  const mn_handler = mn => {
-    set_mn(mn);
+  const mn_handler = (mobileNumber) => {
+    setMobileNumber(mobileNumber);
   };
 
-  const ri_handler = ri => {
-    set_ri(ri);
+  const ri_handler = (rolingID) => {
+    setRolingID(rolingID);
   };
 
-  const cl_handler = cl => {
+  const cl_handler = (cl) => {
     set_cl(cl);
   };
 
   const radio_props = [
     { label: "Male", value: "male" },
-    { label: "Female", value: "female" }
+    { label: "Female", value: "female" },
   ];
 
   const registerhandler = () => {
-    console.log(un);
-    console.log(eml);
-    console.log(pw);
-    console.log(fn);
-    console.log(bd);
-    console.log(ri);
-    console.log(g);
-    console.log(adr);
-    console.log(pn);
-    console.log(mn);
+    console.log(username);
+    console.log(email);
+    console.log(password);
+    console.log(fullname);
+    console.log(birthday);
+    console.log(rolingID);
+    console.log(gender);
+    console.log(adresse);
+    console.log(phoneNumber);
+    console.log(mobileNumber);
     console.log(cl);
 
     fetch(
@@ -100,26 +99,26 @@ export default function RegisterStudent(props) {
         method: "post",
         header: {
           Accept: "application/json",
-          "Content-type": "application/json"
+          "Content-type": "application/json",
         },
         body: JSON.stringify({
           view: "register_student",
-          un: un,
-          eml: eml,
-          pw: pw,
-          fn: fn,
-          ri: ri,
-          bd: bd,
-          g: g,
-          adr: adr,
-          pn: pn,
-          mn: mn,
-          cl: cl
-        })
+          un: username,
+          eml: email,
+          pw: password,
+          fn: fullname,
+          ri: rolingID,
+          bd: birthday,
+          g: gender,
+          adr: adresse,
+          pn: phoneNumber,
+          mn: mobileNumber,
+          cl: cl,
+        }),
       }
     )
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         if (responseJson["status"] === "New record created successfully") {
           Alert.alert(
             "Status",
@@ -129,16 +128,17 @@ export default function RegisterStudent(props) {
               //{text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
               {
                 text: "OK",
-                onPress: () => console.log(props.navigation.navigate("Login"))
-              }
+                onPress: () => console.log(props.navigation.navigate("Login")),
+              },
             ],
             { cancelable: false }
           );
         } else {
           console.log(responseJson["status"]);
+          alert("je suis la !");
         }
       })
-      .catch(error => {
+      .catch((error) => {
         alert(error /*'Error !'*/);
         console.log(error);
       });
@@ -148,7 +148,7 @@ export default function RegisterStudent(props) {
     <ScrollView
       style={{
         padding: 10,
-        height: "100%"
+        height: "100%",
       }}
     >
       <View style={{ alignContent: "center" }}>
@@ -185,7 +185,7 @@ export default function RegisterStudent(props) {
         />
 
         <ClassesPicker
-          set_class={value => {
+          set_class={(value) => {
             cl_handler(value);
           }}
         />
@@ -197,9 +197,9 @@ export default function RegisterStudent(props) {
           <RadioForm
             radio_props={radio_props}
             initial={0}
-            onPress={value => {
-              set_g(value);
-              console.log(g);
+            onPress={(value) => {
+              setGender(value);
+              console.log(gender);
             }}
           />
         </View>
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 5,
     borderRadius: 0,
-    margin: 10
+    margin: 10,
   },
-  button: {}
+  button: {},
 });

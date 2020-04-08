@@ -13,7 +13,8 @@ const LoginNavigator = createStackNavigator({
   Terms,
   RegisterTeacher,
   RegisterStudent,
-  RegisterParent
+  RegisterParent,
   //RestorePassword
 });
+
 export default createAppContainer(LoginNavigator);

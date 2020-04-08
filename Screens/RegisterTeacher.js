@@ -7,101 +7,101 @@ import {
   ScrollView,
   TextInput,
   Button,
-  Alert
+  Alert,
 } from "react-native";
 import RadioForm, {
   RadioButton,
   RadioButtonInput,
-  RadioButtonLabel
+  RadioButtonLabel,
 } from "react-native-simple-radio-button";
 //import GenderRadio from '../Components/GenderRadio';
 export default function RegisterTeacher(props) {
-  const [un, set_un] = useState("");
-  const [eml, set_eml] = useState("");
-  const [pw, set_pw] = useState("");
-  const [fn, set_fn] = useState("");
-  const [bd, set_bd] = useState("");
-  const [g, set_g] = useState();
-  const [adr, set_adr] = useState("");
-  const [pn, set_pn] = useState("");
-  const [mn, set_mn] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [fullname, setFullname] = useState("");
+  const [birthday, setBirthday] = useState("");
+  const [gender, setGender] = useState();
+  const [adresse, setAdresse] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
 
-  const un_handler = un => {
-    set_un(un);
+  const un_handler = (un) => {
+    setUsername(un);
   };
 
-  const eml_handler = eml => {
-    set_eml(eml);
+  const eml_handler = (eml) => {
+    setEmail(eml);
   };
 
-  const pw_handler = pw => {
-    set_pw(pw);
+  const pw_handler = (pw) => {
+    setPassword(pw);
   };
 
-  const fn_handler = fn => {
-    set_fn(fn);
+  const fn_handler = (fn) => {
+    setFullname(fn);
   };
 
-  const bd_handler = bd => {
-    set_bd(bd);
+  const bd_handler = (bd) => {
+    setBirthday(bd);
   };
 
-  const g_handler = g => {
-    set_g(g);
+  const g_handler = (g) => {
+    setGender(g);
     console.log(g);
   };
 
-  const adr_handler = adr => {
-    set_adr(adr);
+  const adr_handler = (adr) => {
+    setAdresse(adr);
   };
 
-  const pn_handler = pn => {
-    set_pn(pn);
+  const pn_handler = (pn) => {
+    setPhoneNumber(pn);
   };
 
-  const mn_handler = mn => {
-    set_mn(mn);
+  const mn_handler = (mn) => {
+    setMobileNumber(mn);
   };
 
   const radio_props = [
     { label: "Male", value: "male" },
-    { label: "Female", value: "female" }
+    { label: "Female", value: "female" },
   ];
 
   const registerhandler = () => {
-    console.log(un);
-    console.log(eml);
-    console.log(pw);
-    console.log(fn);
-    console.log(bd);
-    console.log(g);
-    console.log(adr);
-    console.log(pn);
-    console.log(mn);
+    console.log(username);
+    console.log(email);
+    console.log(password);
+    console.log(fullname);
+    console.log(birthday);
+    console.log(gender);
+    console.log(adresse);
+    console.log(phoneNumber);
+    console.log(mobileNumber);
     fetch(
       "http://192.168.1.7/school/app/api/TeacherRegistrationController.php",
       {
         method: "post",
         header: {
           Accept: "application/json",
-          "Content-type": "application/json"
+          "Content-type": "application/json",
         },
         body: JSON.stringify({
           view: "register_teacher",
-          un: un,
-          eml: eml,
-          pw: pw,
-          fn: fn,
-          bd: bd,
-          g: g,
-          adr: adr,
-          pn: pn,
-          mn: mn
-        })
+          un: username,
+          eml: email,
+          pw: password,
+          fn: fullname,
+          bd: birthday,
+          g: gender,
+          adr: adresse,
+          pn: phoneNumber,
+          mn: mobileNumber,
+        }),
       }
     )
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         if (responseJson["status"] === "New record created successfully") {
           Alert.alert(
             "Status",
@@ -111,8 +111,8 @@ export default function RegisterTeacher(props) {
               //{text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
               {
                 text: "OK",
-                onPress: () => console.log(props.navigation.navigate("Login"))
-              }
+                onPress: () => console.log(props.navigation.navigate("Login")),
+              },
             ],
             { cancelable: false }
           );
@@ -120,7 +120,7 @@ export default function RegisterTeacher(props) {
           console.log(responseJson["status"]);
         }
       })
-      .catch(error => {
+      .catch((error) => {
         alert("Error !");
         console.log(error);
       });
@@ -130,7 +130,7 @@ export default function RegisterTeacher(props) {
     <ScrollView
       style={{
         padding: 10,
-        height: "100%"
+        height: "100%",
       }}
     >
       <View style={{ alignContent: "center" }}>
@@ -167,9 +167,9 @@ export default function RegisterTeacher(props) {
           <RadioForm
             radio_props={radio_props}
             initial={"male"}
-            onPress={value => {
-              set_g(value);
-              console.log(g);
+            onPress={(value) => {
+              setGender(value);
+              console.log(gender);
             }}
           />
         </View>
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 5,
     borderRadius: 0,
-    margin: 10
+    margin: 10,
   },
-  button: {}
+  button: {},
 });

@@ -8,12 +8,12 @@ import {
   TextInput,
   Button,
   Alert,
-  FlatList
+  FlatList,
 } from "react-native";
 import RadioForm, {
   RadioButton,
   RadioButtonInput,
-  RadioButtonLabel
+  RadioButtonLabel,
 } from "react-native-simple-radio-button";
 import { Dropdown } from "react-native-material-dropdown";
 import ClassesPicker from "../Components/ClassesPicker";
@@ -33,54 +33,54 @@ export default function RegisterParent(props) {
   const [p, set_p] = useState("");
   const [of, set_of] = useState("");
 
-  const un_handler = un => {
+  const un_handler = (un) => {
     set_un(un);
   };
 
-  const eml_handler = eml => {
+  const eml_handler = (eml) => {
     set_eml(eml);
   };
 
-  const pw_handler = pw => {
+  const pw_handler = (pw) => {
     set_pw(pw);
   };
 
-  const fn_handler = fn => {
+  const fn_handler = (fn) => {
     set_fn(fn);
   };
 
-  const bd_handler = bd => {
+  const bd_handler = (bd) => {
     set_bd(bd);
   };
 
-  const g_handler = g => {
+  const g_handler = (g) => {
     set_g(g);
     console.log(g);
   };
 
-  const adr_handler = adr => {
+  const adr_handler = (adr) => {
     set_adr(adr);
   };
 
-  const pn_handler = pn => {
+  const pn_handler = (pn) => {
     set_pn(pn);
   };
 
-  const mn_handler = mn => {
+  const mn_handler = (mn) => {
     set_mn(mn);
   };
 
-  const p_handler = p => {
+  const p_handler = (p) => {
     set_p(p);
   };
 
-  const of_handler = of => {
+  const of_handler = (of) => {
     set_of(of);
   };
 
   const radio_props = [
     { label: "Male", value: "male" },
-    { label: "Female", value: "female" }
+    { label: "Female", value: "female" },
   ];
 
   const registerhandler = () => {
@@ -102,7 +102,7 @@ export default function RegisterParent(props) {
         method: "post",
         header: {
           Accept: "application/json",
-          "Content-type": "application/json"
+          "Content-type": "application/json",
         },
         body: JSON.stringify({
           view: "register_student",
@@ -116,12 +116,12 @@ export default function RegisterParent(props) {
           adr: adr,
           pn: pn,
           mn: mn,
-          of: of
-        })
+          of: of,
+        }),
       }
     )
-      .then(response => response.json())
-      .then(responseJson => {
+      .then((response) => response.json())
+      .then((responseJson) => {
         if (responseJson["status"] === "New record created successfully") {
           Alert.alert(
             "Status",
@@ -131,8 +131,8 @@ export default function RegisterParent(props) {
               //{text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
               {
                 text: "OK",
-                onPress: () => console.log(props.navigation.navigate("Login"))
-              }
+                onPress: () => console.log(props.navigation.navigate("Login")),
+              },
             ],
             { cancelable: false }
           );
@@ -140,7 +140,7 @@ export default function RegisterParent(props) {
           console.log(responseJson["status"]);
         }
       })
-      .catch(error => {
+      .catch((error) => {
         alert(error /*'Error !'*/);
         console.log(error);
       });
@@ -176,7 +176,7 @@ export default function RegisterParent(props) {
     <ScrollView
       style={{
         padding: 15,
-        height: "100%"
+        height: "100%",
       }}
     >
       <View style={{ alignContent: "center" }}>
@@ -200,11 +200,23 @@ export default function RegisterParent(props) {
           style={styles.textinput}
           onChangeText={fn_handler}
         />
-        <TextInput
-          placeholder="Birthday"
-          style={styles.textinput}
-          onChangeText={bd_handler}
-        />
+        <View flexDirection="row">
+          <TextInput
+            placeholder="Day"
+            style={styles.textinput}
+            onChangeText={bd_handler}
+          />
+          <TextInput
+            placeholder="Mounth"
+            style={styles.textinput}
+            onChangeText={bd_handler}
+          />
+          <TextInput
+            placeholder="Yers"
+            style={styles.textinput}
+            onChangeText={bd_handler}
+          />
+        </View>
 
         <TextInput
           placeholder="Profession"
@@ -219,7 +231,7 @@ export default function RegisterParent(props) {
           <RadioForm
             radio_props={radio_props}
             initial={0}
-            onPress={value => {
+            onPress={(value) => {
               set_g(value);
               console.log(g);
             }}
@@ -246,12 +258,12 @@ export default function RegisterParent(props) {
           style={{
             margin: 10,
             borderColor: "lightblue",
-            borderWidth: 1
+            borderWidth: 1,
           }}
         >
           <View
             style={{
-              flexDirection: "row"
+              flexDirection: "row",
             }}
           >
             <TextInput
@@ -263,13 +275,13 @@ export default function RegisterParent(props) {
                 padding: 5,
                 borderColor: "lightblue",
                 borderWidth: 1,
-                alignSelf: "center"
+                alignSelf: "center",
               }}
             />
             <View
               style={{
                 width: "30%",
-                padding: 15
+                padding: 15,
               }}
             >
               <Button
@@ -285,7 +297,7 @@ export default function RegisterParent(props) {
             style={{
               margin: 10,
               borderColor: "lightblue",
-              borderWidth: 1
+              borderWidth: 1,
             }}
           >
             <FlatList
@@ -300,7 +312,7 @@ export default function RegisterParent(props) {
                   }}
                 />
               )}
-              keyExtractor={item => item.value}
+              keyExtractor={(item) => item.value}
             />
           </View>
 
@@ -309,13 +321,13 @@ export default function RegisterParent(props) {
               width: "100%",
               padding: 10,
               flexDirection: "row",
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <View style={{ width: "5%" }} />
             <View
               style={{
-                width: "40%"
+                width: "40%",
               }}
             >
               <Button title="Remove All" onPress={() => {}} />
@@ -323,7 +335,7 @@ export default function RegisterParent(props) {
             <View style={{ width: "10%" }} />
             <View
               style={{
-                width: "40%"
+                width: "40%",
               }}
             >
               <Button title="Remove" />
@@ -345,7 +357,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 5,
     borderRadius: 0,
-    margin: 10
+    margin: 10,
   },
-  button: {}
+  button: {},
 });
