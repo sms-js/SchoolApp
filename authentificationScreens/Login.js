@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TextInput, Button, CheckBox, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TextInput, Button, CheckBox, TouchableOpacity, Alert } from "react-native";
 import { fetchLogin } from "../api/login";
 
 export default function Login(props) {
@@ -22,7 +22,7 @@ export default function Login(props) {
   const loginhandler = () => {
     fetchLogin(userName, password)
       .then(res => {
-        // alert(res)
+
         if (res == 'login successfully') {
           Alert.alert(
             'Login Status',
@@ -34,7 +34,7 @@ export default function Login(props) {
             ],
             { cancelable: false }
           )
-        }
+        } else { Alert.alert('Login Status', res) }
       })
       .catch(error => { });
   };
