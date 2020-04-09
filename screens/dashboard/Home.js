@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Text, ScrollView} from 'react-native';
+import {Text, ScrollView, Button} from 'react-native';
 
 export default function Home(props) {
   const [Home, setHome] = useState('');
@@ -7,6 +7,18 @@ export default function Home(props) {
   return (
     <ScrollView style={{margin: 15}}>
       <Text>Home</Text>
+      <Button
+        title="Show my info"
+        onPress={() => {
+          console.log();
+        }}
+      />
+      <Button
+        title="Login Screen"
+        onPress={() => {
+          props.navigation.navigate('Login');
+        }}
+      />
     </ScrollView>
   );
 }
