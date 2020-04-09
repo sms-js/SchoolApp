@@ -1,8 +1,7 @@
-import React, { useState, Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { Component } from "react";
 import { Dropdown } from "react-native-material-dropdown";
-import {fetchClassesCount} from '../api/fetchClassesCount';
-import {fetchClasses} from '../api/fetchClasses';
+import { fetchClassesCount } from '../api/fetchClassesCount';
+import { fetchClasses } from '../api/fetchClasses';
 
 let c = 0;
 let classes_names = [];
@@ -17,17 +16,17 @@ export default class ClassesPicker extends Component {
 
   classes_handler() {
     fetchClassesCount()
-              .then(res => {
-                c = res;
-                this.setState({
-                  classes_count: c
-                });
-              })
-              .catch(error => {});
+      .then(res => {
+        c = res;
+        this.setState({
+          classes_count: c
+        });
+      })
+      .catch(error => { });
 
     fetchClasses()
-              .then(res => {
-                let str = "";
+      .then(res => {
+        let str = "";
         let x = "";
         let y = "";
         for (let i = 0; i < this.state.classes_count; i++) {
@@ -38,9 +37,9 @@ export default class ClassesPicker extends Component {
           classes_names: classes_names,
           classes_ids: classes_ids
         });
-              })
-              .catch(error => {});
-    
+      })
+      .catch(error => { });
+
 
   }
   set_class(value) {

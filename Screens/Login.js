@@ -1,4 +1,4 @@
-import React, { useState, Component } from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput, Button, CheckBox, TouchableOpacity } from "react-native";
 import { fetchLogin } from "../api/login";
 
@@ -21,8 +21,8 @@ export default function Login(props) {
 
   const loginhandler = () => {
     fetchLogin(userName, password)
-      .then(res => {alert(res)})
-      .catch(error => {});
+      .then(res => { alert(res) })
+      .catch(error => { });
   };
 
   return (

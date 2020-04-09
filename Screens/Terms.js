@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, ScrollView, Button, TouchableOpacity } from "react-native";
+import { Text, ScrollView } from "react-native";
 import { fetchTerms } from "../api/fetchTerms";
 
 export default function Terms(props) {
@@ -7,7 +7,6 @@ export default function Terms(props) {
   fetchTerms()
     .then(res => { set_terms(res) })
     .catch(error => { });
-  //set_terms(fetchTerms());
   return (
     <ScrollView style={{ margin: 15 }}>
       <Text>{terms}</Text>

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, CheckBox, View, ScrollView, TextInput, Button, Alert } from 'react-native';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import { registerTeacher } from "../api/registerTeacher";
-//import GenderRadio from '../Components/GenderRadio';
 export default function RegisterTeacher(props) {
 
 
@@ -107,7 +106,6 @@ export default function RegisterTeacher(props) {
             radio_props={radio_props}
             initial={'male'}
             onPress={(value) => {
-              //setGender(value);
               genderHandler(value);
             }}
           />

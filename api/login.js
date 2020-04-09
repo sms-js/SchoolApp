@@ -15,8 +15,8 @@ export async function fetchLogin(userName, password) {
       })
     });
     //if (response.ok) {
-      const responseJson = await response.json();
-      return responseJson["status"];
+    const responseJson = await response.json();
+    return responseJson["status"];
     /*}else{
       return('error !');
     }*/

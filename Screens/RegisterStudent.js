@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, CheckBox, View, ScrollView, TextInput, Button, Alert, Picker } from 'react-native';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
-import { Dropdown } from 'react-native-material-dropdown';
 import ClassesPicker from '../Components/ClassesPicker';
 import { registerStudent } from '../api/registerStudent'
 

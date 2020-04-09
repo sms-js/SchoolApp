@@ -9,23 +9,23 @@ export async function registerStudent(userName, email, password, fullName, birth
         "Content-type": "application/json"
       },
       body: JSON.stringify({
-      view: 'register_student',
-      userName: userName,
-      email: email,
-      password: password,
-      fullName :fullName,
-      birthDay: birthDay,
-      rollingId: rollingId,
-      classId: classId,
-      gender: gender,
-      adress: adress,
-      phoneNumber: phoneNumber,
-      mobileNumber: mobileNumber
+        view: 'register_student',
+        userName: userName,
+        email: email,
+        password: password,
+        fullName: fullName,
+        birthDay: birthDay,
+        rollingId: rollingId,
+        classId: classId,
+        gender: gender,
+        adress: adress,
+        phoneNumber: phoneNumber,
+        mobileNumber: mobileNumber
       })
     });
     //if (response.ok) {
-      const responseJson = await response.json();
-      return responseJson["status"];
+    const responseJson = await response.json();
+    return responseJson["status"];
     /*}else{
       return('error !');
     }*/

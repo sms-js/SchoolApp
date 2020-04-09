@@ -13,8 +13,8 @@ export async function fetchClassesCount() {
       })
     });
     //if (response.ok) {
-      const responseJson = await response.json();
-      return parseInt(responseJson["classes count"][0]["count(*)"]);
+    const responseJson = await response.json();
+    return parseInt(responseJson["classes count"][0]["count(*)"]);
     /*}else{
       return('error !');
     }*/

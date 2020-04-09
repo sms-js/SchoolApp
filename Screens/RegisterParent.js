@@ -1,17 +1,9 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, CheckBox, View, ScrollView, TextInput, Button, Alert, FlatList } from 'react-native';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
-import { Dropdown } from 'react-native-material-dropdown';
-import ClassesPicker from '../Components/ClassesPicker';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import SwipeView from 'react-native-swipeview';
 import { fetchChild } from '../api/fetchChild';
-//import { relationModal } from '../Components/relationModal';
-//import Prompt from 'react-native-prompt';
-import Dialog from "react-native-dialog";
-
-//var values=[];
-//var values=[{id: 1,value: 'Student1'},{id: 2,value: 'Student2'}];
+import { registerParent } from '../api/registerParent';
 
 export default function RegisterParent(props) {
 
@@ -26,11 +18,8 @@ export default function RegisterParent(props) {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
   const [profession, setProfession] = useState('');
-  const [Parentof, setParentof] = useState([]);
+  const [Parentof, setParentof] = useState('');
   const [SearchedUserName, setSearchedUserName] = useState('');
-  const [dialogVisible, setDialogVisible] = useState(false);
-  const [parentRelation, setParentRelation] = useState([]);
-  const [infoRelatio, setInfoRelation] = useState([]);
   const [promptRelation, setPromptRelation] = useState('');
   const [children, setChildren] = useState([]);
 
@@ -83,10 +72,6 @@ export default function RegisterParent(props) {
     setSearchedUserName(searchedUserName);
   };
 
-  const dialogVisibleHandler = () => {
-    setDialogVisible(!dialogVisible);
-  };
-
   const promptRelationHandler = (promptRelation) => {
     setPromptRelation(promptRelation);
   };
@@ -97,44 +82,21 @@ export default function RegisterParent(props) {
     });
   }
 
-  /*const infoPressHandler = (id) => {
-    setInfoRelation((prevInfoRelation) => {
-      return prevInfoRelation.filter(child => child.id != id);
-    });
-  }
-
-  const addInfoPressHandler = (id, value, relation) => {
-    setInfoRelation((prevChildren) => {
-      return [...prevChildren,
-      {
-        id: id,
-        value: value,
-        relation: relation
-      }
-      ]
-    });
-  }*/
-
   const studentRemoveAllHandler = () => {
     setChildren((prevChildren) => {
       return prevChildren.filter(child => child.id === 0);
     });
   }
 
-  const addStudentPressHandler = (id, value) => {
+  const addStudentPressHandler = (id, value, relation) => {
     setChildren((prevChildren) => {
       return [...prevChildren,
       {
-        id: id,
-        value: value
+        student: value,
+        relation: relation,
+        id: id
       }
       ]
-    });
-  }
-
-  const addParentRelationHandler = (relation) => {
-    setParentRelation((prevRelations) => {
-      return [...prevRelations, relation]
     });
   }
 
@@ -151,95 +113,39 @@ export default function RegisterParent(props) {
 
   const registerhandler = () => {
 
-    fetch('http://192.168.1.5/school/app/api/ParentRegistrationController.php', {
-      method: 'post',
-      header: {
-        'Accept': 'application/json',
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        view: 'register_student',
-        un: un,
-        eml: eml,
-        pw: pw,
-        fn: fn,
-        profession: profession,
-        bd: bd,
-        g: g,
-        adr: adr,
-        pn: pn,
-        mn: mn,
-        Parentof: Parentof
-      })
-    }).then((response) => response.json()).then((responseJson) => {
-      if (responseJson["status"] === 'New record created successfully') {
-        Alert.alert(
-          'Status',
-          'Registered Successfully',
-          [
-            //{text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
-            //{text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-            {
-              text: 'OK', onPress: () => {
-                //dialogVisibleHandler();
-                Alert.prompt(
-                  "Enter password",
-                  "Enter your password to claim your $1.5B in lottery winnings",
-                  [
-                    {
-                      text: "Cancel",
-                      onPress: () => console.log("Cancel Pressed"),
-                      style: "cancel"
-                    },
-                    {
-                      text: "OK",
-                      onPress: password => console.log("OK Pressed, password: " + password)
-                    }
-                  ],
-                  "secure-text"
-                );
-              }
-            },
-          ],
-          { cancelable: false }
-        )
+    let a = '[';
+    for (let i = 0; i < children.length; i++) {
+
+      if (i === children.length - 1) {
+        a = a + '{"student":"' + children[i]["student"] + '","relation":"' + children[i]["relation"] + '",' + '"id":"' + children[i]["id"] + '"}]';
       } else {
-        console.log(responseJson["status"]);
+        a = a + '{"student":"' + children[i]["student"] + '","relation":"' + children[i]["relation"] + '",' + '"id":"' + children[i]["id"] + '"},';
       }
+    }
 
+    ParentOfHandler(a);
+    console.log(Parentof)
 
-    }).catch((error) => {
-      alert(error/*'Error !'*/);
-      console.log(error);
-    })
+    registerParent(userName, email, password, fullName, profession, birthDay, gender, adress, phoneNumber, mobileNumber, Parentof)
+      .then(res => {
+        if (res === 'New record created successfully') {
+          Alert.alert(
+            "Status",
+            "Registered Successfully",
+            [
+              //{text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+              //{text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+              { text: 'OK', onPress: () => props.navigation.navigate('Login') },
+            ],
+            { cancelable: false }
+          )
+        } else {
+          console.log(res);
+        }
+      })
+      .catch(error => { });
   };
 
-
-
-  let remove = (ar, v) => {
-    for (var i = 0; i < ar.length; i++) {
-      if (ar[i].value == v)
-        ar.splice(i, 1);
-    }
-  }
-
-  /*
-  <Prompt
-    title="Enter your relation to student"
-    placeholder="Relation"
-    defaultValue="Father"
-    visible={ dialogVisible }
-    onCancel={ () => {
-      dialogVisibleHandler();
-    } }
-    onSubmit={ (value) => {
-      parentRelationHandler(value);
-      dialogVisibleHandler();
-    } }/>
-  */
-  /*
-  
-  */
 
   return (
     <>
@@ -271,8 +177,7 @@ export default function RegisterParent(props) {
               radio_props={radio_props}
               initial={0}
               onPress={(value) => {
-                set_g(value);
-                console.log(g);
+                genderHandler(value);
               }}
             />
           </View>
@@ -287,11 +192,11 @@ export default function RegisterParent(props) {
             borderWidth: 1
           }}>
             <View style={{
-              flexDirection: 'row'
+              flexDirection: 'column'
             }}>
               <TextInput placeholder="Search Student" style={{
-                height: 50,
-                width: '60%',
+                height: 40,
+                width: '80%',
                 margin: 10,
                 padding: 5,
                 borderColor: 'lightblue',
@@ -300,42 +205,51 @@ export default function RegisterParent(props) {
               }}
                 onChangeText={searchedUserNameHandler}
               />
-              <View style={{
-                width: '30%',
-                padding: 15,
-              }}>
-                <Button title="Add" onPress={() => {
-                  fetchChild(SearchedUserName)
-                    .then(res => {
-                      if (res != 'No student found !') {
-                        Alert.alert(
-                          'Student Info',
-                          'Username : ' + SearchedUserName + '\nFull Name : ' + res[1],
-                          [
-                            //{text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
-                            //{text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-                            {
-                              text: 'OK', onPress: () => {
-                                dialogVisibleHandler();
-                                addStudentPressHandler(res[0], res[1]);
-                              }
-                            },
-                          ],
-                          { cancelable: false }
-                        )
-                      } else {
-                        alert(res)
-                      }
+              <TextInput placeholder="Relation To Student" style={{
+                height: 40,
+                width: '80%',
+                margin: 10,
+                padding: 5,
+                borderColor: 'lightblue',
+                borderWidth: 1,
+                alignSelf: 'center'
+              }}
+                onChangeText={promptRelationHandler}
+              />
+              <View style={{ flexDirection: 'row' }}>
+                <View style={{ width: '15%' }} />
+                <View style={{
+                  width: '70%',
+                  padding: 15,
+                }}>
+                  <Button title="Add" onPress={() => {
+                    fetchChild(SearchedUserName)
+                      .then(res => {
+                        if (res != 'No student found !') {
+                          Alert.alert(
+                            'Student Info',
+                            'Username : ' + SearchedUserName + '\nFull Name : ' + res[1],
+                            [
+                              //{text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+                              { text: 'Cancel', onPress: () => { }, style: 'cancel' },
+                              { text: 'OK', onPress: () => { addStudentPressHandler(res[0], res[1], promptRelation); } },
+                            ],
+                            { cancelable: false }
+                          )
+                        } else {
+                          alert(res)
+                        }
 
-                    })
-                    .catch(error => {
-                      alert(error)
-                    });
+                      })
+                      .catch(error => {
+                        alert(error)
+                      });
 
-                }} />
+                  }} />
 
 
 
+                </View>
               </View>
 
             </View>
@@ -351,13 +265,32 @@ export default function RegisterParent(props) {
               renderItem={
                 ({ item }) =>
                   (
-                    <TouchableOpacity
-                      onPress={() => {
-                        studentPressHandler(item.id);
-                      }}
-                    >
-                      <Text>{item.value}</Text>
-                    </TouchableOpacity>
+                    <View style={{
+                      flexDirection: 'row',
+                      paddingLeft: 10,
+                      paddingRight: 50,
+                      paddingTop: 10,
+                      paddingBottom: 10,
+                      alignItems: 'center',
+                      borderColor: 'lightblue',
+                      borderWidth: 1,
+                    }}>
+                      <TouchableOpacity
+                        onPress={() => { }}
+                        style={{ width: '100%' }}
+                      >
+
+                        <Text >{item.student}</Text>
+                      </TouchableOpacity>
+                      <Text style={{ width: '5%' }} />
+                      <Text style={{ width: '35%' }}>{item.relation}</Text>
+                      <Text style={{ width: '5%' }} />
+                      <Button title="remove" onPress={() => { studentPressHandler(item.id); }}
+                        style={{
+                          margin: 5
+                        }} />
+
+                    </View>
                   )
               }
               keyExtractor={item => item.value}
@@ -385,29 +318,14 @@ export default function RegisterParent(props) {
 
         </View>
         <Text style={{ margin: 0 }} />
-        <Button title="Register" onPress={registerhandler} />
+        <Button title="Register" onPress={
+
+          registerhandler
+        } />
         <Text style={{ margin: 10 }} />
 
-
-
-
-
-
-
       </ScrollView >
-      <Dialog.Container visible={dialogVisible}>
-        <Dialog.Title>Parent Relation</Dialog.Title>
-        <Dialog.Description>
-          Enter your relation to student
-           </Dialog.Description>
-        <Dialog.Input label="Relation" onChangeText={(text) => { promptRelationHandler(text) }} />
-        <Dialog.Button label="Cancel" onPress={dialogVisibleHandler} />
-        <Dialog.Button label="Submit" onPress={() => {
-          promptRelationHandler(promptRelation);
-          alert(promptRelation);
-          dialogVisibleHandler();
-        }} />
-      </Dialog.Container>
+
     </>
   );
 
