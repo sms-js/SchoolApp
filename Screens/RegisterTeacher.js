@@ -14,53 +14,53 @@ import RadioForm, {
   RadioButtonInput,
   RadioButtonLabel,
 } from "react-native-simple-radio-button";
+import { registerTeacher } from "../api/registerTeacher";
 //import GenderRadio from '../Components/GenderRadio';
 export default function RegisterTeacher(props) {
-  const [username, setUsername] = useState("");
+  const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fullname, setFullname] = useState("");
-  const [birthday, setBirthday] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [birthDay, setBirthDay] = useState("");
   const [gender, setGender] = useState();
-  const [adresse, setAdresse] = useState("");
+  const [adress, setAdress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
 
-  const un_handler = (un) => {
-    setUsername(un);
+  const userNameHandler = (userName) => {
+    setUserName(userName);
   };
 
-  const eml_handler = (eml) => {
-    setEmail(eml);
+  const emailHandler = (email) => {
+    setEmail(email);
   };
 
-  const pw_handler = (pw) => {
-    setPassword(pw);
+  const passwordHandler = (password) => {
+    setPassword(password);
   };
 
-  const fn_handler = (fn) => {
-    setFullname(fn);
+  const fullNameHandler = (fullName) => {
+    setFullName(fullName);
   };
 
-  const bd_handler = (bd) => {
-    setBirthday(bd);
+  const birthDayHandler = (birthDay) => {
+    setBirthDay(birthDay);
   };
 
-  const g_handler = (g) => {
-    setGender(g);
-    console.log(g);
+  const genderHandler = (gender) => {
+    setGender(gender);
   };
 
-  const adr_handler = (adr) => {
-    setAdresse(adr);
+  const adressHandler = (adress) => {
+    setAdress(adress);
   };
 
-  const pn_handler = (pn) => {
-    setPhoneNumber(pn);
+  const phoneNumberHandler = (phoneNumber) => {
+    setPhoneNumber(phoneNumber);
   };
 
-  const mn_handler = (mn) => {
-    setMobileNumber(mn);
+  const mobileNumberHandler = (mobileNumber) => {
+    setMobileNumber(mobileNumber);
   };
 
   const radio_props = [
@@ -69,61 +69,34 @@ export default function RegisterTeacher(props) {
   ];
 
   const registerhandler = () => {
-    console.log(username);
-    console.log(email);
-    console.log(password);
-    console.log(fullname);
-    console.log(birthday);
-    console.log(gender);
-    console.log(adresse);
-    console.log(phoneNumber);
-    console.log(mobileNumber);
-    fetch(
-      "http://192.168.1.7/school/app/api/TeacherRegistrationController.php",
-      {
-        method: "post",
-        header: {
-          Accept: "application/json",
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-          view: "register_teacher",
-          un: username,
-          eml: email,
-          pw: password,
-          fn: fullname,
-          bd: birthday,
-          g: gender,
-          adr: adresse,
-          pn: phoneNumber,
-          mn: mobileNumber,
-        }),
-      }
+    registerTeacher(
+      userName,
+      email,
+      password,
+      fullName,
+      birthDay,
+      gender,
+      adress,
+      phoneNumber,
+      mobileNumber
     )
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson["status"] === "New record created successfully") {
+      .then((res) => {
+        if (res === "New record created successfully") {
           Alert.alert(
             "Status",
             "Registered Successfully",
             [
               //{text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
               //{text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-              {
-                text: "OK",
-                onPress: () => console.log(props.navigation.navigate("Login")),
-              },
+              { text: "OK", onPress: () => props.navigation.navigate("Login") },
             ],
             { cancelable: false }
           );
         } else {
-          console.log(responseJson["status"]);
+          console.log(res);
         }
       })
-      .catch((error) => {
-        alert("Error !");
-        console.log(error);
-      });
+      .catch((error) => {});
   };
 
   return (
@@ -137,27 +110,27 @@ export default function RegisterTeacher(props) {
         <TextInput
           placeholder="Username"
           style={styles.textinput}
-          onChangeText={un_handler}
+          onChangeText={userNameHandler}
         />
         <TextInput
           placeholder="Email"
           style={styles.textinput}
-          onChangeText={eml_handler}
+          onChangeText={emailHandler}
         />
         <TextInput
           placeholder="Password"
           style={styles.textinput}
-          onChangeText={pw_handler}
+          onChangeText={passwordHandler}
         />
         <TextInput
           placeholder="Full name"
           style={styles.textinput}
-          onChangeText={fn_handler}
+          onChangeText={fullNameHandler}
         />
         <TextInput
           placeholder="Birthday"
           style={styles.textinput}
-          onChangeText={bd_handler}
+          onChangeText={birthDayHandler}
         />
 
         <View style={{ borderColor: "lightblue", borderWidth: 1, margin: 10 }}>
@@ -168,8 +141,8 @@ export default function RegisterTeacher(props) {
             radio_props={radio_props}
             initial={"male"}
             onPress={(value) => {
-              setGender(value);
-              console.log(gender);
+              //setGender(value);
+              genderHandler(value);
             }}
           />
         </View>
@@ -177,17 +150,17 @@ export default function RegisterTeacher(props) {
         <TextInput
           placeholder="Adresse"
           style={styles.textinput}
-          onChangeText={adr_handler}
+          onChangeText={adressHandler}
         />
         <TextInput
           placeholder="Phone number"
           style={styles.textinput}
-          onChangeText={pn_handler}
+          onChangeText={phoneNumberHandler}
         />
         <TextInput
           placeholder="Mobile number"
           style={styles.textinput}
-          onChangeText={mn_handler}
+          onChangeText={mobileNumberHandler}
         />
         <Text style={{ margin: 0 }} />
         <Button title="Register" onPress={registerhandler} />
