@@ -31,28 +31,32 @@ export default function Login(props) {
   };
 
   const loginhandler = () => {
-    setLoading(true);
+    //setLoading(true);
     fetchLogin(userName, password)
       .then((res) => {
-        setLoading(false);
-        Alert.alert(
-          'Login Status',
-          res,
-          [
-            //{text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
-            {text: 'Cancel', onPress: () => {}, style: 'cancel'},
-            {
-              text: 'OK',
-              onPress: () => {
-                props.navigation.navigate('Home');
+        //setLoading(false);
+        if (res == 'login successfully') {
+          Alert.alert(
+            'Login Status',
+            res,
+            [
+              //{text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+              {text: 'Cancel', onPress: () => {}, style: 'cancel'},
+              {
+                text: 'OK',
+                onPress: () => {
+                  props.navigation.navigate('Home');
+                },
               },
-            },
-          ],
-          {cancelable: false},
-        );
+            ],
+            {cancelable: false},
+          );
+        } else {
+          Alert.alert('Login Status', res);
+        }
       })
       .catch((error) => {
-        setLoading(false);
+        //setLoading(false);
         Alert.alert('Erreur', error.message);
       });
   };
