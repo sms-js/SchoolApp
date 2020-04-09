@@ -21,7 +21,21 @@ export default function Login(props) {
 
   const loginhandler = () => {
     fetchLogin(userName, password)
-      .then(res => { alert(res) })
+      .then(res => {
+        // alert(res)
+        if (res == 'login successfully') {
+          Alert.alert(
+            'Login Status',
+            res,
+            [
+              //{text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+              { text: 'Cancel', onPress: () => { }, style: 'cancel' },
+              { text: 'OK', onPress: () => { props.navigation.navigate('Home') } },
+            ],
+            { cancelable: false }
+          )
+        }
+      })
       .catch(error => { });
   };
 
@@ -62,7 +76,7 @@ export default function Login(props) {
           <Text>Register Parent</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.opacity} onPress={() => props.navigation.navigate("Restore")}>
+        <TouchableOpacity style={styles.opacity} onPress={() => props.navigation.navigate("RestorePassword")}>
           <Text>Restore Password</Text>
         </TouchableOpacity>
       </View>
