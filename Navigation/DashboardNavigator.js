@@ -1,40 +1,23 @@
-import { createDrawerNavigator } from 'react-navigation-drawer';
-import { createAppContainer } from 'react-navigation';
-import Events from '../Dashboard Screens/Events';
-import Home from '../Dashboard Screens/Home';
-import Library from '../Dashboard Screens/Library';
-import Media from '../Dashboard Screens/Media';
-import Messages from '../Dashboard Screens/Messages';
-import News from '../Dashboard Screens/News';
-import Pages from '../Dashboard Screens/Pages';
-import Transportation from '../Dashboard Screens/Transportation';
-
+import {createDrawerNavigator} from 'react-navigation-drawer';
+import {createAppContainer} from 'react-navigation';
+import Events from '../screens/dashboard/Events';
+import Home from '../screens/dashboard/Home';
+import Library from '../screens/dashboard/Library';
+import Media from '../screens/dashboard/Media';
+import Messages from '../screens/dashboard/Messages';
+import News from '../screens/dashboard/News';
+import Pages from '../screens/dashboard/Pages';
+import Transportation from '../screens/dashboard/Transportation';
 
 const dashboardNavigator = createDrawerNavigator({
-    Home: {
-        screen: Home
-    },
-    Events: {
-        screen: Events
-    },
-    Media: {
-        screen: Media
-    },
-    Messages: {
-        screen: Messages
-    },
-    Library: {
-        screen: Library
-    },
-    News: {
-        screen: News
-    },
-    Pages: {
-        screen: Pages
-    },
-    Transportation: {
-        screen: Transportation
-    }
+  Home,
+  Events,
+  Media,
+  Messages,
+  Library,
+  News,
+  Pages,
+  Transportation,
 });
 
 export default createAppContainer(dashboardNavigator);

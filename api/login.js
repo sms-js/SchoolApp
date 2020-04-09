@@ -6,21 +6,22 @@ export async function fetchLogin(userName, password) {
       method: "post",
       header: {
         Accept: "application/json",
-        "Content-type": "application/json"
+        "Content-type": "application/json",
       },
       body: JSON.stringify({
         view: "login",
         userName: userName,
-        password: password
-      })
+        password: password,
+      }),
     });
     //if (response.ok) {
     const responseJson = await response.json();
+
     return responseJson["status"];
     /*}else{
       return('error !');
     }*/
   } catch (error) {
-    return error;
+    throw error;
   }
 }
