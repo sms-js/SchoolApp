@@ -8,8 +8,9 @@ import Messages from '../screens/dashboard/Messages';
 import News from '../screens/dashboard/News';
 import Pages from '../screens/dashboard/Pages';
 import Transportation from '../screens/dashboard/Transportation';
+//import userInfo from '../utils/userInfo';
 
-const dashboardNavigator = createDrawerNavigator({
+var screens = {
   Home,
   Events,
   Media,
@@ -18,6 +19,27 @@ const dashboardNavigator = createDrawerNavigator({
   News,
   Pages,
   Transportation,
-});
+};
+var dashboardNavigator = createDrawerNavigator(screens);
+
+/*if (userInfo != undefined) {
+  switch (userInfo[0]['role']) {
+    case 'student':
+      screens = {Home, Library};
+      dashboardNavigator = createDrawerNavigator(screens);
+
+      break;
+
+    case 'teacher':
+      screens = {Home, Transportation};
+      dashboardNavigator = createDrawerNavigator(screens);
+      break;
+
+    case 'parent':
+      screens = {Home, News};
+      dashboardNavigator = createDrawerNavigator(screens);
+      break;
+  }
+}*/
 
 export default createAppContainer(dashboardNavigator);

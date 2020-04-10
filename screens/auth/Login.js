@@ -49,7 +49,7 @@ export default function Login(props) {
                 onPress: () => {
                   fetchUserInfo(userName)
                     .then((res) => {
-                      //console.log(res);
+                      console.log(res[0]['role']);
                       setUserInfo(res);
                     })
                     .catch((error) => {

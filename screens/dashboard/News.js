@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Text, ScrollView, View, Button} from 'react-native';
 import {Header, Left, Right, Icon} from 'native-base';
+import {fetchNewsForAll} from './api/fetchNewsForAll';
 
 export default function News(props) {
   const [News, setNews] = useState('');
@@ -40,6 +41,13 @@ export default function News(props) {
             title="Show my info"
             onPress={() => {
               console.log(userInfo);
+            }}
+          />
+          <Text />
+          <Button
+            title="Show news for all"
+            onPress={() => {
+              fetchNewsForAll();
             }}
           />
           <Text />
