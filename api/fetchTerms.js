@@ -1,4 +1,5 @@
 import {BASE_URL} from '../utils/config';
+import userInfo from '../utils/userInfo';
 
 export async function fetchTerms() {
   try {
@@ -32,7 +33,40 @@ export async function fetchTerms() {
       }
       return s;
     };
-    let s = JSON.stringify(responseJson['terms'][0]['fieldValue']);
+
+    function decodeHtml(str) {
+      var map = {
+        '&eacute;': 'é',
+        '&egrave;': 'è',
+        '&agrave;': 'à',
+        '&ccedil;': 'ç',
+        '&ugrave;': 'ù',
+        '&nbsp;': ' ',
+      };
+      return str.replace(
+        /&eacute;|&egrave;|&agrave;|&ccedil;|&ugrave;|&nbsp;/g,
+        function (m) {
+          return map[m];
+        },
+      );
+    } //let terms = s;
+    //console.log(responseJson['terms'] /*[0]['fieldValue']*/);
+    //let s = JSON.stringify(responseJson['terms'][0]['fieldValue']);
+    //let s = responseJson['terms'][0]['fieldValue'];
+    //s == s.extract('"', '"');
+    //s = decodeHtml(s);
+    /*let b = 'b';
+    let c = '';
+    let terms = '';
+    while (b != '') {
+      b = s.extract('', '\\n');
+      s = s.substring(b.length + 4);
+      c = c + b + '\n';
+    }
+    terms = c;*/ return decodeHtml(
+      responseJson['terms'][0]['fieldValue'],
+    );
+    /*let s = JSON.stringify(responseJson['terms'][0]['fieldValue']);
     let x = s.extract('"', '"');
     let y = 'y';
     let z = '';
@@ -52,7 +86,7 @@ export async function fetchTerms() {
         x = x.substring(y.length + 11);
       }
     }
-    return z;
+    return z;*/
     /*}else{
       return('error !');
     }*/

@@ -34,6 +34,24 @@ export async function fetchNewsForAll() {
       }
       return s;
     };
+
+    function decodeHtml(str) {
+      var map = {
+        '&eacute;': 'é',
+        '&egrave;': 'è',
+        '&agrave;': 'à',
+        '&ccedil;': 'ç',
+        '&ugrave;': 'ù',
+        '&nbsp;': ' ',
+      };
+      return str.replace(
+        /&eacute;|&egrave;|&agrave;|&ccedil;|&ugrave;|&nbsp;/g,
+        function (m) {
+          return map[m];
+        },
+      );
+    }
+
     if (response.ok) {
       let a = '';
       let b = '';
@@ -44,30 +62,29 @@ export async function fetchNewsForAll() {
       for (let i = 0; i < responseJson['all news'].length; i++) {
         a = JSON.stringify(responseJson['all news'][i]['newsText']);
         a = a.extract('"', '"');
-        while (a != '') {
-          b = a.extract('&lt;p&gt;', '');
-          c = b.extract('', '&lt;/p&gt;\\n');
-          news = news + c;
-          a = a.substring(c.length + 21);
-          if (a[0] === '\\' && a[1] === 'n') {
-            b = a.extract('', '&lt;p&gt;');
-            news = news + '\n';
-            a = a.substring(2);
-          }
-
-          (b = ''), (c = '');
+        a = decodeHtml(a);
+        b = 'b';
+        while (b != '') {
+          b = a.extract('', '\\n');
+          a = a.substring(b.length + 4);
+          c = c + b + '\n';
         }
+        news = c;
+        b = '';
+        c = '';
         newsTab.push({
           id: responseJson['all news'][i]['id'],
-          title: responseJson['all news'][i]['newsTitle'],
-          content: news,
+          newsTitle: responseJson['all news'][i]['newsTitle'],
+          newsText: news,
           newsFor: responseJson['all news'][i]['newsFor'],
           newsDate: responseJson['all news'][i]['newsDate'],
           creationDate: responseJson['all news'][i]['creationDate'],
         });
         news = '';
       }
+
       console.log(newsTab);
+
       return newsTab;
     } else {
       //return response.error;
