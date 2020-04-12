@@ -53,7 +53,7 @@ export default function News(props) {
           />
           <Text />
           <Button
-            title={'Show info for ' + userInfo[0]['role'] + 's'}
+            title={'Show news for ' + userInfo[0]['role'] + 's'}
             onPress={() => {
               fetchUserNews();
             }}

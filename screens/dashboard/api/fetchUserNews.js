@@ -85,7 +85,6 @@ export async function fetchUserNews() {
         });
         news = '';
       }
-      console.log(role);
       console.log(newsTab);
 
       return newsTab;
