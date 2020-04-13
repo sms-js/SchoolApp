@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Text, ScrollView, View, Button} from 'react-native';
 import {Header, Left, Right, Icon} from 'native-base';
+import {fetchBooks, searchBooks} from './api/fetchBooks';
 
 export default function Library(props) {
   const [Library, setLibrary] = useState('');
@@ -37,9 +38,16 @@ export default function Library(props) {
           <Text style={{alignSelf: 'center'}}>Library</Text>
           <Text />
           <Button
-            title="Show my info"
+            title="Show all books"
             onPress={() => {
-              console.log(userInfo);
+              fetchBooks();
+            }}
+          />
+          <Text />
+          <Button
+            title="Show Book 1"
+            onPress={() => {
+              searchBooks('searchbytitle', 'Book 1');
             }}
           />
           <Text />
