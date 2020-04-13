@@ -1,6 +1,12 @@
 import React, {useState} from 'react';
 import {Text, ScrollView, View, Button} from 'react-native';
 import {Header, Left, Right, Icon} from 'native-base';
+import {
+  fetchAlbums,
+  fetchAlbumChildren,
+  fetchAlbumItems,
+  fetchItems,
+} from './api/fetchMedia';
 
 export default function Media(props) {
   const [Media, setMedia] = useState('');
@@ -37,9 +43,30 @@ export default function Media(props) {
           <Text style={{alignSelf: 'center'}}>Media</Text>
           <Text />
           <Button
-            title="Show my info"
+            title="Show albums"
             onPress={() => {
-              console.log(userInfo);
+              fetchAlbums();
+            }}
+          />
+          <Text />
+          <Button
+            title="Show items"
+            onPress={() => {
+              fetchItems();
+            }}
+          />
+          <Text />
+          <Button
+            title="Show album children"
+            onPress={() => {
+              fetchAlbumChildren(2);
+            }}
+          />
+          <Text />
+          <Button
+            title="Show album items"
+            onPress={() => {
+              fetchAlbumItems(2);
             }}
           />
           <Text />
