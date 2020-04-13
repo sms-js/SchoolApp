@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {Text, ScrollView, View, Button} from 'react-native';
 import {Header, Left, Right, Icon} from 'native-base';
+import {userInfo} from '../../utils/userInfo';
+import {fetchEventsForAll, fetchUserEvents} from './api/fetchEvents';
 
 export default function Events(props) {
   const [Events, setEvents] = useState('');
@@ -37,9 +39,16 @@ export default function Events(props) {
           <Text style={{alignSelf: 'center'}}>Events</Text>
           <Text />
           <Button
-            title="Show my info"
+            title="Show events for all"
             onPress={() => {
-              console.log(userInfo);
+              fetchEventsForAll();
+            }}
+          />
+          <Text />
+          <Button
+            title={'Show events for ' + userInfo[0]['role']}
+            onPress={() => {
+              fetchUserEvents();
             }}
           />
           <Text />

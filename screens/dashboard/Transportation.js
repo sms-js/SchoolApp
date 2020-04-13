@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Text, ScrollView, View, Button} from 'react-native';
 import {userInfo} from '../../utils/userInfo';
 import {Header, Left, Right, Icon} from 'native-base';
+import {fetchTransportations} from './api/fetchTransportations';
 
 export default function Transportation(props) {
   const [Transportation, setTransportation] = useState('');
@@ -38,9 +39,9 @@ export default function Transportation(props) {
           <Text style={{alignSelf: 'center'}}>Transportation</Text>
           <Text />
           <Button
-            title="Show my info"
+            title="Show transportations"
             onPress={() => {
-              console.log(userInfo);
+              fetchTransportations();
             }}
           />
           <Text />

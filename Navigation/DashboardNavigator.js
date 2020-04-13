@@ -1,3 +1,4 @@
+import React from 'react';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import {createAppContainer} from 'react-navigation';
 import Events from '../screens/dashboard/Events';
@@ -8,9 +9,10 @@ import Messages from '../screens/dashboard/Messages';
 import News from '../screens/dashboard/News';
 import Pages from '../screens/dashboard/Pages';
 import Transportation from '../screens/dashboard/Transportation';
+import NavigatorHeader from './navigatorHeader';
 //import userInfo from '../utils/userInfo';
 
-var screens = {
+/*var screens = {
   Home,
   Events,
   Media,
@@ -20,7 +22,23 @@ var screens = {
   Pages,
   Transportation,
 };
-var dashboardNavigator = createDrawerNavigator(screens);
+var dashboardNavigator = createDrawerNavigator(screens);*/
+
+var dashboardNavigator = createDrawerNavigator(
+  {
+    Home,
+    Events,
+    Media,
+    Messages,
+    Library,
+    News,
+    Pages,
+    Transportation,
+  },
+  {
+    contentComponent: (props) => <NavigatorHeader {...props} />,
+  },
+);
 
 /*if (userInfo != undefined) {
   switch (userInfo[0]['role']) {
