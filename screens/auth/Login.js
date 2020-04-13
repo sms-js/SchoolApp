@@ -1,4 +1,4 @@
-import React, { useState, Component } from "react";
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,14 +7,16 @@ import {
   Button,
   CheckBox,
   TouchableOpacity,
+  ActivityIndicator,
   Alert,
-} from "react-native";
-import { fetchLogin } from "../api/login";
+} from 'react-native';
+import {fetchLogin} from '../../api/login';
 
 export default function Login(props) {
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+  const [userName, setUserName] = useState('');
+  const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const userNameHandler = (userName) => {
     setUserName(userName);
@@ -29,22 +31,44 @@ export default function Login(props) {
   };
 
   const loginhandler = () => {
+    //setLoading(true);
     fetchLogin(userName, password)
       .then((res) => {
-        alert(res);
+        //setLoading(false);
+        if (res == 'login successfully') {
+          Alert.alert(
+            'Login Status',
+            res,
+            [
+              //{text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+              {text: 'Cancel', onPress: () => {}, style: 'cancel'},
+              {
+                text: 'OK',
+                onPress: () => {
+                  props.navigation.navigate('Home');
+                },
+              },
+            ],
+            {cancelable: false},
+          );
+        } else {
+          Alert.alert('Login Status', res);
+        }
       })
-      .catch((error) => {});
+      .catch((error) => {
+        //setLoading(false);
+        Alert.alert('Erreur', error.message);
+      });
   };
 
   return (
     <View
       style={{
         paddingTop: 50,
-        alignContent: "center",
-        height: "90%",
-        alignItems: "center",
-      }}
-    >
+        alignContent: 'center',
+        height: '90%',
+        alignItems: 'center',
+      }}>
       <View style={styles.view}>
         <TextInput
           placeholder="Email / Username"
@@ -59,49 +83,48 @@ export default function Login(props) {
           secureTextEntry={true}
         />
 
-        <View style={{ flexDirection: "row" }}>
+        <View style={{flexDirection: 'row'}}>
           <CheckBox
             title="remember_me"
             value={rememberMe}
             onValueChange={RememberMeHandler}
           />
-          <Text style={{ textAlignVertical: "center" }}> Remember me</Text>
+          <Text style={{textAlignVertical: 'center'}}> Remember me</Text>
         </View>
-        <Text style={{ margin: 0 }} />
-        <Button title="Login" style={styles.button} onPress={loginhandler} />
-        <Text style={{ margin: 0 }} />
+        <Text style={{margin: 0}} />
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <Button title="Login" style={styles.button} onPress={loginhandler} />
+        )}
+        <Text style={{margin: 0}} />
 
         <TouchableOpacity
           style={styles.opacity}
-          onPress={() => props.navigation.navigate("Terms")}
-        >
+          onPress={() => props.navigation.navigate('Terms')}>
           <Text>School Terms</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.opacity}
-          onPress={() => props.navigation.navigate("RegisterTeacher")}
-        >
+          onPress={() => props.navigation.navigate('RegisterTeacher')}>
           <Text>Register Teacher</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.opacity}
-          onPress={() => props.navigation.navigate("RegisterStudent")}
-        >
+          onPress={() => props.navigation.navigate('RegisterStudent')}>
           <Text>Register Student</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.opacity}
-          onPress={() => props.navigation.navigate("RegisterParent")}
-        >
+          onPress={() => props.navigation.navigate('RegisterParent')}>
           <Text>Register Parent</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.opacity}
-          onPress={() => props.navigation.navigate("Restore")}
-        >
+          onPress={() => props.navigation.navigate('RestorePassword')}>
           <Text>Restore Password</Text>
         </TouchableOpacity>
       </View>
@@ -111,11 +134,11 @@ export default function Login(props) {
 
 const styles = StyleSheet.create({
   view: {
-    alignSelf: "center",
-    width: "90%",
+    alignSelf: 'center',
+    width: '90%',
   },
   textinput: {
-    borderColor: "lightblue",
+    borderColor: 'lightblue',
     borderWidth: 1,
     padding: 5,
     borderRadius: 0,
@@ -124,6 +147,6 @@ const styles = StyleSheet.create({
   button: {},
   opacity: {
     margin: 5,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
 });

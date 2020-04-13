@@ -1,21 +1,21 @@
 import {BASE_URL} from '../utils/config';
 
-export async function registerStudent(
+export async function registerParent(
   userName,
   email,
   password,
   fullName,
+  profession,
   birthDay,
-  rollingId,
-  classId,
   gender,
   adress,
   phoneNumber,
   mobileNumber,
+  parentOf,
 ) {
   try {
     const response = await fetch(
-      BASE_URL + '/StudentRegistrationController.php',
+      BASE_URL + 'ParentRegistrationController.php',
       {
         method: 'post',
         header: {
@@ -23,18 +23,18 @@ export async function registerStudent(
           'Content-type': 'application/json',
         },
         body: JSON.stringify({
-          view: 'register_student',
+          view: 'register_parent',
           userName: userName,
           email: email,
           password: password,
           fullName: fullName,
+          profession: profession,
           birthDay: birthDay,
-          rollingId: rollingId,
-          classId: classId,
           gender: gender,
           adress: adress,
           phoneNumber: phoneNumber,
           mobileNumber: mobileNumber,
+          parentOf: parentOf,
         }),
       },
     );
@@ -42,8 +42,8 @@ export async function registerStudent(
     const responseJson = await response.json();
     return responseJson['status'];
     /*}else{
-      return('error !');
-    }*/
+          return('error !');
+        }*/
   } catch (error) {
     return error;
   }

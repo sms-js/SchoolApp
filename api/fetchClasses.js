@@ -13,8 +13,8 @@ export async function fetchClasses() {
       })
     });
     //if (response.ok) {
-      const responseJson = await response.json();
-      return responseJson;
+    const responseJson = await response.json();
+    return responseJson;
     /*}else{
       return('error !');
     }*/
