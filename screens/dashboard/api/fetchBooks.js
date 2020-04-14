@@ -15,7 +15,7 @@ export async function fetchBooks() {
     const responseJson = await response.json();
     if (response.ok) {
       console.log(responseJson['all books']);
-      //let all books = [{}];
+      //let allBooks = [{}];
       return responseJson['all books'];
     } else {
       //return 'error !';

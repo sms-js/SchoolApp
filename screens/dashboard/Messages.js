@@ -2,6 +2,11 @@ import React, {useState} from 'react';
 import {Text, ScrollView, View, Button} from 'react-native';
 import {userInfo} from '../../utils/userInfo';
 import {Header, Left, Right, Icon} from 'native-base';
+import {
+  fetchAllMessages,
+  fetchSentMessages,
+  fetchRecievedMessages,
+} from './api/fetchMessages';
 
 export default function Messages(props) {
   const [Messages, setMessages] = useState('');
@@ -38,9 +43,23 @@ export default function Messages(props) {
           <Text style={{alignSelf: 'center'}}>Messages</Text>
           <Text />
           <Button
-            title="Show my info"
+            title="Show my all messages"
             onPress={() => {
-              console.log(userInfo);
+              fetchAllMessages(userInfo[0]['id']);
+            }}
+          />
+          <Text />
+          <Button
+            title="Show my sent messages"
+            onPress={() => {
+              fetchSentMessages(userInfo[0]['id']);
+            }}
+          />
+          <Text />
+          <Button
+            title="Show my recieved messages"
+            onPress={() => {
+              fetchRecievedMessages(userInfo[0]['id']);
             }}
           />
           <Text />
