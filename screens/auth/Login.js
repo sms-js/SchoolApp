@@ -42,6 +42,7 @@ export default function Login(props) {
           'accessToken',
           'example Axxcezsqdqspdkqsmdqsmdkqsomk',
         );
+        await AsyncStorage.setItem('userName', userName);
         //setLoading(false);
         if (res == 'login successfully') {
           Alert.alert(

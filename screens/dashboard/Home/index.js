@@ -1,10 +1,12 @@
+import React from 'react';
 import {useAuth} from '../../../context/Authentication';
-import HomeParent from './HomeExample.parent';
-import HomeStudent from './HomeExample.student';
+import HomeParent from './Home.parent';
+import HomeStudent from './Home.student';
+import HomeTeacher from './Home.teacher';
 export default function HomeExample() {
   const {user} = useAuth();
 
-  switch (user.role) {
+  switch (user['role']) {
     case 'parent':
       return <HomeParent />;
       break;
@@ -12,7 +14,9 @@ export default function HomeExample() {
     case 'student':
       return <HomeStudent />;
       break;
-    default:
+
+    case 'teacher':
+      return <HomeTeacher />;
       break;
   }
 }

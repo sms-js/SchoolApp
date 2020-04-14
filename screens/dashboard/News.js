@@ -2,9 +2,10 @@ import React, {useState} from 'react';
 import {Text, ScrollView, View, Button} from 'react-native';
 import {Header, Left, Right, Icon} from 'native-base';
 import {fetchNewsForAll, fetchUserNews} from './api/fetchNews';
-import {userInfo} from '../../utils/userInfo';
+import {useAuth} from '../../context/Authentication';
+
 export default function News(props) {
-  const [News, setNews] = useState('');
+  const {user} = useAuth();
 
   return (
     <View>
@@ -40,7 +41,7 @@ export default function News(props) {
           <Button
             title="Show my info"
             onPress={() => {
-              console.log(userInfo);
+              console.log(user);
             }}
           />
           <Text />
@@ -52,7 +53,7 @@ export default function News(props) {
           />
           <Text />
           <Button
-            title={'Show news for ' + userInfo[0]['role'] + 's'}
+            title={'Show news for ' + user['role'] + 's'}
             onPress={() => {
               fetchUserNews();
             }}

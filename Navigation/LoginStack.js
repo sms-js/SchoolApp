@@ -7,10 +7,10 @@ import RegisterTeacher from '../screens/auth/RegisterTeacher';
 import RegisterStudent from '../screens/auth/RegisterStudent';
 import RegisterParent from '../screens/auth/RegisterParent';
 import RestorePassword from '../screens/auth/RestorePassword';
-import LoadingScreen from '../screens/auth/Loading';
+//import LoadingScreen from '../screens/auth/Loading';
 
 const LoginNavigator = createStackNavigator({
-  LoadingScreen,
+  //LoadingScreen,
   Login,
   Terms,
   RegisterTeacher,

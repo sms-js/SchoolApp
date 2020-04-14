@@ -1,13 +1,16 @@
 import React from 'react';
 import {Text, ScrollView, View, StyleSheet} from 'react-native';
 import {DrawerNavigatorItems} from 'react-navigation-drawer';
+import {useAuth} from '../context/Authentication';
 
 export default function NavigatorHeader(props) {
+  const {user} = useAuth();
+
   return (
     <ScrollView>
       <View style={styles.view}>
         <View style={styles.profile} />
-        <Text style={styles.text}>Islam Belmerabet</Text>
+        <Text style={styles.text}>{user['userName']}</Text>
       </View>
       <View>
         <DrawerNavigatorItems {...props} />

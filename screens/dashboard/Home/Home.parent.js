@@ -1,11 +1,10 @@
-import React, {useState} from 'react';
-import {Text, ScrollView, View, Button} from 'react-native';
-import {Header, Left, Right, Icon} from 'native-base';
-import {fetchEventsForAll, fetchUserEvents} from './api/fetchEvents';
-import {useAuth} from '../../context/Authentication';
+import React from 'react';
+import {Text, ScrollView, Button, View} from 'react-native';
+import {Header, Left, Icon} from 'native-base';
+import {useAuth} from '../../../context/Authentication';
 
-export default function Events(props) {
-  const {user} = useAuth();
+export default function Home(props) {
+  const {logout, user} = useAuth();
 
   return (
     <View>
@@ -29,33 +28,29 @@ export default function Events(props) {
             textAlign: 'center',
             fontSize: 25,
           }}>
-          Events
+          Home
         </Text>
         <Text style={{width: '15%'}} />
       </Header>
       <ScrollView style={{margin: 20}}>
         <Text />
         <View>
-          <Text style={{alignSelf: 'center'}}>Events</Text>
+          <Text style={{alignSelf: 'center'}}>Parent</Text>
+          <Text />
+          <Text style={{alignSelf: 'center'}}>Home</Text>
           <Text />
           <Button
-            title="Show events for all"
+            title="Show my info"
             onPress={() => {
-              fetchEventsForAll();
+              console.log(user);
             }}
           />
           <Text />
           <Button
-            title={'Show events for ' + user['role'] + 's'}
+            title="Logout"
             onPress={() => {
-              fetchUserEvents(user['role']);
-            }}
-          />
-          <Text />
-          <Button
-            title="Login Screen"
-            onPress={() => {
-              props.navigation.navigate('Login');
+              logout();
+              //props.navigation.navigate('Login');
             }}
           />
         </View>

@@ -1,15 +1,15 @@
 import React, {useState} from 'react';
 import {Text, ScrollView, View, Button} from 'react-native';
-import {userInfo} from '../../utils/userInfo';
 import {Header, Left, Right, Icon} from 'native-base';
 import {
   fetchAllMessages,
   fetchSentMessages,
   fetchRecievedMessages,
 } from './api/fetchMessages';
+import {useAuth} from '../../context/Authentication';
 
 export default function Messages(props) {
-  const [Messages, setMessages] = useState('');
+  const {user} = useAuth();
 
   return (
     <View>
@@ -45,21 +45,21 @@ export default function Messages(props) {
           <Button
             title="Show my all messages"
             onPress={() => {
-              fetchAllMessages(userInfo[0]['id']);
+              fetchAllMessages(user['id']);
             }}
           />
           <Text />
           <Button
             title="Show my sent messages"
             onPress={() => {
-              fetchSentMessages(userInfo[0]['id']);
+              fetchSentMessages(user['id']);
             }}
           />
           <Text />
           <Button
             title="Show my recieved messages"
             onPress={() => {
-              fetchRecievedMessages(userInfo[0]['id']);
+              fetchRecievedMessages(user['id']);
             }}
           />
           <Text />

@@ -1,6 +1,5 @@
 /* eslint-disable no-extend-native */
 import {BASE_URL} from '../../../utils/config';
-import {userInfo} from '../../../utils/userInfo';
 
 export async function fetchEventsForAll() {
   try {
@@ -132,9 +131,8 @@ export async function fetchEventsForAll() {
   }
 }
 
-export async function fetchUserEvents() {
+export async function fetchUserEvents(role) {
   try {
-    const role = userInfo[0]['role'];
     const response = await fetch(BASE_URL + '/EventsController.php', {
       method: 'post',
       header: {

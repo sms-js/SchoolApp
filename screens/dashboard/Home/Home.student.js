@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Text, ScrollView, Button, View} from 'react-native';
-import {userInfo} from '../../utils/userInfo';
-import {Header, Left, Right, Icon} from 'native-base';
+import {Header, Left, Icon} from 'native-base';
+import {useAuth} from '../../../context/Authentication';
 
 export default function Home(props) {
-  const [Home, setHome] = useState('');
+  const {logout, user} = useAuth();
 
   return (
     <View>
@@ -35,19 +35,22 @@ export default function Home(props) {
       <ScrollView style={{margin: 20}}>
         <Text />
         <View>
+          <Text style={{alignSelf: 'center'}}>Student</Text>
+          <Text />
           <Text style={{alignSelf: 'center'}}>Home</Text>
           <Text />
           <Button
             title="Show my info"
             onPress={() => {
-              console.log(userInfo);
+              console.log(user);
             }}
           />
           <Text />
           <Button
-            title="Login Screen"
+            title="Logout"
             onPress={() => {
-              props.navigation.navigate('Login');
+              logout();
+              //props.navigation.navigate('Login');
             }}
           />
         </View>

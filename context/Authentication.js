@@ -1,5 +1,7 @@
 import React from 'react';
 import {View, AsyncStorage, Text} from 'react-native';
+import {NavigationContext} from 'react-navigation';
+import {fetchUserInfo} from '../api/fetchUserInfo';
 
 const AuthContext = React.createContext({});
 
@@ -13,7 +15,12 @@ const AuthProvider = (props) => {
 
   if (!loading) {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
         <Text> Loading ... </Text>
       </View>
     );
@@ -21,13 +28,19 @@ const AuthProvider = (props) => {
   async function login() {
     setLoading(false);
     const accessToken = await AsyncStorage.getItem('accessToken');
+    const userName = await AsyncStorage.getItem('userName');
     if (accessToken) {
       setTimeout(() => {
-        setUser({
+        fetchUserInfo(userName)
+          .then(async (res) => {
+            setUser(res[0]);
+          })
+          .catch((error) => {});
+        /*setUser({
           role: 'student',
-        });
+        });*/
         setLoading(true);
-      }, 2000);
+      }, 1000);
     } else {
       console.log('no token');
       setLoading(true);
@@ -35,9 +48,11 @@ const AuthProvider = (props) => {
   }
 
   async function logout() {
-    setUser(undefined);
     setLoading(false);
+    setUser(undefined);
     await AsyncStorage.removeItem('accessToken');
+    await AsyncStorage.removeItem('userName');
+    setLoading(true);
   }
 
   return <AuthContext.Provider value={{user, login, logout}} {...props} />;
