@@ -9,17 +9,19 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
+  AsyncStorage,
 } from 'react-native';
 import {fetchLogin} from '../../api/login';
 import {fetchUserInfo} from '../../api/fetchUserInfo';
 import {setUserInfo} from '../../utils/userInfo';
+import {useAuth} from '../../context/Authentication';
 
 export default function Login(props) {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const {login} = useAuth();
   const userNameHandler = (userName) => {
     setUserName(userName);
   };
@@ -35,7 +37,11 @@ export default function Login(props) {
   const loginhandler = () => {
     //setLoading(true);
     fetchLogin(userName, password)
-      .then((res) => {
+      .then(async (res) => {
+        await AsyncStorage.setItem(
+          'accessToken',
+          'example Axxcezsqdqspdkqsmdqsmdkqsomk',
+        );
         //setLoading(false);
         if (res == 'login successfully') {
           Alert.alert(
@@ -47,15 +53,7 @@ export default function Login(props) {
               {
                 text: 'OK',
                 onPress: () => {
-                  fetchUserInfo(userName)
-                    .then((res) => {
-                      console.log(res[0]['role']);
-                      setUserInfo(res);
-                    })
-                    .catch((error) => {
-                      Alert.alert('Erreur', error.message);
-                    });
-                  props.navigation.navigate('Home');
+                  login();
                 },
               },
             ],
