@@ -1,15 +1,10 @@
 import React, {useState} from 'react';
 import {Text, ScrollView, View, Button} from 'react-native';
 import {Header, Left, Right, Icon} from 'native-base';
-import {
-  fetchAlbums,
-  fetchAlbumChildren,
-  fetchAlbumItems,
-  fetchItems,
-} from './api/fetchMedia';
-
-export default function Media(props) {
-  const [Media, setMedia] = useState('');
+import {fetchPollsForAll, fetchUserPolls} from './api/fetchPolls';
+import {userInfo} from '../../utils/userInfo';
+export default function Polls(props) {
+  const [Polls, setPolls] = useState('');
 
   return (
     <View>
@@ -33,40 +28,26 @@ export default function Media(props) {
             textAlign: 'center',
             fontSize: 25,
           }}>
-          Media
+          Polls
         </Text>
         <Text style={{width: '15%'}} />
       </Header>
       <ScrollView style={{margin: 20}}>
         <Text />
         <View>
-          <Text style={{alignSelf: 'center'}}>Media</Text>
+          <Text style={{alignSelf: 'center'}}>Polls</Text>
           <Text />
           <Button
-            title="Show albums"
+            title="Show Polls for all"
             onPress={() => {
-              fetchAlbums();
+              fetchPollsForAll();
             }}
           />
           <Text />
           <Button
-            title="Show items"
+            title={'Show Polls for ' + userInfo[0]['role'] + 's'}
             onPress={() => {
-              fetchItems();
-            }}
-          />
-          <Text />
-          <Button
-            title="Show album children"
-            onPress={() => {
-              fetchAlbumChildren(2);
-            }}
-          />
-          <Text />
-          <Button
-            title="Show album items"
-            onPress={() => {
-              fetchAlbumItems(2);
+              fetchUserPolls();
             }}
           />
           <Text />

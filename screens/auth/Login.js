@@ -11,6 +11,8 @@ import {
   Alert,
 } from 'react-native';
 import {fetchLogin} from '../../api/login';
+import {fetchUserInfo} from '../../api/fetchUserInfo';
+import {setUserInfo} from '../../utils/userInfo';
 
 export default function Login(props) {
   const [userName, setUserName] = useState('');
@@ -45,6 +47,14 @@ export default function Login(props) {
               {
                 text: 'OK',
                 onPress: () => {
+                  fetchUserInfo(userName)
+                    .then((res) => {
+                      console.log(res[0]['role']);
+                      setUserInfo(res);
+                    })
+                    .catch((error) => {
+                      Alert.alert('Erreur', error.message);
+                    });
                   props.navigation.navigate('Home');
                 },
               },
