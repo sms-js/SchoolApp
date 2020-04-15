@@ -27,8 +27,7 @@ export async function fetchPollsForAll() {
   }
 }
 
-export async function fetchUserPolls() {
-  const role = userInfo[0]['role'];
+export async function fetchUserPolls(role) {
   try {
     const response = await fetch(BASE_URL + '/PollsController.php', {
       method: 'post',

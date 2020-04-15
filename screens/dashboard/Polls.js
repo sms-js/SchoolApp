@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Text, ScrollView, View, Button} from 'react-native';
 import {Header, Left, Right, Icon} from 'native-base';
 import {fetchPollsForAll, fetchUserPolls} from './api/fetchPolls';
-import {userInfo} from '../../utils/userInfo';
+import {useAuth} from '../../context/Authentication';
 export default function Polls(props) {
-  const [Polls, setPolls] = useState('');
+  const {user} = useAuth();
 
   return (
     <View>
@@ -45,9 +45,9 @@ export default function Polls(props) {
           />
           <Text />
           <Button
-            title={'Show Polls for ' + userInfo[0]['role'] + 's'}
+            title={'Show Polls for ' + user['role'] + 's'}
             onPress={() => {
-              fetchUserPolls();
+              fetchUserPolls(user['role']);
             }}
           />
           <Text />
