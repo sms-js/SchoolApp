@@ -1,6 +1,5 @@
 /* eslint-disable no-extend-native */
 import {BASE_URL} from '../../../utils/config';
-import {userInfo} from '../../../utils/userInfo';
 
 export async function fetchNewsForAll() {
   try {
@@ -132,9 +131,8 @@ export async function fetchNewsForAll() {
   }
 }
 
-export async function fetchUserNews() {
+export async function fetchUserNews(role) {
   try {
-    const role = userInfo[0]['role'];
     const response = await fetch(BASE_URL + '/NewsController.php', {
       method: 'post',
       header: {

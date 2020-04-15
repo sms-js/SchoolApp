@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Text, ScrollView, View, Button} from 'react-native';
 import {Header, Left, Right, Icon} from 'native-base';
 import {fetchNewsForAll, fetchUserNews} from './api/fetchNews';
@@ -55,7 +55,7 @@ export default function News(props) {
           <Button
             title={'Show news for ' + user['role'] + 's'}
             onPress={() => {
-              fetchUserNews();
+              fetchUserNews(user['role']);
             }}
           />
           <Text />
