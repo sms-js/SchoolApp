@@ -1,11 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Text, ScrollView, View, Button} from 'react-native';
-import {Header, Left, Right, Icon} from 'native-base';
+import {Header, Left, Icon} from 'native-base';
 import {fetchBooks, searchBooks} from './api/fetchBooks';
 
 export default function Library(props) {
-  const [Library, setLibrary] = useState('');
-
   return (
     <View>
       <Header

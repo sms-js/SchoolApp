@@ -3,6 +3,7 @@ import {createDrawerNavigator} from 'react-navigation-drawer';
 import {createAppContainer} from 'react-navigation';
 import Events from '../screens/dashboard/Events';
 import Home from '../screens/dashboard/Home/index';
+import Assignments from '../screens/dashboard/Assignments/index';
 import Library from '../screens/dashboard/Library';
 import Media from '../screens/dashboard/Media';
 import Messages from '../screens/dashboard/Messages';
@@ -15,6 +16,7 @@ import NavigatorHeader from './navigatorHeader';
 var dashboardNavigator = createDrawerNavigator(
   {
     Home,
+    Assignments,
     Events,
     Media,
     Messages,
