@@ -9,7 +9,7 @@ import {
 } from '../api/fetchAssignments';
 import {useAuth} from '../../../context/Authentication';
 
-export default function Library(props) {
+export default function Assignments(props) {
   const {user} = useAuth();
   return (
     <View>
