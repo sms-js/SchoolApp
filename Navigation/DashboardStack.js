@@ -3,6 +3,7 @@ import {createDrawerNavigator} from 'react-navigation-drawer';
 import {createAppContainer} from 'react-navigation';
 import Events from '../screens/dashboard/Events';
 import Home from '../screens/dashboard/Home/index';
+import Class from '../screens/dashboard/Class/index';
 import Assignments from '../screens/dashboard/Assignments/index';
 import ClassSchedule from '../screens/dashboard/ClassesSchedule/index';
 import Subjects from '../screens/dashboard/Subjects/index';
@@ -19,6 +20,7 @@ import NavigatorHeader from './navigatorHeader';
 var dashboardNavigator = createDrawerNavigator(
   {
     Home,
+    Class,
     ClassSchedule,
     Subjects,
     Assignments,

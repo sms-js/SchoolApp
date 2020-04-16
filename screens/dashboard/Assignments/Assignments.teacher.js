@@ -50,6 +50,20 @@ export default function Assignments(props) {
           />
           <Text />
           <Button
+            title="Show my assignments for class 1"
+            onPress={() => {
+              fetchClassTeacherAssignments(user['id'], 1);
+            }}
+          />
+          <Text />
+          <Button
+            title="Show my assignments for subject 1"
+            onPress={() => {
+              fetchSubjectTeacherAssignments(user['id'], 1);
+            }}
+          />
+          <Text />
+          <Button
             title="Login Screen"
             onPress={() => {
               props.navigation.navigate('Login');
