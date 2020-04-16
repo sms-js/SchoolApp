@@ -3,7 +3,7 @@ import {useAuth} from '../../../context/Authentication';
 import AssignmentsParent from './Assignments.parent';
 import AssignmentsStudent from './Assignments.student';
 import AssignmentsTeacher from './Assignments.teacher';
-export default function AssignmentsExample() {
+export default function Assignments() {
   const {user} = useAuth();
 
   switch (user['role']) {

@@ -5,6 +5,7 @@ import Events from '../screens/dashboard/Events';
 import Home from '../screens/dashboard/Home/index';
 import Assignments from '../screens/dashboard/Assignments/index';
 import ClassSchedule from '../screens/dashboard/ClassesSchedule/index';
+import Subjects from '../screens/dashboard/Subjects/index';
 import Library from '../screens/dashboard/Library';
 import Media from '../screens/dashboard/Media';
 import Messages from '../screens/dashboard/Messages';
@@ -18,6 +19,7 @@ var dashboardNavigator = createDrawerNavigator(
   {
     Home,
     ClassSchedule,
+    Subjects,
     Assignments,
     Events,
     Media,

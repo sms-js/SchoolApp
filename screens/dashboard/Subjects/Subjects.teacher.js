@@ -2,12 +2,12 @@ import React from 'react';
 import {Text, ScrollView, View, Button} from 'react-native';
 import {Header, Left, Icon} from 'native-base';
 import {
-  fetchStudentAssignments,
-  fetchStudentSubjectAssignments,
-} from '../api/fetchAssignments';
+  fetchTeacherSubjects,
+  fetchTeacherClassSubjects,
+} from '../api/fetchSubjects';
 import {useAuth} from '../../../context/Authentication';
 
-export default function Library(props) {
+export default function Subjects(props) {
   const {user} = useAuth();
   return (
     <View>
@@ -31,26 +31,26 @@ export default function Library(props) {
             textAlign: 'center',
             fontSize: 25,
           }}>
-          Assignments
+          Subjects
         </Text>
         <Text style={{width: '15%'}} />
       </Header>
       <ScrollView style={{margin: 20}}>
         <Text />
         <View>
-          <Text style={{alignSelf: 'center'}}>Assignments</Text>
+          <Text style={{alignSelf: 'center'}}>Subjects</Text>
           <Text />
           <Button
-            title="Show my assignments"
+            title="Show my Subjects"
             onPress={() => {
-              fetchStudentAssignments(user['classId']);
+              fetchTeacherSubjects(user['id']);
             }}
           />
           <Text />
           <Button
-            title="Show Subject 1 assignments"
+            title="Show class1 Subjects"
             onPress={() => {
-              fetchStudentSubjectAssignments(1);
+              fetchTeacherClassSubjects(user['id'], 1);
             }}
           />
           <Text />

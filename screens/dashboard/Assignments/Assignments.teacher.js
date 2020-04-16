@@ -33,14 +33,14 @@ export default function Assignments(props) {
             textAlign: 'center',
             fontSize: 25,
           }}>
-          Library
+          Assignments
         </Text>
         <Text style={{width: '15%'}} />
       </Header>
       <ScrollView style={{margin: 20}}>
         <Text />
         <View>
-          <Text style={{alignSelf: 'center'}}>Library</Text>
+          <Text style={{alignSelf: 'center'}}>Assignments</Text>
           <Text />
           <Button
             title="Show my assignments"

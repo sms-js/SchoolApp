@@ -2,6 +2,7 @@ import React from 'react';
 import {Text, ScrollView, View, Button} from 'react-native';
 import {Header, Left, Icon} from 'native-base';
 import {fetchClassesSchedule} from '../api/fetchClassesSchedule';
+import {fetchSubject} from '../api/fetchSubjects';
 import {useAuth} from '../../../context/Authentication';
 
 export default function ClassSchedule(props) {
@@ -28,19 +29,26 @@ export default function ClassSchedule(props) {
             textAlign: 'center',
             fontSize: 25,
           }}>
-          Library
+          Class Schedule
         </Text>
         <Text style={{width: '15%'}} />
       </Header>
       <ScrollView style={{margin: 20}}>
         <Text />
         <View>
-          <Text style={{alignSelf: 'center'}}>Library</Text>
+          <Text style={{alignSelf: 'center'}}>Class Schedule</Text>
           <Text />
           <Button
             title="Show class1 schedule"
             onPress={() => {
-              fetchClassesSchedule(1);
+              fetchClassesSchedule(2);
+            }}
+          />
+          <Text />
+          <Button
+            title="Show subject1 info"
+            onPress={() => {
+              fetchSubject(1);
             }}
           />
           <Text />

@@ -3,7 +3,7 @@ import {useAuth} from '../../../context/Authentication';
 import ExamsParent from './Exams.parent';
 import ExamsStudent from './Exams.student';
 import ExamsTeacher from './Exams.teacher';
-export default function ExamsExample() {
+export default function Exams() {
   const {user} = useAuth();
 
   switch (user['role']) {

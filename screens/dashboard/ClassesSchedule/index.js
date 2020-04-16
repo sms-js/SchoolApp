@@ -3,7 +3,7 @@ import {useAuth} from '../../../context/Authentication';
 import ClassesScheduleParent from './ClassesSchedule.parent';
 import ClassesScheduleStudent from './ClassesSchedule.student';
 import ClassesScheduleTeacher from './ClassesSchedule.teacher';
-export default function ClassesScheduleExample() {
+export default function ClassesSchedule() {
   const {user} = useAuth();
 
   switch (user['role']) {

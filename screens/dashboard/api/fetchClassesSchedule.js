@@ -10,7 +10,7 @@ export async function fetchClassesSchedule(classId) {
       },
       body: JSON.stringify({
         view: 'get',
-        classid: classId,
+        classId: classId,
       }),
     });
     const responseJson = await response.json();
