@@ -15,6 +15,7 @@ import News from '../screens/dashboard/News';
 import Pages from '../screens/dashboard/Pages';
 import Transportation from '../screens/dashboard/Transportation';
 import Polls from '../screens/dashboard/Polls';
+import Profile from '../screens/dashboard/Profile';
 import NavigatorHeader from './navigatorHeader';
 
 var dashboardNavigator = createDrawerNavigator(
@@ -33,6 +34,7 @@ var dashboardNavigator = createDrawerNavigator(
     Pages,
     Transportation,
     Polls,
+    Profile,
   },
   {
     contentComponent: (props) => <NavigatorHeader {...props} />,
