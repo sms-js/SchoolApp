@@ -1,5 +1,12 @@
-import React from 'react';
-import {Text, ScrollView, View, Button} from 'react-native';
+import React, {useState} from 'react';
+import {
+  Text,
+  ScrollView,
+  View,
+  Button,
+  TextInput,
+  StyleSheet,
+} from 'react-native';
 import {Header, Left, Icon} from 'native-base';
 import {
   fetchTeacherAssignments,
@@ -11,6 +18,30 @@ import {useAuth} from '../../../context/Authentication';
 
 export default function Assignments(props) {
   const {user} = useAuth();
+  const [assignmentTitle, setAssignmentTitle] = useState('');
+  const [assignmentDescription, setAssignmentDescription] = useState('');
+  const [assignmentClass, setAssignmentClass] = useState('');
+  const [assignmentSubject, setAssignmentSubject] = useState('');
+  const [assignmentDeadLine, setAssignmentDeadLine] = useState('');
+  const [assignmentFile, setAssignmentFile] = useState('');
+  const assignmentTitleHandler = (title) => {
+    setAssignmentTitle(title);
+  };
+  const assignmentDescriptionHandler = (description) => {
+    setAssignmentDescription(description);
+  };
+  const assignmentclasseHandler = (classe) => {
+    setAssignmentClass(classe);
+  };
+  const assignmentSubjectHandler = (subject) => {
+    setAssignmentSubject(subject);
+  };
+  const assignmentDeadLineHandler = (deadLine) => {
+    setAssignmentDeadLine(deadLine);
+  };
+  const assignmentFileHandler = (file) => {
+    setAssignmentFile(file);
+  };
   return (
     <View>
       <Header
@@ -62,6 +93,53 @@ export default function Assignments(props) {
               fetchSubjectTeacherAssignments(user['id'], 1);
             }}
           />
+          <View style={styles.view}>
+            <TextInput
+              placeholder="Assignment Title"
+              onChangeText={assignmentTitleHandler}
+              style={styles.textinput}
+            />
+            <TextInput
+              placeholder="Assignment Description"
+              onChangeText={assignmentDescriptionHandler}
+              style={styles.textinput}
+            />
+            <TextInput
+              placeholder="Assignment Class"
+              onChangeText={assignmentclasseHandler}
+              style={styles.textinput}
+            />
+            <TextInput
+              placeholder="Assignment Subject"
+              onChangeText={assignmentSubjectHandler}
+              style={styles.textinput}
+            />
+            <TextInput
+              placeholder="Assignment DeadLine"
+              onChangeText={assignmentDeadLineHandler}
+              style={styles.textinput}
+            />
+            <TextInput
+              placeholder="Assignment File"
+              onChangeText={assignmentFileHandler}
+              style={styles.textinput}
+            />
+            <Button
+              title="add assignment"
+              style={styles.button}
+              onPress={() => {
+                insertTeacherAssignments(
+                  assignmentClass,
+                  assignmentSubject,
+                  user['id'],
+                  assignmentTitle,
+                  setAssignmentDescription,
+                  setAssignmentFile,
+                  setAssignmentDeadLine,
+                );
+              }}
+            />
+          </View>
           <Text />
           <Button
             title="Login Screen"
@@ -74,3 +152,8 @@ export default function Assignments(props) {
     </View>
   );
 }
+const styles = StyleSheet.create({
+  view: {borderColor: 'lightblue', borderWidth: 1, margin: 5},
+  textinput: {borderColor: 'lightblue', borderWidth: 1, padding: 10, margin: 5},
+  button: {alignSelf: 'center'},
+});
