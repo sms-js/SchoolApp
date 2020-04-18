@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     margin: 5,
+    marginBottom: 20,
   },
   text: {
     fontSize: 25,
@@ -46,6 +47,7 @@ const styles = StyleSheet.create({
     height: 90,
     borderRadius: 100,
     margin: 5,
+    marginTop: 20,
     resizeMode: 'center',
   },
 });

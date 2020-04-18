@@ -13,7 +13,7 @@ import Media from '../screens/dashboard/Media';
 import Messages from '../screens/dashboard/Messages';
 import News from '../screens/dashboard/News';
 import Pages from '../screens/dashboard/Pages';
-import Transportation from '../screens/dashboard/Transportation';
+import Transportation from '../screens/dashboard/Transportation/index';
 import Polls from '../screens/dashboard/Polls';
 import Profile from '../screens/dashboard/Profile';
 import NavigatorHeader from './navigatorHeader';

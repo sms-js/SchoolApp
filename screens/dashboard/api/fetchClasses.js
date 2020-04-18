@@ -2,7 +2,7 @@ import {BASE_URL} from '../../../utils/config';
 
 export async function fetchClass(classId) {
   try {
-    const response = await fetch(BASE_URL + '/ClassesController.php', {
+    const response = await fetch(BASE_URL + '/ClassesController2.php', {
       method: 'post',
       header: {
         Accept: 'application/json',
@@ -29,7 +29,7 @@ export async function fetchClass(classId) {
 
 export async function fetchTeacherClasses(teacherId) {
   try {
-    const response = await fetch(BASE_URL + '/ClassesController.php', {
+    const response = await fetch(BASE_URL + '/ClassesController2.php', {
       method: 'post',
       header: {
         Accept: 'application/json',

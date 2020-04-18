@@ -30,8 +30,8 @@ export default class ClassesPicker extends Component {
         let x = '';
         let y = '';
         for (let i = 0; i < this.state.classes_count; i++) {
-          classes_names[i] = {value: res['classes'][i]['className']};
-          classes_ids[i] = {value: parseInt(res['classes'][i]['id'])};
+          classes_names[i] = {value: res[i]['className']};
+          classes_ids[i] = {value: parseInt(res[i]['id'])};
         }
         this.setState({
           classes_names: classes_names,

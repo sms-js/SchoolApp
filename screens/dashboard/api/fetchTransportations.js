@@ -14,12 +14,63 @@ export async function fetchTransportations() {
     });
     const responseJson = await response.json();
     if (response.ok) {
-      console.log(responseJson['transportations']);
-      //let transportations = [{}];
       return responseJson['transportations'];
     } else {
-      //return 'error !';
       alert(responseJson['transportations']['error']);
+    }
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function fetchTransportation(id) {
+  try {
+    const response = await fetch(
+      BASE_URL + '/TransportationGetController.php',
+      {
+        method: 'post',
+        header: {
+          Accept: 'application/json',
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          view: 'get',
+          id: id,
+        }),
+      },
+    );
+    const responseJson = await response.json();
+    if (response.ok) {
+      return responseJson['transportation'];
+    } else {
+      alert(responseJson['transportation']['error']);
+    }
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function fetchUserTransportation(id) {
+  try {
+    const response = await fetch(
+      BASE_URL + '/TransportationGetController.php',
+      {
+        method: 'post',
+        header: {
+          Accept: 'application/json',
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          view: 'user',
+          id: id,
+        }),
+      },
+    );
+    const responseJson = await response.json();
+    if (response.ok) {
+      return responseJson['transportation'][0]['transport'];
+    } else {
+      return 0;
     }
   } catch (error) {
     return error;

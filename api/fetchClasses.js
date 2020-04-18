@@ -12,12 +12,12 @@ export async function fetchClasses() {
         view: 'all',
       }),
     });
-    //if (response.ok) {
     const responseJson = await response.json();
-    return responseJson;
-    /*}else{
-      return('error !');
-    }*/
+    if (response.ok) {
+      return responseJson['classes'];
+    } else {
+      alert(['classes']['error']);
+    }
   } catch (error) {
     return error;
   }
