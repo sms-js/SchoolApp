@@ -14,7 +14,7 @@ export async function fetchBooks() {
     });
     const responseJson = await response.json();
     if (response.ok) {
-      console.log(responseJson['all books']);
+      //console.log(responseJson['all books']);
       //let allBooks = [{}];
       return responseJson['all books'];
     } else {
@@ -26,7 +26,7 @@ export async function fetchBooks() {
   }
 }
 
-export async function searchBooks(searchCriteria, searchValue) {
+export async function searchBooks(searchValue, searchCriteria) {
   try {
     const response = await fetch(BASE_URL + '/BookSearchController.php', {
       method: 'post',
@@ -35,17 +35,14 @@ export async function searchBooks(searchCriteria, searchValue) {
         'Content-type': 'application/json',
       },
       body: JSON.stringify({
-        searchCriteria: searchCriteria,
         searchValue: searchValue,
+        searchCriteria: searchCriteria,
       }),
     });
     const responseJson = await response.json();
     if (response.ok) {
-      console.log(responseJson['books']);
-      //let all books = [{}];
       return responseJson['books'];
     } else {
-      //return 'error !';
       alert(responseJson['books']['error']);
     }
   } catch (error) {

@@ -17,15 +17,108 @@ export default function Library(props) {
   const [books, setBooks] = useState([{}]);
   const [searchedBook, setSearchedBook] = useState('');
   const [searchCriteria, setSearchCriteria] = useState('');
-  const [filterCriteria, setFilterCriteria] = useState('');
+  const [typeFilter, setTypeFilter] = useState();
+  const [availabilityFilter, setAvailabilityFilter] = useState();
+  const [priceFilter, setPriceFilter] = useState('');
+
   const searchedBookHandler = (value) => {
     setSearchedBook(value);
   };
   const searchCriteriaHandler = (criteria) => {
     setSearchCriteria(criteria);
   };
-  const filterCriteriaHandler = (criteria) => {
-    setFilterCriteria(criteria);
+  const typeFilterHandler = (value) => {
+    setTypeFilter(value);
+  };
+  const availabilityFilterHandler = (value) => {
+    setAvailabilityFilter(value);
+  };
+  const priceFilterHandler = (value) => {
+    setPriceFilter(value);
+  };
+  const searchBook = (search, criteria) => {
+    if (!searchedBook & !searchCriteria) {
+      alert('Select Search !');
+    } else {
+      switch (criteria) {
+        case 1:
+          searchBooks(searchedBook, 'searchbytitle')
+            .then(async (res) => {
+              setBooks(res);
+            })
+            .catch((error) => {
+              alert(error);
+            });
+          break;
+
+        case 2:
+          searchBooks(searchedBook, 'searchbyauthor')
+            .then(async (res) => {
+              setBooks(res);
+            })
+            .catch((error) => {
+              alert(error);
+            });
+          break;
+      }
+    }
+  };
+  const filterBooks = (type, availability, price) => {
+    if (!type & !availability & !price) {
+      fetchBooks()
+        .then(async (res) => {
+          setBooks(res);
+        })
+        .catch((error) => {
+          alert(error);
+        });
+    } else {
+      if (type & !availability & !price) {
+        if (type == 1) {
+          fetchBooks()
+            .then(async (res) => {
+              setBooks(res);
+            })
+            .catch((error) => {
+              alert(error);
+            });
+        }
+      } else {
+        if (!type & availability & !price) {
+          if (availability == 1) {
+            fetchBooks()
+              .then(async (res) => {
+                setBooks(res);
+              })
+              .catch((error) => {
+                alert(error);
+              });
+          }
+        } else {
+          if (!type & !availability & price) {
+          } else {
+            if (type & availability & !price) {
+              if ((type == 1) & (availability == 1)) {
+                fetchBooks()
+                  .then(async (res) => {
+                    setBooks(res);
+                  })
+                  .catch((error) => {
+                    alert(error);
+                  });
+              }
+            } else {
+              if (type & !availability & price) {
+              } else {
+                if (!type & availability & price) {
+                } else {
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   };
   return (
     <View>
@@ -53,7 +146,7 @@ export default function Library(props) {
         </Text>
         <Text style={{width: '15%'}} />
       </Header>
-      <ScrollView style={{margin: 20}}>
+      <ScrollView style={{margin: 10, marginBottom: 100}}>
         <Text />
 
         <TextInput
@@ -77,39 +170,125 @@ export default function Library(props) {
         <TouchableOpacity
           style={styles.searchOpacity}
           onPress={() => {
-            //searchBooks('searchbytitle', 'Book 1');
-            alert('sb: ' + searchedBook + '\nsc: ' + searchCriteria);
+            searchBook(searchedBook, searchCriteria);
           }}>
           <Text style={{marginTop: 10, alignSelf: 'center'}}>Search</Text>
         </TouchableOpacity>
         <View style={styles.filterView}>
-          <Text style={{width: '30%', fontSize: 17.5, paddingTop: 17.5}}>
-            Show
-          </Text>
-          <View style={{width: '70%'}}>
+          <View style={{width: '45%'}}>
             <Dropdown
-              label="Books by"
+              label="Books Type"
               data={[
-                {label: 'All Books', value: 1},
-                {label: 'Traditional Books', value: 2},
-                {label: 'Electronic Books', value: 3},
+                {label: 'All', value: 1},
+                {label: 'Traditional', value: 2},
+                {label: 'Electronic', value: 3},
               ]}
               onChangeText={(value) => {
-                filterCriteriaHandler(value);
+                typeFilterHandler(value);
+              }}
+            />
+          </View>
+          <Text style={{width: '10%'}} />
+          <View style={{width: '45%'}}>
+            <Dropdown
+              label="Books Availibility"
+              data={[
+                {label: 'All', value: 1},
+                {label: 'Available', value: 2},
+                {label: 'Unavailable', value: 3},
+              ]}
+              onChangeText={(value) => {
+                availabilityFilterHandler(value);
               }}
             />
           </View>
         </View>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Maximum Price"
+          onChangeText={priceFilterHandler}
+        />
+        <TouchableOpacity
+          onPress={() => {
+            filterBooks(typeFilter, availabilityFilter, priceFilter);
+          }}>
+          <Text
+            style={{
+              width: '20%',
+              fontSize: 17.5,
+              paddingTop: 17.5,
+              alignSelf: 'center',
+            }}>
+            Show
+          </Text>
+        </TouchableOpacity>
         <Text />
 
-        <FlatList data={books} renderItem={({item}) => {}} />
+        <FlatList
+          data={books}
+          renderItem={({item}) => {
+            switch (item.bookType) {
+              case 'traditional':
+                if (item.bookState == 1) {
+                  return (
+                    <View style={styles.bookView}>
+                      <Text>{item.bookName}</Text>
+                      <Text>{item.bookDescription}</Text>
+                      <Text>{item.bookAuthor}</Text>
+                      <Text style={styles.available}>Available</Text>
+                      <Text>{item.bookPrice}</Text>
+                    </View>
+                  );
+                } else {
+                  return (
+                    <View style={styles.bookView}>
+                      <Text>{item.bookName}</Text>
+                      <Text>{item.bookDescription}</Text>
+                      <Text>{item.bookAuthor}</Text>
+                      <Text style={styles.unavailable}>Unavailable</Text>
+                      <Text>{item.bookPrice}</Text>
+                    </View>
+                  );
+                }
+                break;
+
+              case 'electronic':
+                if (item.bookState == 1) {
+                  return (
+                    <View style={styles.bookView}>
+                      <Text>{item.bookName}</Text>
+                      <Text>{item.bookDescription}</Text>
+                      <Text>{item.bookAuthor}</Text>
+                      <Text style={styles.available}>Available</Text>
+                      <Text>{item.bookPrice}</Text>
+                      <Button title="Download" />
+                    </View>
+                  );
+                } else {
+                  return (
+                    <View style={styles.bookView}>
+                      <Text>{item.bookName}</Text>
+                      <Text>{item.bookDescription}</Text>
+                      <Text>{item.bookAuthor}</Text>
+                      <Text style={styles.unavailable}>Unavailable</Text>
+                      <Text>{item.bookPrice}</Text>
+                    </View>
+                  );
+                }
+                break;
+            }
+          }}
+        />
       </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  filterView: {alignItems: 'center', flexDirection: 'row'},
+  filterView: {
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
   searchInput: {
     padding: 5,
     borderColor: 'lightblue',
@@ -124,4 +303,32 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginBottom: 5,
   },
+  bookView: {
+    height: 200,
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 5,
+    padding: 5,
+    borderColor: 'lightblue',
+    borderWidth: 1,
+    borderRadius: 30,
+  },
+  available: {color: 'green'},
+  unavailable: {color: 'red'},
 });
+/*
+
+
+          renderItem={({item}) => (
+            <View>
+              <Text>Item</Text>
+              <Text>{item.bookName}</Text>
+              <Text>{item.bookDescription}</Text>
+              <Text>{item.bookAuthor}</Text>
+              <Text>{item.State}</Text>
+              <Text>{item.bookPrice}</Text>
+            </View>
+          )}
+*/
