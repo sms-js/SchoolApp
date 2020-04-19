@@ -38,7 +38,7 @@ export default function Exams(props) {
         </Text>
         <Text style={{width: '15%'}} />
       </Header>
-      <ScrollView style={{margin: 20}}>
+      <ScrollView style={{margin: 20, marginBottom: 60}}>
         <Text />
         <Button
           title="Show Exams"
