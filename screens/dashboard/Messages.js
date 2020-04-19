@@ -1,15 +1,38 @@
 import React, {useState} from 'react';
-import {Text, ScrollView, View, Button} from 'react-native';
-import {Header, Left, Right, Icon} from 'native-base';
+import {
+  Text,
+  ScrollView,
+  View,
+  Button,
+  StyleSheet,
+  TextInput,
+} from 'react-native';
+import {Header, Left, Icon} from 'native-base';
+import {Dropdown} from 'react-native-material-dropdown';
 import {
   fetchAllMessages,
   fetchSentMessages,
   fetchRecievedMessages,
 } from './api/fetchMessages';
 import {useAuth} from '../../context/Authentication';
+import {FlatList} from 'react-native-gesture-handler';
 
 export default function Messages(props) {
   const {user} = useAuth();
+  const [userName, setUserName] = useState('');
+  const [messageText, setMessageText] = useState('');
+  const [date, setDate] = useState('');
+  const [messages, setMessages] = useState([{}]);
+
+  const userNameHandler = (username) => {
+    setUserName(username);
+  };
+  const messageTextHandler = (text) => {
+    setMessageText(text);
+  };
+  const dateHandler = (date) => {
+    setDate(date);
+  };
 
   return (
     <View>
@@ -39,38 +62,102 @@ export default function Messages(props) {
       </Header>
       <ScrollView style={{margin: 20}}>
         <Text />
-        <View>
-          <Text style={{alignSelf: 'center'}}>Messages</Text>
-          <Text />
-          <Button
-            title="Show my all messages"
-            onPress={() => {
-              fetchAllMessages(user['id']);
-            }}
-          />
-          <Text />
-          <Button
-            title="Show my sent messages"
-            onPress={() => {
-              fetchSentMessages(user['id']);
-            }}
-          />
-          <Text />
-          <Button
-            title="Show my recieved messages"
-            onPress={() => {
-              fetchRecievedMessages(user['id']);
-            }}
-          />
-          <Text />
-          <Button
-            title="Login Screen"
-            onPress={() => {
-              props.navigation.navigate('Login');
-            }}
-          />
-        </View>
+        <TextInput
+          style={styles.textinput}
+          placeholder="User Name"
+          onChangeText={userNameHandler}
+        />
+        <TextInput
+          style={styles.msginput}
+          placeholder="Message"
+          onChangeText={messageTextHandler}
+        />
+        <TextInput
+          style={styles.textinput}
+          placeholder="Date"
+          onChangeText={dateHandler}
+        />
+        <Text />
+        <Button title="Send Message" onPress={() => {}} />
+        <Text />
+        <Dropdown
+          label="Show Messages"
+          data={[
+            {label: 'All Messages', value: 1},
+            {label: 'Sent Messages', value: 2},
+            {label: 'Recieved Messages', value: 3},
+          ]}
+          onChangeText={(value) => {
+            switch (value) {
+              case 1:
+                fetchAllMessages(user['id'])
+                  .then(async (res) => {
+                    setMessages(res);
+                  })
+                  .catch((error) => {
+                    alert(error);
+                  });
+                break;
+
+              case 2:
+                break;
+
+              case 3:
+                break;
+            }
+          }}
+        />
+        <FlatList
+          data={messages}
+          renderItem={({item}) => (
+            <View>
+              <Text>{item.fromId}</Text>
+              <Text>{item.messageText}</Text>
+              <Text>{item.dateSent}</Text>
+            </View>
+          )}
+        />
+        <Text />
+        <Button
+          title="Show my sent messages"
+          onPress={() => {
+            fetchSentMessages(user['id']);
+          }}
+        />
+        <Text />
+        <Button
+          title="Show my recieved messages"
+          onPress={() => {
+            fetchRecievedMessages(user['id']);
+          }}
+        />
       </ScrollView>
     </View>
   );
 }
+const styles = StyleSheet.create({
+  view: {
+    borderColor: 'lightblue',
+    borderWidth: 1,
+    borderRadius: 30,
+    padding: 20,
+    marginBottom: 15,
+    marginTop: 20,
+  },
+  textinput: {
+    padding: 5,
+    margin: 5,
+    borderColor: 'lightblue',
+    borderWidth: 1,
+  },
+  msginput: {
+    height: 100,
+    padding: 5,
+    margin: 5,
+    borderColor: 'lightblue',
+    borderWidth: 1,
+    textAlignVertical: 'top',
+  },
+  title: {fontSize: 20, marginBottom: 5},
+  boldtitle: {alignSelf: 'center', fontSize: 25, marginBottom: 5},
+});

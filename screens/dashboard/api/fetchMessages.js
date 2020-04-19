@@ -42,7 +42,7 @@ export async function fetchSentMessages(userId) {
     });
     const responseJson = await response.json();
     if (response.ok) {
-      console.log(responseJson['sent messages']);
+      // console.log(responseJson['sent messages']);
       //let sentMessages = [{}];
       return responseJson['sent messages'];
     } else {
@@ -69,7 +69,7 @@ export async function fetchRecievedMessages(userId) {
     });
     const responseJson = await response.json();
     if (response.ok) {
-      console.log(responseJson['recieved messages']);
+      //console.log(responseJson['recieved messages']);
       //let recievedMessages = [{}];
       return responseJson['recieved messages'];
     } else {

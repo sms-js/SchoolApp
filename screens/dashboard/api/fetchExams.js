@@ -14,7 +14,7 @@ export async function fetchExams() {
     });
     const responseJson = await response.json();
     if (response.ok) {
-      console.log(responseJson['exams']);
+      //console.log(responseJson['exams']);
       //let exams = [{}];
       return responseJson['exams'];
     } else {
