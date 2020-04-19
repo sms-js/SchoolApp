@@ -1,9 +1,17 @@
-import React from 'react';
-import {Text, ScrollView, View, Button} from 'react-native';
+import React, {useState} from 'react';
+import {
+  Text,
+  ScrollView,
+  View,
+  Button,
+  FlatList,
+  StyleSheet,
+} from 'react-native';
 import {Header, Left, Icon} from 'native-base';
 import {fetchExams} from './api/fetchExams';
 
 export default function Exams(props) {
+  const [exams, setExams] = useState([{}]);
   return (
     <View>
       <Header
@@ -32,26 +40,47 @@ export default function Exams(props) {
       </Header>
       <ScrollView style={{margin: 20}}>
         <Text />
-        <View>
-          <Text style={{alignSelf: 'center'}}>Exams</Text>
-          <Text />
-          <Button
-            title="Show exams"
-            onPress={() => {
-              fetchExams();
-            }}
-          />
-          <Text />
-
-          <Text />
-          <Button
-            title="Login Screen"
-            onPress={() => {
-              props.navigation.navigate('Login');
-            }}
-          />
-        </View>
+        <Button
+          title="Show Exams"
+          onPress={() => {
+            fetchExams()
+              .then(async (res) => {
+                setExams(res);
+              })
+              .catch((error) => {
+                alert(error);
+              });
+          }}
+        />
+        <FlatList
+          data={exams}
+          renderItem={({item}) => (
+            <View style={styles.view}>
+              <Text style={styles.boldtitle}>{item.examTitle}</Text>
+              <Text style={styles.title}>Description : </Text>
+              <Text>{item.examDescription}</Text>
+              <Text />
+              <Text style={styles.title}>Date :</Text>
+              <Text>{item.examDate}</Text>
+            </View>
+          )}
+        />
       </ScrollView>
     </View>
   );
 }
+const styles = StyleSheet.create({
+  view: {
+    borderColor: 'lightblue',
+    borderWidth: 1,
+    borderRadius: 30,
+    padding: 20,
+    marginBottom: 15,
+    marginTop: 20,
+  },
+  text: {
+    marginBottom: 10,
+  },
+  title: {fontSize: 20, marginBottom: 5},
+  boldtitle: {alignSelf: 'center', fontSize: 25, marginBottom: 5},
+});
