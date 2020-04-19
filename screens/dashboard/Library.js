@@ -10,7 +10,15 @@ import {
   StyleSheet,
 } from 'react-native';
 import {Header, Left, Icon} from 'native-base';
-import {fetchBooks, searchBooks} from './api/fetchBooks';
+import {
+  fetchBooks,
+  searchBooks,
+  typeFilterBooks,
+  availabilityFilterBooks,
+  traditionalStatusBooks,
+  electronicStatusBooks,
+  //priceFilterBooks,
+} from './api/fetchBooks';
 import {Dropdown} from 'react-native-material-dropdown';
 
 export default function Library(props) {
@@ -19,7 +27,7 @@ export default function Library(props) {
   const [searchCriteria, setSearchCriteria] = useState('');
   const [typeFilter, setTypeFilter] = useState();
   const [availabilityFilter, setAvailabilityFilter] = useState();
-  const [priceFilter, setPriceFilter] = useState('');
+  //const [priceFilter, setPriceFilter] = useState('');
 
   const searchedBookHandler = (value) => {
     setSearchedBook(value);
@@ -33,9 +41,9 @@ export default function Library(props) {
   const availabilityFilterHandler = (value) => {
     setAvailabilityFilter(value);
   };
-  const priceFilterHandler = (value) => {
+  /*const priceFilterHandler = (value) => {
     setPriceFilter(value);
-  };
+  };*/
   const searchBook = (search, criteria) => {
     if (!searchedBook & !searchCriteria) {
       alert('Select Search !');
@@ -63,8 +71,9 @@ export default function Library(props) {
       }
     }
   };
-  const filterBooks = (type, availability, price) => {
-    if (!type & !availability & !price) {
+
+  const filterBooks = (type, availability) => {
+    if (!type & !availability) {
       fetchBooks()
         .then(async (res) => {
           setBooks(res);
@@ -73,19 +82,10 @@ export default function Library(props) {
           alert(error);
         });
     } else {
-      if (type & !availability & !price) {
-        if (type == 1) {
-          fetchBooks()
-            .then(async (res) => {
-              setBooks(res);
-            })
-            .catch((error) => {
-              alert(error);
-            });
-        }
-      } else {
-        if (!type & availability & !price) {
-          if (availability == 1) {
+      if (type & !availability) {
+        alert(type);
+        switch (type) {
+          case 1:
             fetchBooks()
               .then(async (res) => {
                 setBooks(res);
@@ -93,25 +93,147 @@ export default function Library(props) {
               .catch((error) => {
                 alert(error);
               });
+            break;
+
+          case 5:
+            typeFilterBooks('traditional')
+              .then(async (res) => {
+                setBooks(res);
+              })
+              .catch((error) => {
+                alert(error);
+              });
+            break;
+
+          case 3:
+            typeFilterBooks('electronic')
+              .then(async (res) => {
+                setBooks(res);
+              })
+              .catch((error) => {
+                alert(error);
+              });
+            break;
+        }
+      } else {
+        if (!type & availability) {
+          switch (availability) {
+            case 1:
+              fetchBooks()
+                .then(async (res) => {
+                  setBooks(res);
+                })
+                .catch((error) => {
+                  alert(error);
+                });
+              break;
+
+            case 5:
+              availabilityFilterBooks(1)
+                .then(async (res) => {
+                  setBooks(res);
+                })
+                .catch((error) => {
+                  alert(error);
+                });
+              break;
+
+            case 3:
+              availabilityFilterBooks(0)
+                .then(async (res) => {
+                  setBooks(res);
+                })
+                .catch((error) => {
+                  alert(error);
+                });
+              break;
           }
         } else {
-          if (!type & !availability & price) {
+          if ((type == 1) & (availability == 1)) {
+            fetchBooks()
+              .then(async (res) => {
+                setBooks(res);
+              })
+              .catch((error) => {
+                alert(error);
+              });
           } else {
-            if (type & availability & !price) {
-              if ((type == 1) & (availability == 1)) {
-                fetchBooks()
+            if ((type == 5) & (availability == 1)) {
+              typeFilterBooks('traditional')
+                .then(async (res) => {
+                  setBooks(res);
+                })
+                .catch((error) => {
+                  alert(error);
+                });
+            } else {
+              if ((type == 3) & (availability == 1)) {
+                typeFilterBooks('electronic')
                   .then(async (res) => {
                     setBooks(res);
                   })
                   .catch((error) => {
                     alert(error);
                   });
-              }
-            } else {
-              if (type & !availability & price) {
               } else {
-                if (!type & availability & price) {
+                if ((type == 1) & (availability == 5)) {
+                  availabilityFilterBooks(1)
+                    .then(async (res) => {
+                      setBooks(res);
+                    })
+                    .catch((error) => {
+                      alert(error);
+                    });
                 } else {
+                  if ((type == 1) & (availability == 3)) {
+                    availabilityFilterBooks(0)
+                      .then(async (res) => {
+                        setBooks(res);
+                      })
+                      .catch((error) => {
+                        alert(error);
+                      });
+                  } else {
+                    if ((type == 5) & (availability == 5)) {
+                      traditionalStatusBooks(1)
+                        .then(async (res) => {
+                          setBooks(res);
+                        })
+                        .catch((error) => {
+                          alert(error);
+                        });
+                    } else {
+                      if ((type == 5) & (availability == 3)) {
+                        traditionalStatusBooks(0)
+                          .then(async (res) => {
+                            setBooks(res);
+                          })
+                          .catch((error) => {
+                            alert(error);
+                          });
+                      } else {
+                        if ((type == 3) & (availability == 5)) {
+                          electronicStatusBooks(1)
+                            .then(async (res) => {
+                              setBooks(res);
+                            })
+                            .catch((error) => {
+                              alert(error);
+                            });
+                        } else {
+                          if ((type == 3) & (availability == 3)) {
+                            electronicStatusBooks(0)
+                              .then(async (res) => {
+                                setBooks(res);
+                              })
+                              .catch((error) => {
+                                alert(error);
+                              });
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -120,6 +242,7 @@ export default function Library(props) {
       }
     }
   };
+
   return (
     <View>
       <Header
@@ -180,7 +303,7 @@ export default function Library(props) {
               label="Books Type"
               data={[
                 {label: 'All', value: 1},
-                {label: 'Traditional', value: 2},
+                {label: 'Traditional', value: 5},
                 {label: 'Electronic', value: 3},
               ]}
               onChangeText={(value) => {
@@ -194,7 +317,7 @@ export default function Library(props) {
               label="Books Availibility"
               data={[
                 {label: 'All', value: 1},
-                {label: 'Available', value: 2},
+                {label: 'Available', value: 5},
                 {label: 'Unavailable', value: 3},
               ]}
               onChangeText={(value) => {
@@ -203,14 +326,10 @@ export default function Library(props) {
             />
           </View>
         </View>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Maximum Price"
-          onChangeText={priceFilterHandler}
-        />
+
         <TouchableOpacity
           onPress={() => {
-            filterBooks(typeFilter, availabilityFilter, priceFilter);
+            filterBooks(typeFilter, availabilityFilter);
           }}>
           <Text
             style={{
@@ -250,7 +369,6 @@ export default function Library(props) {
                     </View>
                   );
                 }
-                break;
 
               case 'electronic':
                 if (item.bookState == 1) {
@@ -275,7 +393,6 @@ export default function Library(props) {
                     </View>
                   );
                 }
-                break;
             }
           }}
         />
@@ -319,16 +436,120 @@ const styles = StyleSheet.create({
   unavailable: {color: 'red'},
 });
 /*
+ <TextInput
+          style={styles.searchInput}
+          placeholder="Maximum Price"
+          onChangeText={priceFilterHandler}
+        />
 
-
-          renderItem={({item}) => (
-            <View>
-              <Text>Item</Text>
-              <Text>{item.bookName}</Text>
-              <Text>{item.bookDescription}</Text>
-              <Text>{item.bookAuthor}</Text>
-              <Text>{item.State}</Text>
-              <Text>{item.bookPrice}</Text>
-            </View>
-          )}
 */
+/*const filterBooks = (type, availability, price) => {
+    if (!type & !availability & !price) {
+      fetchBooks()
+        .then(async (res) => {
+          setBooks(res);
+        })
+        .catch((error) => {
+          alert(error);
+        });
+    } else {
+      if (type & !availability & !price) {
+        alert(type);
+        switch (type) {
+          case 1:
+            fetchBooks()
+              .then(async (res) => {
+                setBooks(res);
+              })
+              .catch((error) => {
+                alert(error);
+              });
+            break;
+
+          case 5:
+            typeFilterBooks('traditional')
+              .then(async (res) => {
+                setBooks(res);
+              })
+              .catch((error) => {
+                alert(error);
+              });
+            break;
+
+          case 3:
+            typeFilterBooks('electronic')
+              .then(async (res) => {
+                setBooks(res);
+              })
+              .catch((error) => {
+                alert(error);
+              });
+            break;
+        }
+      } else {
+        if (!type & availability & !price) {
+          alert(availability);
+          switch (availability) {
+            case 1:
+              fetchBooks()
+                .then(async (res) => {
+                  setBooks(res);
+                })
+                .catch((error) => {
+                  alert(error);
+                });
+              break;
+
+            case 5:
+              availabilityFilterBooks(1)
+                .then(async (res) => {
+                  setBooks(res);
+                })
+                .catch((error) => {
+                  alert(error);
+                });
+              break;
+
+            case 3:
+              availabilityFilterBooks(0)
+                .then(async (res) => {
+                  setBooks(res);
+                })
+                .catch((error) => {
+                  alert(error);
+                });
+              break;
+          }
+        } else {
+          if (!type & !availability & price) {
+            priceFilterBooks(priceFilter)
+              .then(async (res) => {
+                setBooks(res);
+              })
+              .catch((error) => {
+                alert(error);
+              });
+          } else {
+            if (type & availability & !price) {
+              if ((type == 1) & (availability == 1)) {
+                fetchBooks()
+                  .then(async (res) => {
+                    setBooks(res);
+                  })
+                  .catch((error) => {
+                    alert(error);
+                  });
+              }
+            } else {
+              if (type & !availability & price) {
+              } else {
+                if (!type & availability & price) {
+                } else {
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  };*/
