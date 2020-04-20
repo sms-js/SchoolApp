@@ -83,7 +83,6 @@ export default function Library(props) {
         });
     } else {
       if (type & !availability) {
-        alert(type);
         switch (type) {
           case 1:
             fetchBooks()

@@ -16,6 +16,7 @@ import {
 } from './api/fetchMessages';
 import {useAuth} from '../../context/Authentication';
 import {FlatList} from 'react-native-gesture-handler';
+import Message from '../../Components/Message';
 
 export default function Messages(props) {
   const {user} = useAuth();
@@ -100,36 +101,31 @@ export default function Messages(props) {
                 break;
 
               case 2:
+                fetchSentMessages(user['id'])
+                  .then(async (res) => {
+                    setMessages(res);
+                  })
+                  .catch((error) => {
+                    alert(error);
+                  });
                 break;
 
               case 3:
+                fetchRecievedMessages(user['id'])
+                  .then(async (res) => {
+                    setMessages(res);
+                  })
+                  .catch((error) => {
+                    alert(error);
+                  });
                 break;
             }
           }}
         />
         <FlatList
+          style={{marginBottom: 50}}
           data={messages}
-          renderItem={({item}) => (
-            <View>
-              <Text>{item.fromId}</Text>
-              <Text>{item.messageText}</Text>
-              <Text>{item.dateSent}</Text>
-            </View>
-          )}
-        />
-        <Text />
-        <Button
-          title="Show my sent messages"
-          onPress={() => {
-            fetchSentMessages(user['id']);
-          }}
-        />
-        <Text />
-        <Button
-          title="Show my recieved messages"
-          onPress={() => {
-            fetchRecievedMessages(user['id']);
-          }}
+          renderItem={({item}) => <Message item={item} />}
         />
       </ScrollView>
     </View>
@@ -161,3 +157,10 @@ const styles = StyleSheet.create({
   title: {fontSize: 20, marginBottom: 5},
   boldtitle: {alignSelf: 'center', fontSize: 25, marginBottom: 5},
 });
+/*
+<View>
+              <Text>{item.fromId}</Text>
+              <Text>{item.messageText}</Text>
+              <Text>{item.dateSent}</Text>
+            </View>
+*/
