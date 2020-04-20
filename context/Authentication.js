@@ -1,10 +1,11 @@
 import React from 'react';
-import {View, AsyncStorage, Text} from 'react-native';
+import {AsyncStorage} from 'react-native';
+import Loading from '../Components/loading';
 
 const AuthContext = React.createContext({});
 
 const AuthProvider = (props) => {
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const [user, setUser] = React.useState(undefined);
 
   React.useEffect(() => {
@@ -12,14 +13,11 @@ const AuthProvider = (props) => {
   }, []);
 
   if (!loading) {
-    return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Text> Loading ... </Text>
-      </View>
-    );
+    return <Loading img={require('../assets/splash01.json')} />;
   }
   async function login() {
     setLoading(false);
+
     const accessToken = await AsyncStorage.getItem('accessToken');
     if (accessToken) {
       setTimeout(() => {
@@ -27,8 +25,14 @@ const AuthProvider = (props) => {
           role: 'student',
         });
         setLoading(true);
-      }, 2000);
+      }, 5000);
     } else {
+      setTimeout(() => {
+        setUser({
+          role: 'user',
+        });
+        setLoading(true);
+      }, 5000);
       console.log('no token');
       setLoading(true);
     }

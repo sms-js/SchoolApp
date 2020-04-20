@@ -8,6 +8,9 @@ export default function SplashScreen({navigation}) {
 
   if (user) {
     switch (user?.role) {
+      case 'user':
+        navigation.navigate('Login');
+        break;
       case 'student':
         navigation.navigate('Home');
         break;
