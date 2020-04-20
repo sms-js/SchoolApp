@@ -1,12 +1,14 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Text, ScrollView, View, Button} from 'react-native';
-import {userInfo} from '../../utils/userInfo';
-import {Header, Left, Right, Icon} from 'native-base';
-import {fetchTransportations} from './api/fetchTransportations';
+import {Header, Left, Icon} from 'native-base';
+import {
+  fetchStudentAssignments,
+  fetchStudentSubjectAssignments,
+} from '../api/fetchAssignments';
+import {useAuth} from '../../../context/Authentication';
 
-export default function Transportation(props) {
-  const [Transportation, setTransportation] = useState('');
-
+export default function Library(props) {
+  const {user} = useAuth();
   return (
     <View>
       <Header
@@ -29,19 +31,26 @@ export default function Transportation(props) {
             textAlign: 'center',
             fontSize: 25,
           }}>
-          Transportation
+          Assignments
         </Text>
         <Text style={{width: '15%'}} />
       </Header>
       <ScrollView style={{margin: 20}}>
         <Text />
         <View>
-          <Text style={{alignSelf: 'center'}}>Transportation</Text>
+          <Text style={{alignSelf: 'center'}}>Assignments</Text>
           <Text />
           <Button
-            title="Show transportations"
+            title="Show my assignments"
             onPress={() => {
-              fetchTransportations();
+              fetchStudentAssignments(user['studentClass']);
+            }}
+          />
+          <Text />
+          <Button
+            title="Show Subject 1 assignments"
+            onPress={() => {
+              fetchStudentSubjectAssignments(1);
             }}
           />
           <Text />

@@ -1,6 +1,8 @@
 import React from 'react';
 import {AsyncStorage} from 'react-native';
 import Loading from '../Components/loading';
+import {NavigationContext} from 'react-navigation';
+import {fetchUserInfo} from '../api/fetchUserInfo';
 
 const AuthContext = React.createContext({});
 
@@ -19,11 +21,17 @@ const AuthProvider = (props) => {
     setLoading(false);
 
     const accessToken = await AsyncStorage.getItem('accessToken');
+    const userName = await AsyncStorage.getItem('userName');
     if (accessToken) {
       setTimeout(() => {
-        setUser({
+        fetchUserInfo(userName)
+          .then(async (res) => {
+            setUser(res[0]);
+          })
+          .catch((error) => {});
+        /*setUser({
           role: 'student',
-        });
+        });*/
         setLoading(true);
       }, 5000);
     } else {
@@ -39,9 +47,11 @@ const AuthProvider = (props) => {
   }
 
   async function logout() {
-    setUser(undefined);
     setLoading(false);
+    setUser(undefined);
     await AsyncStorage.removeItem('accessToken');
+    await AsyncStorage.removeItem('userName');
+    setLoading(true);
   }
 
   return <AuthContext.Provider value={{user, login, logout}} {...props} />;

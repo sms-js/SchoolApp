@@ -7,10 +7,7 @@ export default function SplashScreen({navigation}) {
   const {user} = useAuth();
 
   if (user) {
-    switch (user?.role) {
-      case 'user':
-        navigation.navigate('Login');
-        break;
+    /*switch (user?.role) {
       case 'student':
         navigation.navigate('Home');
         break;
@@ -20,7 +17,8 @@ export default function SplashScreen({navigation}) {
       default:
         navigation.navigate('Home');
         break;
-    }
+    }*/
+    navigation.navigate('Home');
   } else {
     navigation.navigate('Login');
   }

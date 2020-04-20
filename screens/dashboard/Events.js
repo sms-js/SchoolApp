@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import {Text, ScrollView, View, Button} from 'react-native';
 import {Header, Left, Right, Icon} from 'native-base';
-import {userInfo} from '../../utils/userInfo';
 import {fetchEventsForAll, fetchUserEvents} from './api/fetchEvents';
+import {useAuth} from '../../context/Authentication';
 
 export default function Events(props) {
-  const [Events, setEvents] = useState('');
+  const {user} = useAuth();
 
   return (
     <View>
@@ -46,9 +46,9 @@ export default function Events(props) {
           />
           <Text />
           <Button
-            title={'Show events for ' + userInfo[0]['role']}
+            title={'Show events for ' + user['role'] + 's'}
             onPress={() => {
-              fetchUserEvents();
+              fetchUserEvents(user['role']);
             }}
           />
           <Text />

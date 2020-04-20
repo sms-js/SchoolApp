@@ -1,13 +1,28 @@
 import React from 'react';
-import {Text, ScrollView, View, StyleSheet} from 'react-native';
+import {Text, ScrollView, View, StyleSheet, Image} from 'react-native';
 import {DrawerNavigatorItems} from 'react-navigation-drawer';
+import {useAuth} from '../context/Authentication';
+import {server, defaultUserImageURL} from '../utils/config';
 
 export default function NavigatorHeader(props) {
+  const {user} = useAuth();
+  let profilePictureUri = '';
+  if (user['photo'] === '') {
+    profilePictureUri = defaultUserImageURL;
+  } else {
+    profilePictureUri = server + 'uploads/profile/' + user['photo'];
+  }
   return (
     <ScrollView>
       <View style={styles.view}>
-        <View style={styles.profile} />
-        <Text style={styles.text}>Islam Belmerabet</Text>
+        <Image
+          style={styles.profile}
+          source={{
+            uri: profilePictureUri,
+          }}
+        />
+        <Text style={styles.text}>{user['userName']}</Text>
+        <Text style={{fontSize: 17.5, margin: 5}}>{user['fullName']}</Text>
       </View>
       <View>
         <DrawerNavigatorItems {...props} />
@@ -19,17 +34,19 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     margin: 5,
+    marginBottom: 20,
   },
   text: {
     fontSize: 25,
     margin: 5,
   },
   profile: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: 'black',
+    width: 90,
+    height: 90,
+    borderRadius: 100,
     margin: 5,
+    marginTop: 20,
+    resizeMode: 'center',
   },
 });
 

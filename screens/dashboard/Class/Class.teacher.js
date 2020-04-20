@@ -1,11 +1,12 @@
-import React, {useState} from 'react';
-import {Text, ScrollView, Button, View} from 'react-native';
-import {userInfo} from '../../utils/userInfo';
-import {Header, Left, Right, Icon} from 'native-base';
+import React from 'react';
+import {Text, ScrollView, View, Button} from 'react-native';
+import {Header, Left, Icon} from 'native-base';
+import {fetchClass, fetchTeacherClasses} from '../api/fetchClasses';
+import {fetchDormitory} from '../api/fetchDormitory';
+import {useAuth} from '../../../context/Authentication';
 
-export default function Home(props) {
-  const [Home, setHome] = useState('');
-
+export default function Class(props) {
+  const {user} = useAuth();
   return (
     <View>
       <Header
@@ -28,19 +29,33 @@ export default function Home(props) {
             textAlign: 'center',
             fontSize: 25,
           }}>
-          Home
+          Class
         </Text>
         <Text style={{width: '15%'}} />
       </Header>
       <ScrollView style={{margin: 20}}>
         <Text />
         <View>
-          <Text style={{alignSelf: 'center'}}>Home</Text>
+          <Text style={{alignSelf: 'center'}}>Class</Text>
           <Text />
           <Button
-            title="Show my info"
+            title="Show my classes"
             onPress={() => {
-              console.log(userInfo);
+              fetchTeacherClasses(user['id']);
+            }}
+          />
+          <Text />
+          <Button
+            title="Show class1 info"
+            onPress={() => {
+              fetchClass(1);
+            }}
+          />
+          <Text />
+          <Button
+            title="Show dormitory1 info"
+            onPress={() => {
+              fetchDormitory(1);
             }}
           />
           <Text />

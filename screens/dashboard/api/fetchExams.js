@@ -1,8 +1,8 @@
-import {BASE_URL} from '../utils/config';
+import {BASE_URL} from '../../../utils/config';
 
-export async function fetchClasses() {
+export async function fetchExams() {
   try {
-    const response = await fetch(BASE_URL + '/ClassesController.php', {
+    const response = await fetch(BASE_URL + '/ExamsController.php', {
       method: 'post',
       header: {
         Accept: 'application/json',
@@ -14,9 +14,12 @@ export async function fetchClasses() {
     });
     const responseJson = await response.json();
     if (response.ok) {
-      return responseJson['classes'];
+      //console.log(responseJson['exams']);
+      //let exams = [{}];
+      return responseJson['exams'];
     } else {
-      alert(['classes']['error']);
+      //return 'error !';
+      alert(responseJson['exams']['error']);
     }
   } catch (error) {
     return error;

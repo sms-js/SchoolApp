@@ -1,11 +1,14 @@
 import React from 'react';
 import {Text, ScrollView, View, Button} from 'react-native';
-import {Header, Left, Right, Icon} from 'native-base';
-import {fetchPollsForAll, fetchUserPolls} from './api/fetchPolls';
-import {useAuth} from '../../context/Authentication';
-export default function Polls(props) {
-  const {user} = useAuth();
+import {Header, Left, Icon} from 'native-base';
+import {
+  fetchTeacherSubjects,
+  fetchTeacherClassSubjects,
+} from '../api/fetchSubjects';
+import {useAuth} from '../../../context/Authentication';
 
+export default function Subjects(props) {
+  const {user} = useAuth();
   return (
     <View>
       <Header
@@ -28,26 +31,26 @@ export default function Polls(props) {
             textAlign: 'center',
             fontSize: 25,
           }}>
-          Polls
+          Subjects
         </Text>
         <Text style={{width: '15%'}} />
       </Header>
       <ScrollView style={{margin: 20}}>
         <Text />
         <View>
-          <Text style={{alignSelf: 'center'}}>Polls</Text>
+          <Text style={{alignSelf: 'center'}}>Subjects</Text>
           <Text />
           <Button
-            title="Show Polls for all"
+            title="Show my Subjects"
             onPress={() => {
-              fetchPollsForAll();
+              fetchTeacherSubjects(user['id']);
             }}
           />
           <Text />
           <Button
-            title={'Show Polls for ' + user['role'] + 's'}
+            title="Show class1 Subjects"
             onPress={() => {
-              fetchUserPolls(user['role']);
+              fetchTeacherClassSubjects(user['id'], 1);
             }}
           />
           <Text />

@@ -1,11 +1,12 @@
 import React from 'react';
 import {Text, ScrollView, View, Button} from 'react-native';
-import {Header, Left, Right, Icon} from 'native-base';
-import {fetchPollsForAll, fetchUserPolls} from './api/fetchPolls';
-import {useAuth} from '../../context/Authentication';
-export default function Polls(props) {
-  const {user} = useAuth();
+import {Header, Left, Icon} from 'native-base';
+import {fetchClass} from '../api/fetchClasses';
+import {fetchDormitory} from '../api/fetchDormitory';
+import {useAuth} from '../../../context/Authentication';
 
+export default function Class(props) {
+  const {user} = useAuth();
   return (
     <View>
       <Header
@@ -28,26 +29,26 @@ export default function Polls(props) {
             textAlign: 'center',
             fontSize: 25,
           }}>
-          Polls
+          Class
         </Text>
         <Text style={{width: '15%'}} />
       </Header>
       <ScrollView style={{margin: 20}}>
         <Text />
         <View>
-          <Text style={{alignSelf: 'center'}}>Polls</Text>
+          <Text style={{alignSelf: 'center'}}>Class</Text>
           <Text />
           <Button
-            title="Show Polls for all"
+            title="Show islamblmrbt class"
             onPress={() => {
-              fetchPollsForAll();
+              fetchClass(1);
             }}
           />
           <Text />
           <Button
-            title={'Show Polls for ' + user['role'] + 's'}
+            title="Show dormitory1 info"
             onPress={() => {
-              fetchUserPolls(user['role']);
+              fetchDormitory(1);
             }}
           />
           <Text />

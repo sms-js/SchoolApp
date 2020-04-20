@@ -1,52 +1,53 @@
 import {BASE_URL} from '../../../utils/config';
-import {userInfo} from '../../../utils/userInfo';
 
-export async function fetchPollsForAll() {
+export async function fetchClass(classId) {
   try {
-    const response = await fetch(BASE_URL + '/PollsController.php', {
+    const response = await fetch(BASE_URL + '/ClassesController2.php', {
       method: 'post',
       header: {
         Accept: 'application/json',
         'Content-type': 'application/json',
       },
       body: JSON.stringify({
-        view: 'all',
+        view: 'get',
+        id: classId,
       }),
     });
     const responseJson = await response.json();
     if (response.ok) {
-      console.log(responseJson['all polls']);
-      //let allPolls = [{}];
-      return responseJson['all polls'];
+      console.log(responseJson['class']);
+      //let class = [{}];
+      return responseJson['class'];
     } else {
       //return 'error !';
-      alert(responseJson['all polls']['error']);
+      alert(responseJson['class']['error']);
     }
   } catch (error) {
     return error;
   }
 }
 
-export async function fetchUserPolls(role) {
+export async function fetchTeacherClasses(teacherId) {
   try {
-    const response = await fetch(BASE_URL + '/PollsController.php', {
+    const response = await fetch(BASE_URL + '/ClassesController2.php', {
       method: 'post',
       header: {
         Accept: 'application/json',
         'Content-type': 'application/json',
       },
       body: JSON.stringify({
-        view: role,
+        view: 'teacher',
+        id: teacherId,
       }),
     });
     const responseJson = await response.json();
     if (response.ok) {
-      console.log(responseJson[role + ' polls']);
-      //let userPolls = [{}];
-      return responseJson[role + ' polls'];
+      console.log(responseJson['classes']);
+      //let classes = [{}];
+      return responseJson['classes'];
     } else {
       //return 'error !';
-      alert(responseJson[role + ' polls']['error']);
+      alert(responseJson['classes']['error']);
     }
   } catch (error) {
     return error;

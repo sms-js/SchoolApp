@@ -1,10 +1,10 @@
 import React from 'react';
-import {Text, ScrollView, View, Button} from 'react-native';
-import {Header, Left, Right, Icon} from 'native-base';
-import {fetchPollsForAll, fetchUserPolls} from './api/fetchPolls';
+import {Text, ScrollView, Button, View} from 'react-native';
+import {Header, Left, Icon} from 'native-base';
 import {useAuth} from '../../context/Authentication';
-export default function Polls(props) {
-  const {user} = useAuth();
+
+export default function Home(props) {
+  const {logout, user} = useAuth();
 
   return (
     <View>
@@ -28,33 +28,20 @@ export default function Polls(props) {
             textAlign: 'center',
             fontSize: 25,
           }}>
-          Polls
+          Profile
         </Text>
         <Text style={{width: '15%'}} />
       </Header>
       <ScrollView style={{margin: 20}}>
         <Text />
         <View>
-          <Text style={{alignSelf: 'center'}}>Polls</Text>
+          <Text />
+          <Text style={{alignSelf: 'center'}}>My Profile</Text>
           <Text />
           <Button
-            title="Show Polls for all"
+            title="Show my info"
             onPress={() => {
-              fetchPollsForAll();
-            }}
-          />
-          <Text />
-          <Button
-            title={'Show Polls for ' + user['role'] + 's'}
-            onPress={() => {
-              fetchUserPolls(user['role']);
-            }}
-          />
-          <Text />
-          <Button
-            title="Login Screen"
-            onPress={() => {
-              props.navigation.navigate('Login');
+              console.log(user);
             }}
           />
         </View>
