@@ -13,6 +13,8 @@ import {
   fetchAllMessages,
   fetchSentMessages,
   fetchRecievedMessages,
+  fetchMessageReciever,
+  sendMessage,
 } from './api/fetchMessages';
 import {useAuth} from '../../context/Authentication';
 import {FlatList} from 'react-native-gesture-handler';
@@ -73,13 +75,50 @@ export default function Messages(props) {
           placeholder="Message"
           onChangeText={messageTextHandler}
         />
-        <TextInput
-          style={styles.textinput}
-          placeholder="Date"
-          onChangeText={dateHandler}
-        />
         <Text />
-        <Button title="Send Message" onPress={() => {}} />
+        <Button
+          title="Send Message"
+          onPress={() => {
+            /*var today = new Date();
+            var date =
+              today.getFullYear() +
+              '-' +
+              (today.getMonth() + 1) +
+              '-' +
+              today.getDate();
+            var time =
+              today.getHours() +
+              ':' +
+              today.getMinutes() +
+              ':' +
+              today.getSeconds();
+            var dateTime = date + ' ' + time;*/
+            fetchMessageReciever(userName)
+              .then(async (res) => {
+                if (res == 'No user found!') {
+                  alert('User Not Found!');
+                } else {
+                  let today = new Date();
+                  let date =
+                    today.getDate() +
+                    '/' +
+                    (today.getMonth() + 1) +
+                    '/' +
+                    today.getFullYear();
+                  sendMessage(user['id'], res[0]['id'], messageText, date)
+                    .then(async (res) => {
+                      alert(res);
+                    })
+                    .catch((error) => {
+                      alert(error);
+                    });
+                }
+              })
+              .catch((error) => {
+                alert(error);
+              });
+          }}
+        />
         <Text />
         <Dropdown
           label="Show Messages"

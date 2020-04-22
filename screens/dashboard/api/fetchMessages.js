@@ -107,3 +107,61 @@ export async function fetchMessageSender(userId) {
     return error;
   }
 }
+
+export async function fetchMessageReciever(userName) {
+  try {
+    const response = await fetch(BASE_URL + '/MessageRecieverController.php', {
+      method: 'post',
+      header: {
+        Accept: 'application/json',
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        view: 'reciever',
+        user: userName,
+      }),
+    });
+    const responseJson = await response.json();
+    if (response.ok) {
+      //console.log(responseJson['user']);
+      //let recievedMessages = [{}];
+      return responseJson['user'];
+    } else {
+      //return 'error !';
+      //alert(responseJson['user']['error']);
+      return responseJson['user']['error'];
+    }
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function sendMessage(fromId, toId, messageText, dateSent) {
+  try {
+    const response = await fetch(BASE_URL + '/MessagesInsertController.php', {
+      method: 'post',
+      header: {
+        Accept: 'application/json',
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        view: 'send',
+        fromId: fromId,
+        toId: toId,
+        messageText: messageText,
+        dateSent: dateSent,
+      }),
+    });
+    const responseJson = await response.json();
+    if (response.ok) {
+      ///console.log(responseJson['insert status']);
+      //let recievedMessages = [{}];
+      return responseJson['insert status'];
+    } else {
+      //return 'error !';
+      return responseJson['insert status']['error'];
+    }
+  } catch (error) {
+    return error;
+  }
+}
