@@ -15,7 +15,7 @@ export async function fetchDormitory(dormitoryId) {
     });
     const responseJson = await response.json();
     if (response.ok) {
-      console.log(responseJson['dormitory']);
+      //console.log(responseJson['dormitory']);
       //let dormitory = [{}];
       return responseJson['dormitory'];
     } else {
