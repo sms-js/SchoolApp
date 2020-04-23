@@ -3,7 +3,6 @@ import {
   Text,
   ScrollView,
   View,
-  Button,
   FlatList,
   StyleSheet,
   Image,
@@ -19,7 +18,7 @@ import {server, defaultUserImageURL} from '../../../utils/config';
 export default function Class(props) {
   const {user} = useAuth();
   const [child, setChild] = useState();
-  const [classe, setClasse] = useState([{className: ''}]);
+  const [classe, setClasse] = useState([]);
   const [teachers, setTeachers] = useState([]);
   const [dormitory, setDormitory] = useState([{}]);
 
@@ -97,7 +96,7 @@ export default function Class(props) {
   }
   let ch = [];
   for (let i = 0; i < ids.length; i++) {
-    ch.push({label: names[i] + "'s transportation", value: ids[i]});
+    ch.push({label: names[i] + "'s class", value: ids[i]});
   }
 
   return (
@@ -140,7 +139,9 @@ export default function Class(props) {
         />
         <Text />
         <View style={styles.container}>
-          <Text style={{alignSelf: 'center'}}>{classe[0]['className']}</Text>
+          <Text style={{alignSelf: 'center'}}>
+            {classe[0] ? classe[0]['className'] : 'Class Name'}
+          </Text>
           <Text />
           <Text>Teachers :</Text>
           <Text />
