@@ -97,9 +97,10 @@ export default function Messages(props) {
                 } else {
                   let today = new Date();
                   let date =
-                    today.getDate() +
+                    today.getMonth() +
+                    1 +
                     '/' +
-                    (today.getMonth() + 1) +
+                    today.getDate() +
                     '/' +
                     today.getFullYear();
                   sendMessage(user['id'], res[0]['id'], messageText, date)
