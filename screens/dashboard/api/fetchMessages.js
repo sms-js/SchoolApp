@@ -15,7 +15,7 @@ export async function fetchAllMessages(userId) {
     });
     const responseJson = await response.json();
     if (response.ok) {
-      console.log(responseJson['all messages']);
+      //console.log(responseJson['all messages']);
       //let allMessages = [{}];
       return responseJson['all messages'];
     } else {

@@ -24,17 +24,14 @@ export default function Messages(props) {
   const {user} = useAuth();
   const [userName, setUserName] = useState('');
   const [messageText, setMessageText] = useState('');
-  const [date, setDate] = useState('');
   const [messages, setMessages] = useState([{}]);
+  const [messagesFilter, setMessagesFilter] = useState();
 
   const userNameHandler = (username) => {
     setUserName(username);
   };
   const messageTextHandler = (text) => {
     setMessageText(text);
-  };
-  const dateHandler = (date) => {
-    setDate(date);
   };
 
   return (
@@ -107,7 +104,29 @@ export default function Messages(props) {
                     today.getFullYear();
                   sendMessage(user['id'], res[0]['id'], messageText, date)
                     .then(async (res) => {
-                      alert(res);
+                      console.log(res);
+                      alert('Message Sent Successfully !');
+                      switch (messagesFilter) {
+                        case 1:
+                          fetchAllMessages(user['id'])
+                            .then(async (res) => {
+                              setMessages(res);
+                            })
+                            .catch((error) => {
+                              alert(error);
+                            });
+                          break;
+
+                        case 2:
+                          fetchSentMessages(user['id'])
+                            .then(async (res) => {
+                              setMessages(res);
+                            })
+                            .catch((error) => {
+                              alert(error);
+                            });
+                          break;
+                      }
                     })
                     .catch((error) => {
                       alert(error);
@@ -128,6 +147,7 @@ export default function Messages(props) {
             {label: 'Recieved Messages', value: 3},
           ]}
           onChangeText={(value) => {
+            setMessagesFilter(value);
             switch (value) {
               case 1:
                 fetchAllMessages(user['id'])
