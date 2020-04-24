@@ -1,12 +1,13 @@
 import React from 'react';
-import {View, AsyncStorage, Text} from 'react-native';
+import {AsyncStorage} from 'react-native';
+import Loading from '../Components/loading';
 import {NavigationContext} from 'react-navigation';
 import {fetchUserInfo} from '../api/fetchUserInfo';
 
 const AuthContext = React.createContext({});
 
 const AuthProvider = (props) => {
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const [user, setUser] = React.useState(undefined);
 
   React.useEffect(() => {
@@ -15,18 +16,14 @@ const AuthProvider = (props) => {
 
   if (!loading) {
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Text> Loading ... </Text>
-      </View>
+      <Loading
+        img={require('../assets/18914-sand-clock-loader-animation.json')}
+      />
     );
   }
   async function login() {
     setLoading(false);
+
     const accessToken = await AsyncStorage.getItem('accessToken');
     const userName = await AsyncStorage.getItem('userName');
     if (accessToken) {
@@ -40,9 +37,16 @@ const AuthProvider = (props) => {
           role: 'student',
         });*/
         setLoading(true);
-      }, 1000);
+      }, 1500);
+      console.warn('token');
     } else {
-      console.log('no token');
+      setTimeout(() => {
+        setUser({
+          role: 'user',
+        });
+        setLoading(true);
+      }, 1500);
+      console.warn('no token');
       setLoading(true);
     }
   }

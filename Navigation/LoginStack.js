@@ -1,6 +1,5 @@
 import {createStackNavigator} from 'react-navigation-stack';
 import {createAppContainer} from 'react-navigation';
-
 import Terms from '../screens/auth/Terms';
 import Login from '../screens/auth/Login';
 import RegisterTeacher from '../screens/auth/RegisterTeacher';

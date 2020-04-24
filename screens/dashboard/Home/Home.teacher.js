@@ -10,7 +10,7 @@ export default function Home(props) {
     <View>
       <Header
         style={{
-          backgroundColor: 'white',
+          backgroundColor: '#9CD1EF',
           flexDirection: 'row',
         }}>
         <Left style={{width: '15%'}}>
