@@ -15,7 +15,11 @@ const AuthProvider = (props) => {
   }, []);
 
   if (!loading) {
-    return <Loading img={require('../assets/splash01.json')} />;
+    return (
+      <Loading
+        img={require('../assets/18914-sand-clock-loader-animation.json')}
+      />
+    );
   }
   async function login() {
     setLoading(false);
@@ -33,15 +37,16 @@ const AuthProvider = (props) => {
           role: 'student',
         });*/
         setLoading(true);
-      }, 5000);
+      }, 1500);
+      console.warn('token');
     } else {
       setTimeout(() => {
         setUser({
           role: 'user',
         });
         setLoading(true);
-      }, 5000);
-      console.log('no token');
+      }, 1500);
+      console.warn('no token');
       setLoading(true);
     }
   }
