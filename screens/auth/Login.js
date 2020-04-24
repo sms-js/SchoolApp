@@ -78,7 +78,7 @@ export default function Login(props) {
       style={styles.container}>
       <View
         style={{
-          paddingTop: 270,
+          paddingTop: 100,
           alignContent: 'center',
           height: '90%',
           alignItems: 'center',

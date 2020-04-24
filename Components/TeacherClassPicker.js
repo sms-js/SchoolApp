@@ -3,32 +3,36 @@ import {Dropdown} from 'react-native-material-dropdown';
 import {fetchTeacherClasses} from '../screens/dashboard/api/fetchClasses';
 
 export default class TeacherClassesPicker extends Component {
-  constructor() {
-    super();
-    this.classesHandler();
+  constructor(props) {
+    super(props);
+    this.classesHandler.bind(this);
     this.state = {classes: [], classesNames: []};
   }
-  classesHandler() {
-    var classesnames = [];
-    fetchTeacherClasses(this.props.userId)
-      .then(async (res) => {
-        this.state.classes = res;
-      })
-      .catch((error) => {
-        alert(error);
-      });
-    for (let i = 0; i < this.state.classes.length; i++) {
-      classesnames.push({
-        label: this.state.classes[i]['className'],
-        value: i,
-      });
+  componentDidMount() {
+    this.classesHandler();
+  }
+  async classesHandler() {
+    try {
+      //var classesnames = [];
+      const res = await fetchTeacherClasses(this.props.userId);
+      this.setState(
+        {
+          classes: res.map((element) => {
+            return {label: element.className, value: element.id};
+          }),
+        },
+        () => {
+          this.props.setClasses(this.state.classes);
+        },
+      );
+
+      //this.state.classesNames = classesnames;
+      //this.setClasses(this.state.classes);
+    } catch (error) {
+      alert(error);
     }
-    this.state.classesNames = classesnames;
-    this.setClasses(this.state.classes);
   }
-  setClasses(value) {
-    this.props.setClasses(value);
-  }
+
   showMyClass(value) {
     this.props.showMyClass(value);
   }
@@ -40,7 +44,7 @@ export default class TeacherClassesPicker extends Component {
     return (
       <Dropdown
         label="My classes"
-        data={this.state.classesNames}
+        data={this.state.classes}
         onChangeText={(value) => {
           this.showMyClass(value);
           this.setClasse(value);

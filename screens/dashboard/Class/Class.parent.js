@@ -17,7 +17,7 @@ import {server, defaultUserImageURL} from '../../../utils/config';
 
 export default function Class(props) {
   const {user} = useAuth();
-  const [child, setChild] = useState();
+  const [children, setChildren] = useState([]);
   const [classe, setClasse] = useState([]);
   const [teachers, setTeachers] = useState([]);
   const [dormitory, setDormitory] = useState([{}]);
@@ -54,50 +54,53 @@ export default function Class(props) {
       });
   };
 
-  String.prototype.extract = function (prefix, suffix) {
-    let s = this;
-    var i = s.indexOf(prefix);
-    if (i >= 0) {
-      s = s.substring(i + prefix.length);
-    } else {
-      return '';
-    }
-    if (suffix) {
-      i = s.indexOf(suffix);
+  React.useEffect(() => {
+    String.prototype.extract = function (prefix, suffix) {
+      let s = this;
+      var i = s.indexOf(prefix);
       if (i >= 0) {
-        s = s.substring(0, i);
+        s = s.substring(i + prefix.length);
       } else {
         return '';
       }
-    }
-    return s;
-  };
+      if (suffix) {
+        i = s.indexOf(suffix);
+        if (i >= 0) {
+          s = s.substring(0, i);
+        } else {
+          return '';
+        }
+      }
+      return s;
+    };
 
-  let s = user['parentOf'];
-  let ids = [];
-  let names = [];
-  s = s.extract('[', ']');
-  let a = '';
-  let b = '';
-  let c = '';
-  let d = '';
-  while (s != '') {
-    a = s.extract('{', '}');
-    s = s.substring(1);
-    b = a.extract('"student":', ',');
-    names.push(b.extract('"', '"'));
-    s = s.substring('"student":'.length + b.length + 1);
-    c = a.substring('"student":'.length + b.length + 1);
-    d = c.extract('', ',');
-    s = s.substring(d.length + 1);
-    d = c.substring(d.length + 1 + '"id":'.length);
-    ids.push(parseInt(d));
-    s = s.substring('"id":'.length + d.length + 2);
-  }
-  let ch = [];
-  for (let i = 0; i < ids.length; i++) {
-    ch.push({label: names[i] + "'s class", value: ids[i]});
-  }
+    let s = user['parentOf'];
+    let ids = [];
+    let names = [];
+    s = s.extract('[', ']');
+    let a = '';
+    let b = '';
+    let c = '';
+    let d = '';
+    while (s != '') {
+      a = s.extract('{', '}');
+      s = s.substring(1);
+      b = a.extract('"student":', ',');
+      names.push(b.extract('"', '"'));
+      s = s.substring('"student":'.length + b.length + 1);
+      c = a.substring('"student":'.length + b.length + 1);
+      d = c.extract('', ',');
+      s = s.substring(d.length + 1);
+      d = c.substring(d.length + 1 + '"id":'.length);
+      ids.push(parseInt(d));
+      s = s.substring('"id":'.length + d.length + 2);
+    }
+    let ch = [];
+    for (let i = 0; i < ids.length; i++) {
+      ch.push({label: names[i] + "'s class", value: ids[i]});
+    }
+    setChildren(ch);
+  }, []);
 
   return (
     <View>
@@ -129,7 +132,7 @@ export default function Class(props) {
         <Text />
         <Dropdown
           label="Children classes"
-          data={ch}
+          data={children}
           onChangeText={(value) => {
             if (value == 0) {
             } else {
