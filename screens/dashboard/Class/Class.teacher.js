@@ -9,14 +9,15 @@ import {
 } from 'react-native';
 import {Header, Left, Icon} from 'native-base';
 import {
-  fetchClass,
-  fetchTeacherClasses,
+  //fetchClass,
+  //fetchTeacherClasses,
   fetchClassTeacher,
 } from '../api/fetchClasses';
 import {fetchDormitory} from '../api/fetchDormitory';
 import {useAuth} from '../../../context/Authentication';
-import {Dropdown} from 'react-native-material-dropdown';
+//import {Dropdown} from 'react-native-material-dropdown';
 import {server, defaultUserImageURL} from '../../../utils/config';
+import TeacherClassesPicker from '../../../Components/TeacherClassPicker';
 
 export default function Class(props) {
   const {user} = useAuth();
@@ -43,7 +44,7 @@ export default function Class(props) {
       });
   };
 
-  var classesNames = [];
+  /*var classesNames = [];
 
   fetchTeacherClasses(user['id'])
     .then(async (res) => {
@@ -57,7 +58,7 @@ export default function Class(props) {
       label: classes[i]['className'],
       value: i,
     });
-  }
+  }*/
 
   return (
     <View>
@@ -87,15 +88,18 @@ export default function Class(props) {
       </Header>
       <ScrollView style={{margin: 20, marginBottom: 80}}>
         <Text />
-        <Dropdown
-          label="My classes"
-          data={classesNames}
-          onChangeText={(value) => {
-            showMyClass(value);
+        <TeacherClassesPicker
+          userId={user['id']}
+          setClasses={(value) => {
+            setClasses(value);
+          }}
+          setClasse={(value) => {
             setClasse(value);
           }}
+          showMyClass={(value) => {
+            showMyClass(value);
+          }}
         />
-
         <Text />
         <View style={styles.container}>
           <Text style={{alignSelf: 'center'}}>
@@ -211,3 +215,13 @@ const styles = StyleSheet.create({
   },
   user: {fontSize: 15},
 });
+/*
+<Dropdown
+          label="My classes"
+          data={classesNames}
+          onChangeText={(value) => {
+            showMyClass(value);
+            setClasse(value);
+          }}
+        />
+*/

@@ -43,7 +43,7 @@ export async function fetchTeacherClasses(teacherId) {
     });
     const responseJson = await response.json();
     if (response.ok) {
-      //console.log(responseJson['classes']);
+      console.log(responseJson['classes']);
       //let classes = [{}];
       return responseJson['classes'];
     } else {
