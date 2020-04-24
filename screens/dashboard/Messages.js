@@ -13,6 +13,8 @@ import {
   fetchAllMessages,
   fetchSentMessages,
   fetchRecievedMessages,
+  fetchMessageReciever,
+  sendMessage,
 } from './api/fetchMessages';
 import {useAuth} from '../../context/Authentication';
 import {FlatList} from 'react-native-gesture-handler';
@@ -22,17 +24,14 @@ export default function Messages(props) {
   const {user} = useAuth();
   const [userName, setUserName] = useState('');
   const [messageText, setMessageText] = useState('');
-  const [date, setDate] = useState('');
   const [messages, setMessages] = useState([{}]);
+  const [messagesFilter, setMessagesFilter] = useState();
 
   const userNameHandler = (username) => {
     setUserName(username);
   };
   const messageTextHandler = (text) => {
     setMessageText(text);
-  };
-  const dateHandler = (date) => {
-    setDate(date);
   };
 
   return (
@@ -73,13 +72,73 @@ export default function Messages(props) {
           placeholder="Message"
           onChangeText={messageTextHandler}
         />
-        <TextInput
-          style={styles.textinput}
-          placeholder="Date"
-          onChangeText={dateHandler}
-        />
         <Text />
-        <Button title="Send Message" onPress={() => {}} />
+        <Button
+          title="Send Message"
+          onPress={() => {
+            /*var today = new Date();
+            var date =
+              today.getFullYear() +
+              '-' +
+              (today.getMonth() + 1) +
+              '-' +
+              today.getDate();
+            var time =
+              today.getHours() +
+              ':' +
+              today.getMinutes() +
+              ':' +
+              today.getSeconds();
+            var dateTime = date + ' ' + time;*/
+            fetchMessageReciever(userName)
+              .then(async (res) => {
+                if (res == 'No user found!') {
+                  alert('User Not Found!');
+                } else {
+                  let today = new Date();
+                  let date =
+                    today.getMonth() +
+                    1 +
+                    '/' +
+                    today.getDate() +
+                    '/' +
+                    today.getFullYear();
+                  sendMessage(user['id'], res[0]['id'], messageText, date)
+                    .then(async (res) => {
+                      console.log(res);
+                      alert('Message Sent Successfully !');
+                      switch (messagesFilter) {
+                        case 1:
+                          fetchAllMessages(user['id'])
+                            .then(async (res) => {
+                              setMessages(res);
+                            })
+                            .catch((error) => {
+                              alert(error);
+                            });
+                          break;
+
+                        case 2:
+                          fetchSentMessages(user['id'])
+                            .then(async (res) => {
+                              setMessages(res);
+                            })
+                            .catch((error) => {
+                              alert(error);
+                            });
+                          break;
+                      }
+                    })
+                    .catch((error) => {
+                      alert(error);
+                    });
+                }
+              })
+              .catch((error) => {
+                alert(error);
+              });
+          }}
+        />
         <Text />
         <Dropdown
           label="Show Messages"
@@ -89,6 +148,7 @@ export default function Messages(props) {
             {label: 'Recieved Messages', value: 3},
           ]}
           onChangeText={(value) => {
+            setMessagesFilter(value);
             switch (value) {
               case 1:
                 fetchAllMessages(user['id'])
