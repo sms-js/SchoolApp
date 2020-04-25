@@ -40,7 +40,7 @@ export default function Subjects(props) {
           <Button
             title="Show islamblmrbt Subjects"
             onPress={() => {
-              fetchClassSubjects(6);
+              fetchClassSubjects(1);
             }}
           />
           <Text />

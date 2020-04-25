@@ -27,6 +27,33 @@ export async function fetchSubject(subjectId) {
   }
 }
 
+export async function fetchSubjectTeacher(teachersIds) {
+  try {
+    const response = await fetch(BASE_URL + '/SubjectsController.php', {
+      method: 'post',
+      header: {
+        Accept: 'application/json',
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        view: 'subjectTeacher',
+        id: teachersIds,
+      }),
+    });
+    const responseJson = await response.json();
+    if (response.ok) {
+      //console.log(responseJson['teacher']);
+      //let subjectInfo = [{}];
+      return responseJson['teacher'];
+    } else {
+      //return 'error !';
+      alert(responseJson['teacher']['error']);
+    }
+  } catch (error) {
+    return error;
+  }
+}
+
 export async function fetchClassSubjects(classId) {
   try {
     const response = await fetch(BASE_URL + '/SubjectsController.php', {
@@ -42,7 +69,7 @@ export async function fetchClassSubjects(classId) {
     });
     const responseJson = await response.json();
     if (response.ok) {
-      console.log(responseJson['subjects']);
+      //console.log(responseJson['subjects']);
       //let classSubjects = [{}];
       return responseJson['subjects'];
     } else {

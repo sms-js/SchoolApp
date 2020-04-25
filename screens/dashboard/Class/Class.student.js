@@ -19,7 +19,7 @@ export default function Class(props) {
   const [classe, setClasse] = useState([{}]);
   const [teachers, setTeachers] = useState([]);
   const [dormitory, setDormitory] = useState([{}]);
-  const showMyClass = () => {
+  /*const showMyClass = () => {
     fetchClass(user['studentClass'])
       .then(async (res) => {
         setClasse(res);
@@ -43,6 +43,24 @@ export default function Class(props) {
       .catch((error) => {
         alert(error);
       });
+  };*/
+  React.useEffect(() => {
+    showMyClass();
+  }, []);
+  const showMyClass = async () => {
+    try {
+      const res = await fetchClass(user['studentClass']);
+      setClasse(res);
+      //console.log(res);
+      const res2 = await fetchClassTeacher(res[0]['classTeacher']);
+      setTeachers(res2);
+      // console.log(res2);
+      const res3 = await fetchDormitory(res[0]['dormitoryId']);
+      setDormitory(res3);
+      // console.log(res3);
+    } catch (error) {
+      alert(error);
+    }
   };
   return (
     <View>
@@ -193,3 +211,6 @@ const styles = StyleSheet.create({
   },
   user: {fontSize: 15},
 });
+/*
+
+*/

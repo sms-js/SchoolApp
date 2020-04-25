@@ -6,12 +6,15 @@ import {
   FlatList,
   StyleSheet,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 import {Header, Left, Icon} from 'native-base';
 import {
   //fetchClass,
   fetchTeacherClasses,
   fetchClassTeacher,
+  fetchClassStudents,
+  fetchStudentParents,
 } from '../api/fetchClasses';
 import {fetchDormitory} from '../api/fetchDormitory';
 import {useAuth} from '../../../context/Authentication';
@@ -23,11 +26,22 @@ export default function Class(props) {
   const {user} = useAuth();
   const [classes, setClasses] = useState([{}]);
   const [teachers, setTeachers] = useState([]);
+  const [students, setStudents] = useState([]);
+  const [parents, setParents] = useState([]);
   const [dormitory, setDormitory] = useState([{}]);
   const [classe, setClasse] = useState();
   const [classesNames, setClassesNames] = useState([]);
 
   const showMyClass = (value) => {
+    fetchClassStudents(classes[value]['id'])
+      .then(async (res) => {
+        setStudents(res);
+        console.log(res[0]);
+      })
+      .catch((error) => {
+        alert(error);
+      });
+
     fetchClassTeacher(classes[value]['classTeacher'])
       .then(async (res) => {
         setTeachers(res);
@@ -45,22 +59,27 @@ export default function Class(props) {
       });
   };
 
+  const showStudentParents = async (studentId) => {
+    const res = await fetchStudentParents(studentId);
+    setParents(res);
+  };
+
   React.useEffect(() => {
     var classesNames = [];
     fetchTeacherClasses(user['id'])
       .then((res) => {
         setClasses(res);
+        for (let i = 0; i < res.length; i++) {
+          classesNames.push({
+            label: res[i]['className'],
+            value: i,
+          });
+        }
+        setClassesNames(classesNames);
       })
       .catch((error) => {
         alert(error);
       });
-    for (let i = 0; i < classes.length; i++) {
-      classesNames.push({
-        label: classes[i]['className'],
-        value: i,
-      });
-    }
-    setClassesNames(classesNames);
   }, []);
   /**/
 
@@ -90,7 +109,7 @@ export default function Class(props) {
         </Text>
         <Text style={{width: '15%'}} />
       </Header>
-      <ScrollView style={{margin: 20, marginBottom: 80}}>
+      <ScrollView style={{margin: 10, marginBottom: 80}}>
         <Text />
         <Dropdown
           label="My classes"
@@ -106,6 +125,78 @@ export default function Class(props) {
           <Text style={{alignSelf: 'center'}}>
             {classe ? classes[classe]['className'] : 'Class Name'}
           </Text>
+          <Text />
+          <Text>Students :</Text>
+          <Text />
+          <FlatList
+            data={students}
+            renderItem={({item}) => {
+              if (item.photo == '') {
+                return (
+                  <View>
+                    <View style={styles.teachers}>
+                      <View
+                        style={{
+                          justifyContent: 'center',
+                          padding: 5,
+                          borderRightWidth: 1,
+                          borderRightColor: 'lightblue',
+                        }}>
+                        <Image
+                          style={styles.image}
+                          source={{
+                            uri: defaultUserImageURL,
+                          }}
+                        />
+                        <Text>{item.username}</Text>
+                      </View>
+                      <View
+                        style={{
+                          flex: 2,
+                          justifyContent: 'center',
+                          padding: 5,
+                          borderRightWidth: 1,
+                          borderRightColor: 'lightblue',
+                        }}>
+                        <Text>Name</Text>
+                        <Text />
+                        <Text>{item.fullName}</Text>
+                      </View>
+                      <View
+                        style={{flex: 3, justifyContent: 'center', padding: 5}}>
+                        <Text>Email</Text>
+                        <Text />
+                        <Text>{item.email}</Text>
+                      </View>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => {
+                        showStudentParents(item.id);
+                        alert(parents[0]['parent']['fullName']);
+                      }}>
+                      <Text>Show parents info</Text>
+                    </TouchableOpacity>
+                  </View>
+                );
+              } else {
+                return (
+                  <View style={styles.teachers}>
+                    <View>
+                      <Image
+                        style={styles.image}
+                        source={{
+                          uri: server + 'uploads/profile/' + item.photo,
+                        }}
+                      />
+                      <Text>{item.username}</Text>
+                    </View>
+                    <Text>{item.fullName}</Text>
+                    <Text>{item.email}</Text>
+                  </View>
+                );
+              }
+            }}
+          />
           <Text />
           <Text>Teachers :</Text>
           <Text />
@@ -208,8 +299,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   image: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     borderRadius: 100,
     margin: 5,
     resizeMode: 'center',
