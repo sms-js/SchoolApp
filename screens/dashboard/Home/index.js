@@ -3,20 +3,20 @@ import {useAuth} from '../../../context/Authentication';
 import HomeParent from './Home.parent';
 import HomeStudent from './Home.student';
 import HomeTeacher from './Home.teacher';
-export default function Home() {
+export default function Home(props) {
   const {user} = useAuth();
 
   switch (user['role']) {
     case 'parent':
-      return <HomeParent />;
+      return <HomeParent properties={props} />;
       break;
 
     case 'student':
-      return <HomeStudent />;
+      return <HomeStudent properties={props} />;
       break;
 
     case 'teacher':
-      return <HomeTeacher />;
+      return <HomeTeacher properties={props} />;
       break;
   }
 }

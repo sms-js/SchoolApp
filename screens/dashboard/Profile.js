@@ -44,6 +44,13 @@ export default function Home(props) {
               console.log(user);
             }}
           />
+          <Text />
+          <Button
+            title="hOME"
+            onPress={() => {
+              props.navigation.navigate('Home');
+            }}
+          />
         </View>
       </ScrollView>
     </View>

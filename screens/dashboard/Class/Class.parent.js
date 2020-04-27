@@ -6,6 +6,7 @@ import {
   FlatList,
   StyleSheet,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 import {Header, Left, Icon} from 'native-base';
 import {fetchClass, fetchClassTeacher} from '../api/fetchClasses';
@@ -22,15 +23,17 @@ export default function Class(props) {
   const [teachers, setTeachers] = useState([]);
   const [dormitory, setDormitory] = useState([{}]);
 
-  const showChildClass = (childId) => {
+  const showChildClass = async (childId) => {
     fetchStudentClass(childId)
       .then(async (res) => {
         fetchClass(res[0]['studentClass'])
           .then(async (res) => {
+            console.log(res);
             setClasse(res);
 
             fetchClassTeacher(res[0]['classTeacher'])
               .then(async (res) => {
+                console.log(res);
                 setTeachers(res);
               })
               .catch((error) => {
@@ -39,6 +42,7 @@ export default function Class(props) {
 
             fetchDormitory(res[0]['dormitoryId'])
               .then(async (res) => {
+                console.log(res);
                 setDormitory(res);
               })
               .catch((error) => {
@@ -52,6 +56,21 @@ export default function Class(props) {
       .catch((error) => {
         alert(error);
       });
+    /* try {
+      const res1 = await fetchStudentClass(childId);
+      console.log(res1);
+      setClasse(res1);
+
+      const res2 = await fetchClassTeacher(res1[0]['classTeacher']);
+      console.log(res2);
+      setTeachers(res2);
+
+      const res3 = await fetchDormitory(res1[0]['dormitoryId']);
+      console.log(res3);
+      setDormitory(res3);
+    } catch (error) {
+      alert(error);
+    }*/
   };
 
   React.useEffect(() => {
@@ -113,7 +132,7 @@ export default function Class(props) {
           <Icon
             name="menu"
             onPress={() => {
-              props.navigation.openDrawer();
+              props.properties.navigation.openDrawer();
             }}
           />
         </Left>
@@ -153,40 +172,59 @@ export default function Class(props) {
             renderItem={({item}) => {
               if (item.photo == '') {
                 return (
-                  <View style={styles.teachers}>
-                    <View
+                  <View>
+                    <View style={styles.teachers}>
+                      <View
+                        style={{
+                          justifyContent: 'center',
+                          padding: 5,
+                          borderRightWidth: 1,
+                          borderRightColor: 'lightblue',
+                        }}>
+                        <Image
+                          style={styles.image}
+                          source={{
+                            uri: defaultUserImageURL,
+                          }}
+                        />
+                        <Text>{item.username}</Text>
+                      </View>
+                      <View
+                        style={{
+                          flex: 2,
+                          justifyContent: 'center',
+                          padding: 5,
+                          borderRightWidth: 1,
+                          borderRightColor: 'lightblue',
+                        }}>
+                        <Text>Name</Text>
+                        <Text />
+                        <Text>{item.fullName}</Text>
+                      </View>
+                      <View
+                        style={{flex: 3, justifyContent: 'center', padding: 5}}>
+                        <Text>Email</Text>
+                        <Text />
+                        <Text>{item.email}</Text>
+                      </View>
+                    </View>
+                    <TouchableOpacity
                       style={{
+                        height: 30,
+                        width: '60%',
                         justifyContent: 'center',
-                        padding: 5,
-                        borderRightWidth: 1,
-                        borderRightColor: 'lightblue',
+                        alignSelf: 'center',
+                        backgroundColor: 'lightblue',
+                        borderRadius: 30,
+                        marginBottom: 5,
+                      }}
+                      onPress={() => {
+                        props.properties.navigation.navigate('TeacherInfo');
                       }}>
-                      <Image
-                        style={styles.image}
-                        source={{
-                          uri: defaultUserImageURL,
-                        }}
-                      />
-                      <Text>{item.username}</Text>
-                    </View>
-                    <View
-                      style={{
-                        flex: 2,
-                        justifyContent: 'center',
-                        padding: 5,
-                        borderRightWidth: 1,
-                        borderRightColor: 'lightblue',
-                      }}>
-                      <Text>Name</Text>
-                      <Text />
-                      <Text>{item.fullName}</Text>
-                    </View>
-                    <View
-                      style={{flex: 3, justifyContent: 'center', padding: 5}}>
-                      <Text>Email</Text>
-                      <Text />
-                      <Text>{item.email}</Text>
-                    </View>
+                      <Text style={{alignSelf: 'center'}}>
+                        Show teacher info
+                      </Text>
+                    </TouchableOpacity>
                   </View>
                 );
               } else {

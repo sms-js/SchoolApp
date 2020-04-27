@@ -2,21 +2,21 @@ import React from 'react';
 import {useAuth} from '../../../context/Authentication';
 import ClassParent from './Class.parent';
 import ClassStudent from './Class.student';
-import ClassTeacher from './Class.teacher';
-export default function Class() {
+import ClassTeacher from './ClassTeacher';
+export default function Class(props) {
   const {user} = useAuth();
 
   switch (user['role']) {
     case 'parent':
-      return <ClassParent />;
+      return <ClassParent properties={props} />;
       break;
 
     case 'student':
-      return <ClassStudent />;
+      return <ClassStudent properties={props} />;
       break;
 
     case 'teacher':
-      return <ClassTeacher />;
+      return <ClassTeacher properties={props} />;
       break;
   }
 }

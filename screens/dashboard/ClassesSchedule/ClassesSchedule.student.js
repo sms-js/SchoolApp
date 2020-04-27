@@ -55,7 +55,7 @@ export default function ClassSchedule(props) {
           <Button
             title="Login Screen"
             onPress={() => {
-              props.navigation.navigate('Login');
+              props.properties.navigation.navigate('Login');
             }}
           />
         </View>

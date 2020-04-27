@@ -14,6 +14,7 @@ export async function fetchStudentClass(studentId) {
       }),
     });
     const responseJson = await response.json();
+
     if (response.ok) {
       //console.log(responseJson['class']);
       //alert(responseJson['class'][0]['classTeacher']);

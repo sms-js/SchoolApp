@@ -20,7 +20,7 @@ export default function Subjects(props) {
           <Icon
             name="menu"
             onPress={() => {
-              props.navigation.openDrawer();
+              props.properties.navigation.openDrawer();
             }}
           />
         </Left>
@@ -57,7 +57,7 @@ export default function Subjects(props) {
           <Button
             title="Login Screen"
             onPress={() => {
-              props.navigation.navigate('Login');
+              props.properties.navigation.navigate('Login');
             }}
           />
         </View>

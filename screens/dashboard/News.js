@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, ScrollView, View, Button} from 'react-native';
 import {Header, Left, Right, Icon} from 'native-base';
-import {fetchNewsForAll, fetchUserNews} from './api/fetchNews';
+import {fetchNewsForAll, fetchUserNews, fetchNews} from './api/fetchNews';
 import {useAuth} from '../../context/Authentication';
 
 export default function News(props) {
@@ -46,16 +46,9 @@ export default function News(props) {
           />
           <Text />
           <Button
-            title="Show news for all"
+            title={'Show news'}
             onPress={() => {
-              fetchNewsForAll();
-            }}
-          />
-          <Text />
-          <Button
-            title={'Show news for ' + user['role'] + 's'}
-            onPress={() => {
-              fetchUserNews(user['role']);
+              fetchNews(user['role']);
             }}
           />
           <Text />

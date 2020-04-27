@@ -1,7 +1,11 @@
 import React, {useState} from 'react';
 import {Text, ScrollView, View, Button} from 'react-native';
 import {Header, Left, Right, Icon} from 'native-base';
-import {fetchEventsForAll, fetchUserEvents} from './api/fetchEvents';
+import {
+  fetchEventsForAll,
+  fetchUserEvents,
+  fetchEvents,
+} from './api/fetchEvents';
 import {useAuth} from '../../context/Authentication';
 
 export default function Events(props) {
@@ -37,18 +41,12 @@ export default function Events(props) {
         <Text />
         <View>
           <Text style={{alignSelf: 'center'}}>Events</Text>
+
           <Text />
           <Button
-            title="Show events for all"
+            title={'Show events'}
             onPress={() => {
-              fetchEventsForAll();
-            }}
-          />
-          <Text />
-          <Button
-            title={'Show events for ' + user['role'] + 's'}
-            onPress={() => {
-              fetchUserEvents(user['role']);
+              fetchEvents(user['role']);
             }}
           />
           <Text />

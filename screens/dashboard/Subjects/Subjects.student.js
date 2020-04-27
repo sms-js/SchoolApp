@@ -1,37 +1,17 @@
 import React, {useState} from 'react';
 import {Text, ScrollView, View, Button, FlatList, Image} from 'react-native';
 import {Header, Left, Icon} from 'native-base';
-import {
-  fetchClassSubjects,
-  fetchSubject,
-  fetchSubjectTeacher,
-} from '../api/fetchSubjects';
+import {fetchClassSubjects} from '../api/fetchSubjects';
 import {useAuth} from '../../../context/Authentication';
 import {server, defaultUserImageURL} from '../../../utils/config';
 
 export default function Subjects(props) {
   const {user} = useAuth();
   const [subjects, setSubjects] = useState([]);
-  //const [teachersIds, setTeachersIds] = useState([]);
-  const [teachers, setTeachers] = useState([]);
   const showMySubjects = async () => {
     const res = await fetchClassSubjects(user['studentClass']);
     setSubjects(res);
-    /*setTeachersIds(res.map((item) => item.teacherId));
-    let str = '';
-    for (let i = 0; i < teachersIds.length; i++) {
-      if (i != teachersIds.length - 1) {
-        str = str + teachersIds[i] + ',';
-      } else {
-        str = str + teachersIds[i];
-      }
-    }*/
-    let t = [];
-    for (let i = 0; i < res.length; i++) {
-      let res2 = await fetchSubjectTeacher(res[i]['teacherId']);
-      t.push(res2[0]);
-    }
-    setTeachers(t);
+    console.log(subjects);
   };
   React.useEffect(() => {
     showMySubjects();
@@ -47,7 +27,7 @@ export default function Subjects(props) {
           <Icon
             name="menu"
             onPress={() => {
-              props.navigation.openDrawer();
+              props.properties.navigation.openDrawer();
             }}
           />
         </Left>
@@ -65,12 +45,12 @@ export default function Subjects(props) {
       <ScrollView style={{margin: 5}}>
         <View>
           <Text />
-          <Button title="Show my Subjects" onPress={() => {}} />
+          <Button title="Show my Subjects" onPress={showMySubjects} />
           <Text />
           <FlatList
             data={subjects}
             renderItem={({item}) => {
-              if (teachers[subjects.indexOf(item)]['photo'] == '') {
+              if (item.photo == '') {
                 return (
                   <View
                     style={{
@@ -133,20 +113,18 @@ export default function Subjects(props) {
                               uri: defaultUserImageURL,
                             }}
                           />
-                          <Text>
-                            {teachers[subjects.indexOf(item)]['username']}
-                          </Text>
+                          <Text>{item.username}</Text>
                         </View>
                         <View style={{flex: 1, justifyContent: 'center'}}>
                           <Text style={{alignSelf: 'center'}}>Name :</Text>
                           <Text style={{alignSelf: 'center'}}>
-                            {teachers[subjects.indexOf(item)]['fullName']}
+                            {item.fullName}
                           </Text>
                         </View>
                         <View style={{flex: 2, justifyContent: 'center'}}>
                           <Text style={{alignSelf: 'center'}}>Email :</Text>
                           <Text style={{alignSelf: 'center'}}>
-                            {teachers[subjects.indexOf(item)]['email']}
+                            {item.email}
                           </Text>
                         </View>
                       </View>
@@ -213,26 +191,21 @@ export default function Subjects(props) {
                               resizeMode: 'center',
                             }}
                             source={{
-                              uri:
-                                server +
-                                'uploads/profile/' +
-                                teachers[subjects.indexOf(item)]['photo'],
+                              uri: server + 'uploads/profile/' + item.photo,
                             }}
                           />
-                          <Text>
-                            {teachers[subjects.indexOf(item)]['username']}
-                          </Text>
+                          <Text>{item.username}</Text>
                         </View>
                         <View style={{flex: 1, justifyContent: 'center'}}>
                           <Text style={{alignSelf: 'center'}}>Name :</Text>
                           <Text style={{alignSelf: 'center'}}>
-                            {teachers[subjects.indexOf(item)]['fullName']}
+                            {item.fullName}
                           </Text>
                         </View>
                         <View style={{flex: 2, justifyContent: 'center'}}>
                           <Text style={{alignSelf: 'center'}}>Email :</Text>
                           <Text style={{alignSelf: 'center'}}>
-                            {teachers[subjects.indexOf(item)]['email']}
+                            {item.email}
                           </Text>
                         </View>
                       </View>
@@ -247,3 +220,6 @@ export default function Subjects(props) {
     </View>
   );
 }
+/*
+
+ */
