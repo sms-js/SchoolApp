@@ -14,7 +14,6 @@ import {
   fetchTeacherClasses,
   fetchClassTeacher,
   fetchClassStudents,
-  fetchStudentParents,
 } from '../api/fetchClasses';
 import {fetchDormitory} from '../api/fetchDormitory';
 import {useAuth} from '../../../context/Authentication';
@@ -27,8 +26,6 @@ export default function Class(props) {
   const [classes, setClasses] = useState([{}]);
   const [teachers, setTeachers] = useState([]);
   const [students, setStudents] = useState([]);
-  const [viewParents, setViewParents] = useState(false);
-  const [parents, setParents] = useState([]);
   const [dormitory, setDormitory] = useState([{}]);
   const [classe, setClasse] = useState();
   const [classesNames, setClassesNames] = useState([]);
@@ -58,23 +55,6 @@ export default function Class(props) {
       .catch((error) => {
         alert(error);
       });
-  };
-
-  const showStudentParents = async (studentId) => {
-    const res = await fetchStudentParents(studentId);
-    setParents(res);
-  };
-
-  const renderParentsView = () => {
-    if (viewParents) {
-      return (
-        <View>
-          <FlatList data={parents} renderItem={({item}) => <Text>fff</Text>} />
-        </View>
-      );
-    } else {
-      return null;
-    }
   };
 
   React.useEffect(() => {
@@ -198,11 +178,10 @@ export default function Class(props) {
                           marginBottom: 5,
                         }}
                         onPress={() => {
-                          showStudentParents(item.id);
-                          setViewParents(true);
+                          /*showStudentParents(item.id);
+                          setViewParents(true);*/
                           props.properties.navigation.navigate('StudentInfo', {
-                            itemId: 86,
-                            otherParam: 'anything you want here',
+                            student: item,
                           });
                         }}>
                         <Text style={{alignSelf: 'center'}}>
@@ -210,23 +189,73 @@ export default function Class(props) {
                         </Text>
                       </TouchableOpacity>
                     </View>
-                    {renderParentsView}
                   </View>
                 );
               } else {
                 return (
-                  <View style={styles.teachers}>
+                  <View>
                     <View>
-                      <Image
-                        style={styles.image}
-                        source={{
-                          uri: server + 'uploads/profile/' + item.photo,
+                      <View style={styles.teachers}>
+                        <View
+                          style={{
+                            justifyContent: 'center',
+                            padding: 5,
+                            borderRightWidth: 1,
+                            borderRightColor: 'lightblue',
+                          }}>
+                          <Image
+                            style={styles.image}
+                            source={{
+                              uri: server + 'uploads/profile/' + item.photo,
+                            }}
+                          />
+                          <Text>{item.username}</Text>
+                        </View>
+                        <View
+                          style={{
+                            flex: 2,
+                            justifyContent: 'center',
+                            padding: 5,
+                            borderRightWidth: 1,
+                            borderRightColor: 'lightblue',
+                          }}>
+                          <Text>Name</Text>
+                          <Text />
+                          <Text>{item.fullName}</Text>
+                        </View>
+                        <View
+                          style={{
+                            flex: 3,
+                            justifyContent: 'center',
+                            padding: 5,
+                          }}>
+                          <Text>Email</Text>
+                          <Text />
+                          <Text>{item.email}</Text>
+                        </View>
+                      </View>
+                      <TouchableOpacity
+                        style={{
+                          height: 30,
+                          width: '60%',
+                          justifyContent: 'center',
+                          alignSelf: 'center',
+                          backgroundColor: 'lightblue',
+                          borderRadius: 30,
+                          marginBottom: 5,
                         }}
-                      />
-                      <Text>{item.username}</Text>
+                        onPress={() => {
+                          /*showStudentParents(item.id);
+                          setViewParents(true);*/
+                          props.properties.navigation.navigate('StudentInfo', {
+                            student: item,
+                          });
+                        }}>
+                        <Text style={{alignSelf: 'center'}}>
+                          Show student info
+                        </Text>
+                      </TouchableOpacity>
                     </View>
-                    <Text>{item.fullName}</Text>
-                    <Text>{item.email}</Text>
                   </View>
                 );
               }
@@ -240,56 +269,136 @@ export default function Class(props) {
             renderItem={({item}) => {
               if (item.photo == '') {
                 return (
-                  <View style={styles.teachers}>
-                    <View
+                  <View>
+                    <View style={styles.teachers}>
+                      <View
+                        style={{
+                          justifyContent: 'center',
+                          padding: 5,
+                          borderRightWidth: 1,
+                          borderRightColor: 'lightblue',
+                        }}>
+                        <Image
+                          style={styles.image}
+                          source={{
+                            uri: defaultUserImageURL,
+                          }}
+                        />
+                        <Text>{item.username}</Text>
+                      </View>
+                      <View
+                        style={{
+                          flex: 2,
+                          justifyContent: 'center',
+                          padding: 5,
+                          borderRightWidth: 1,
+                          borderRightColor: 'lightblue',
+                        }}>
+                        <Text>Name</Text>
+                        <Text />
+                        <Text>{item.fullName}</Text>
+                      </View>
+                      <View
+                        style={{flex: 3, justifyContent: 'center', padding: 5}}>
+                        <Text>Email</Text>
+                        <Text />
+                        <Text>{item.email}</Text>
+                      </View>
+                    </View>
+                    <TouchableOpacity
                       style={{
+                        height: 30,
+                        width: '60%',
                         justifyContent: 'center',
-                        padding: 5,
-                        borderRightWidth: 1,
-                        borderRightColor: 'lightblue',
+                        alignSelf: 'center',
+                        backgroundColor: 'lightblue',
+                        borderRadius: 30,
+                        marginBottom: 5,
+                      }}
+                      onPress={() => {
+                        /*fetchTeacherInfo(item.id)
+                      .then(async (res) => {
+                        console.log(res);
+                      })
+                      .catch((error) => {
+                        alert(error);
+                      });*/
+                        props.properties.navigation.navigate(
+                          'TeacherInfo',
+                          item,
+                        );
                       }}>
-                      <Image
-                        style={styles.image}
-                        source={{
-                          uri: defaultUserImageURL,
-                        }}
-                      />
-                      <Text>{item.username}</Text>
-                    </View>
-                    <View
-                      style={{
-                        flex: 2,
-                        justifyContent: 'center',
-                        padding: 5,
-                        borderRightWidth: 1,
-                        borderRightColor: 'lightblue',
-                      }}>
-                      <Text>Name</Text>
-                      <Text />
-                      <Text>{item.fullName}</Text>
-                    </View>
-                    <View
-                      style={{flex: 3, justifyContent: 'center', padding: 5}}>
-                      <Text>Email</Text>
-                      <Text />
-                      <Text>{item.email}</Text>
-                    </View>
+                      <Text style={{alignSelf: 'center'}}>
+                        Show teacher info
+                      </Text>
+                    </TouchableOpacity>
                   </View>
                 );
               } else {
                 return (
-                  <View style={styles.teachers}>
-                    <View>
-                      <Image
-                        style={styles.image}
-                        source={{
-                          uri: server + 'uploads/profile/' + item.photo,
-                        }}
-                      />
-                      <Text>{item.username}</Text>
+                  <View>
+                    <View style={styles.teachers}>
+                      <View
+                        style={{
+                          justifyContent: 'center',
+                          padding: 5,
+                          borderRightWidth: 1,
+                          borderRightColor: 'lightblue',
+                        }}>
+                        <Image
+                          style={styles.image}
+                          source={{
+                            uri: server + 'uploads/profile/' + item.photo,
+                          }}
+                        />
+                        <Text>{item.username}</Text>
+                      </View>
+                      <View
+                        style={{
+                          flex: 2,
+                          justifyContent: 'center',
+                          padding: 5,
+                          borderRightWidth: 1,
+                          borderRightColor: 'lightblue',
+                        }}>
+                        <Text>Name</Text>
+                        <Text />
+                        <Text>{item.fullName}</Text>
+                      </View>
+                      <View
+                        style={{flex: 3, justifyContent: 'center', padding: 5}}>
+                        <Text>Email</Text>
+                        <Text />
+                        <Text>{item.email}</Text>
+                      </View>
                     </View>
-                    <Text>{item.fullName}</Text>
-                    <Text>{item.email}</Text>
+                    <TouchableOpacity
+                      style={{
+                        height: 30,
+                        width: '60%',
+                        justifyContent: 'center',
+                        alignSelf: 'center',
+                        backgroundColor: 'lightblue',
+                        borderRadius: 30,
+                        marginBottom: 5,
+                      }}
+                      onPress={() => {
+                        /*fetchTeacherInfo(item.id)
+                  .then(async (res) => {
+                    console.log(res);
+                  })
+                  .catch((error) => {
+                    alert(error);
+                  });*/
+                        props.properties.navigation.navigate(
+                          'TeacherInfo',
+                          item,
+                        );
+                      }}>
+                      <Text style={{alignSelf: 'center'}}>
+                        Show teacher info
+                      </Text>
+                    </TouchableOpacity>
                   </View>
                 );
               }

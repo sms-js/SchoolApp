@@ -12,9 +12,11 @@ import {Header, Left, Icon} from 'native-base';
 import {fetchClass, fetchClassTeacher} from '../api/fetchClasses';
 import {fetchDormitory} from '../api/fetchDormitory';
 import {fetchStudentClass} from '../api/fetchStudentInfo';
+import {fetchTeacherInfo} from '../api/fetchTeacherInfo';
 import {useAuth} from '../../../context/Authentication';
 import {Dropdown} from 'react-native-material-dropdown';
 import {server, defaultUserImageURL} from '../../../utils/config';
+import TeacherInfo from './TeacherInfo';
 
 export default function Class(props) {
   const {user} = useAuth();
@@ -71,6 +73,11 @@ export default function Class(props) {
     } catch (error) {
       alert(error);
     }*/
+  };
+
+  const teacherInfo = async (teacherId) => {
+    const res = fetchTeacherInfo(teacherId);
+    return res[0];
   };
 
   React.useEffect(() => {
@@ -219,7 +226,17 @@ export default function Class(props) {
                         marginBottom: 5,
                       }}
                       onPress={() => {
-                        props.properties.navigation.navigate('TeacherInfo');
+                        /*fetchTeacherInfo(item.id)
+                          .then(async (res) => {
+                            console.log(res);
+                          })
+                          .catch((error) => {
+                            alert(error);
+                          });*/
+                        props.properties.navigation.navigate(
+                          'TeacherInfo',
+                          item,
+                        );
                       }}>
                       <Text style={{alignSelf: 'center'}}>
                         Show teacher info
