@@ -22,9 +22,8 @@ export default function Subjects(props) {
     setSubjects(res);
   };
   const getMyClassSubjects = async (classId) => {
-    const res = fetchTeacherClassSubjects(user['id'], classId);
+    const res = await fetchTeacherClassSubjects(user['id'], classId);
     setSubjects(res);
-    console.log(subjects);
   };
   React.useEffect(() => {
     getMyClasses();
@@ -85,7 +84,7 @@ export default function Subjects(props) {
                   <Text>{item.subjectTitle}</Text>
                 </View>
                 <View style={{flex: 1, justifyContent: 'center'}}>
-                  <Text style={{alignSelf: 'center'}}>tttt</Text>
+                  <Text style={{alignSelf: 'center'}}>{item.className}</Text>
                 </View>
               </View>
             )}
