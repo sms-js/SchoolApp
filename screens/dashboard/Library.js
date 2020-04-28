@@ -242,6 +242,16 @@ export default function Library(props) {
     }
   };
 
+  React.useEffect(() => {
+    fetchBooks()
+      .then(async (res) => {
+        setBooks(res);
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  }, []);
+
   return (
     <View>
       <Header

@@ -34,6 +34,16 @@ export default function Messages(props) {
     setMessageText(text);
   };
 
+  React.useEffect(() => {
+    fetchAllMessages(user['id'])
+      .then(async (res) => {
+        setMessages(res);
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  }, []);
+
   return (
     <View>
       <Header

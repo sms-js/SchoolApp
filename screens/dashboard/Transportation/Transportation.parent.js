@@ -76,6 +76,17 @@ export default function Transportation(props) {
         });
     }
   };
+
+  React.useEffect(() => {
+    fetchTransportations()
+      .then(async (res) => {
+        setTransportations(res);
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  }, []);
+
   return (
     <View style={{marginBottom: 50}}>
       <Header

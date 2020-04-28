@@ -5,11 +5,13 @@ import {server, defaultUserImageURL} from '../../../utils/config';
 export default function TeacherInfo(props) {
   const [profileImage, setProfileImage] = useState('');
   React.useEffect(() => {
-    if (props.navigation.state.params.photo == '') {
+    if (props.navigation.state.params.teacher.photo == '') {
       setProfileImage(defaultUserImageURL);
     } else {
       setProfileImage(
-        server + 'uploads/profile/' + props.navigation.state.params.photo,
+        server +
+          'uploads/profile/' +
+          props.navigation.state.params.teacher.photo,
       );
     }
   }, []);
@@ -33,26 +35,34 @@ export default function TeacherInfo(props) {
             width: '70%',
             textAlignVertical: 'center',
             textAlign: 'center',
-            fontSize: 25,
+            fontSize: 20,
           }}>
-          Class
+          Teacher Informations
         </Text>
         <Text style={{width: '15%'}} />
       </Header>
       <ScrollView>
         <View>
           <Image style={styles.profile} source={{uri: profileImage}} />
-          <Text>User Name : {props.navigation.state.params.username}</Text>
-          <Text>Full Name : {props.navigation.state.params.fullName}</Text>
-          <Text>Email : {props.navigation.state.params.email}</Text>
-          <Text>Phone Number : {props.navigation.state.params.phoneNo}</Text>
-          <Text>Mobile Number : {props.navigation.state.params.mobileNo}</Text>
+          <Text>
+            User Name : {props.navigation.state.params.teacher.username}
+          </Text>
+          <Text>
+            Full Name : {props.navigation.state.params.teacher.fullName}
+          </Text>
+          <Text>Email : {props.navigation.state.params.teacher.email}</Text>
+          <Text>
+            Phone Number : {props.navigation.state.params.teacher.phoneNo}
+          </Text>
+          <Text>
+            Mobile Number : {props.navigation.state.params.teacher.mobileNo}
+          </Text>
         </View>
         <Text />
         <Button
           title="back"
           onPress={() => {
-            props.navigation.navigate('Class');
+            props.navigation.navigate(props.navigation.state.params.backScreen);
           }}
         />
       </ScrollView>

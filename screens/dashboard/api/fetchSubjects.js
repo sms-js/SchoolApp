@@ -27,7 +27,7 @@ export async function fetchSubject(subjectId) {
   }
 }
 
-export async function fetchSubjectTeacher(teachersIds) {
+export async function fetchSubjectTeacher(teachersId) {
   try {
     const response = await fetch(BASE_URL + '/SubjectsController.php', {
       method: 'post',
@@ -37,7 +37,7 @@ export async function fetchSubjectTeacher(teachersIds) {
       },
       body: JSON.stringify({
         view: 'subjectTeacher',
-        id: teachersIds,
+        id: teachersId,
       }),
     });
     const responseJson = await response.json();

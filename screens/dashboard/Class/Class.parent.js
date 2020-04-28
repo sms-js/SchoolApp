@@ -16,7 +16,6 @@ import {fetchTeacherInfo} from '../api/fetchTeacherInfo';
 import {useAuth} from '../../../context/Authentication';
 import {Dropdown} from 'react-native-material-dropdown';
 import {server, defaultUserImageURL} from '../../../utils/config';
-import TeacherInfo from './TeacherInfo';
 
 export default function Class(props) {
   const {user} = useAuth();
@@ -233,10 +232,10 @@ export default function Class(props) {
                           .catch((error) => {
                             alert(error);
                           });*/
-                        props.properties.navigation.navigate(
-                          'TeacherInfo',
-                          item,
-                        );
+                        props.properties.navigation.navigate('TeacherInfo', {
+                          teacher: item,
+                          backScreen: 'Class',
+                        });
                       }}>
                       <Text style={{alignSelf: 'center'}}>
                         Show teacher info
