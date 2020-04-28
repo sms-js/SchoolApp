@@ -96,7 +96,7 @@ export async function fetchTeacherSubjects(teacherId) {
     });
     const responseJson = await response.json();
     if (response.ok) {
-      console.log(responseJson['subjects']);
+      //console.log(responseJson['subjects']);
       //let teacherSubjects = [{}];
       return responseJson['subjects'];
     } else {

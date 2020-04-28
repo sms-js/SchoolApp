@@ -1,14 +1,35 @@
-import React from 'react';
-import {Text, ScrollView, View, Button} from 'react-native';
+import React, {useState} from 'react';
+import {Text, ScrollView, View, FlatList, TouchableOpacity} from 'react-native';
 import {Header, Left, Icon} from 'native-base';
 import {
   fetchTeacherSubjects,
   fetchTeacherClassSubjects,
 } from '../api/fetchSubjects';
+import {fetchTeacherClasses} from '../api/fetchClasses';
 import {useAuth} from '../../../context/Authentication';
+import {Dropdown} from 'react-native-material-dropdown';
 
 export default function Subjects(props) {
   const {user} = useAuth();
+  const [classes, setClasses] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+  const getMyClasses = async () => {
+    const res = await fetchTeacherClasses(user['id']);
+    setClasses(res);
+  };
+  const getMySubjects = async () => {
+    const res = await fetchTeacherSubjects(user['id']);
+    setSubjects(res);
+  };
+  const getMyClassSubjects = async (classId) => {
+    const res = fetchTeacherClassSubjects(user['id'], classId);
+    setSubjects(res);
+    console.log(subjects);
+  };
+  React.useEffect(() => {
+    getMyClasses();
+    getMySubjects();
+  }, []);
   return (
     <View>
       <Header
@@ -35,30 +56,39 @@ export default function Subjects(props) {
         </Text>
         <Text style={{width: '15%'}} />
       </Header>
-      <ScrollView style={{margin: 20}}>
-        <Text />
+      <ScrollView style={{margin: 20, marginBottom: 80}}>
         <View>
-          <Text style={{alignSelf: 'center'}}>Subjects</Text>
           <Text />
-          <Button
-            title="Show my Subjects"
-            onPress={() => {
-              fetchTeacherSubjects(user['id']);
+          <Dropdown
+            label="My class Subjects"
+            data={classes.map((item) => {
+              return {label: item.className, value: item.id};
+            })}
+            onChangeText={(value) => {
+              getMyClassSubjects(value);
             }}
           />
           <Text />
-          <Button
-            title="Show class1 Subjects"
-            onPress={() => {
-              fetchTeacherClassSubjects(user['id'], 1);
-            }}
-          />
-          <Text />
-          <Button
-            title="Login Screen"
-            onPress={() => {
-              props.properties.navigation.navigate('Login');
-            }}
+          <FlatList
+            data={subjects}
+            renderItem={({item}) => (
+              <View
+                style={{
+                  margin: 5,
+                  padding: 10,
+                  borderColor: 'lightblue',
+                  borderWidth: 1,
+                  borderRadius: 15,
+                  flexDirection: 'row',
+                }}>
+                <View style={{flex: 1, justifyContent: 'center'}}>
+                  <Text>{item.subjectTitle}</Text>
+                </View>
+                <View style={{flex: 1, justifyContent: 'center'}}>
+                  <Text style={{alignSelf: 'center'}}>tttt</Text>
+                </View>
+              </View>
+            )}
           />
         </View>
       </ScrollView>
