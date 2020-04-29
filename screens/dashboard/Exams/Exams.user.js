@@ -1,17 +1,17 @@
 import React, {useState} from 'react';
-import {
-  Text,
-  ScrollView,
-  View,
-  Button,
-  FlatList,
-  StyleSheet,
-} from 'react-native';
+import {Text, ScrollView, View, FlatList, StyleSheet} from 'react-native';
 import {Header, Left, Icon} from 'native-base';
-import {fetchExams} from './api/fetchExams';
+import {fetchExams} from '../api/fetchExams';
 
 export default function Exams(props) {
   const [exams, setExams] = useState([{}]);
+  const getExams = async () => {
+    const res = await fetchExams();
+    setExams(res);
+  };
+  React.useEffect(() => {
+    getExams();
+  }, []);
   return (
     <View>
       <Header
@@ -40,18 +40,7 @@ export default function Exams(props) {
       </Header>
       <ScrollView style={{margin: 20, marginBottom: 60}}>
         <Text />
-        <Button
-          title="Show Exams"
-          onPress={() => {
-            fetchExams()
-              .then(async (res) => {
-                setExams(res);
-              })
-              .catch((error) => {
-                alert(error);
-              });
-          }}
-        />
+
         <FlatList
           data={exams}
           renderItem={({item}) => (
