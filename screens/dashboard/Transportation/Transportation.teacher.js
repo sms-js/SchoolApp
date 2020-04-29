@@ -39,7 +39,7 @@ export default function Transportation(props) {
     }
   };
   React.useEffect(() => {
-    fetchTransportations()
+    fetchTransportation(user['transport'])
       .then(async (res) => {
         setTransportations(res);
       })

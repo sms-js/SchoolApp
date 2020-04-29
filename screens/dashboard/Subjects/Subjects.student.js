@@ -45,8 +45,6 @@ export default function Subjects(props) {
       <ScrollView style={{margin: 5}}>
         <View>
           <Text />
-          <Button title="Show my Subjects" onPress={showMySubjects} />
-          <Text />
           <FlatList
             data={subjects}
             renderItem={({item}) => {

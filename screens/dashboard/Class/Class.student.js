@@ -91,13 +91,6 @@ export default function Class(props) {
       <ScrollView style={{margin: 20, marginBottom: 80}}>
         <Text />
         <View>
-          <Text />
-          <Button
-            title="Show my class"
-            onPress={() => {
-              showMyClass();
-            }}
-          />
           <View style={styles.container}>
             <Text style={{alignSelf: 'center'}}>{classe[0]['className']}</Text>
             <Text />
