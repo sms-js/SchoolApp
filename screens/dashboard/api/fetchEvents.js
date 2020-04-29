@@ -242,7 +242,7 @@ export async function fetchEvents(role) {
     });
 
     const responseJson = await response.json();
-    //console.log(responseJson['events']);
+    console.log(responseJson['events']);
 
     String.prototype.extract = function (prefix, suffix) {
       let s = this;
@@ -310,9 +310,10 @@ export async function fetchEvents(role) {
         });
         events = '';
       }
-      console.log(eventsTab);
+      //console.log(eventsTab);
 
-      return eventsTab;
+      //return eventsTab;
+      return responseJson['events'];
     } else {
       //return response.error;
       alert(responseJson['events']['error']);

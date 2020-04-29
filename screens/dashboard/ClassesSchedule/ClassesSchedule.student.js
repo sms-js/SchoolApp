@@ -36,7 +36,6 @@ export default function ClassSchedule(props) {
       <ScrollView style={{margin: 20}}>
         <Text />
         <View>
-          <Text style={{alignSelf: 'center'}}>Class Schedule</Text>
           <Text />
           <Button
             title="Show my class schedule"
@@ -45,19 +44,6 @@ export default function ClassSchedule(props) {
             }}
           />
           <Text />
-          <Button
-            title="Show subject1 info"
-            onPress={() => {
-              fetchSubject(1);
-            }}
-          />
-          <Text />
-          <Button
-            title="Login Screen"
-            onPress={() => {
-              props.properties.navigation.navigate('Login');
-            }}
-          />
         </View>
       </ScrollView>
     </View>

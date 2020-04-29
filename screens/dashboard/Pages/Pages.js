@@ -1,11 +1,17 @@
 import React, {useState} from 'react';
-import {Text, ScrollView, View, Button} from 'react-native';
+import {Text, ScrollView, View, FlatList, TouchableOpacity} from 'react-native';
 import {Header, Left, Right, Icon} from 'native-base';
-import {fetchPages} from './api/fetchPages';
+import {fetchPages} from '../api/fetchPages';
 
 export default function Pages(props) {
-  const [Pages, setPages] = useState('');
-
+  const [pages, setPages] = useState([]);
+  const getPages = async () => {
+    const res = await fetchPages();
+    setPages(res);
+  };
+  React.useEffect(() => {
+    getPages();
+  }, []);
   return (
     <View>
       <Header
@@ -34,23 +40,33 @@ export default function Pages(props) {
       </Header>
       <ScrollView style={{margin: 20}}>
         <Text />
-        <View>
-          <Text style={{alignSelf: 'center'}}>Pages</Text>
-          <Text />
-          <Button
-            title="Show Pages"
-            onPress={() => {
-              fetchPages();
-            }}
-          />
-          <Text />
-          <Button
-            title="Login Screen"
-            onPress={() => {
-              props.navigation.navigate('Login');
-            }}
-          />
-        </View>
+        <FlatList
+          data={pages}
+          renderItem={({item}) => {
+            return (
+              <View
+                style={{
+                  borderColor: 'lightblue',
+                  borderWidth: 1,
+                  margin: 5,
+                  padding: 10,
+                  flexDirection: 'row',
+                  borderRadius: 25,
+                }}>
+                <Text style={{flex: 2}}>{item.pageTitle}</Text>
+                <TouchableOpacity
+                  style={{flex: 1, alignItems: 'center'}}
+                  onPress={() => {
+                    props.properties.navigation.navigate('HTMLView', {
+                      content: item.pageContent,
+                    });
+                  }}>
+                  <Text>View Page</Text>
+                </TouchableOpacity>
+              </View>
+            );
+          }}
+        />
       </ScrollView>
     </View>
   );

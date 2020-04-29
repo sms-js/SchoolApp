@@ -1,12 +1,19 @@
-import React from 'react';
-import {Text, ScrollView, View, Button} from 'react-native';
+import React, {useState} from 'react';
+import {Text, ScrollView, View, FlatList, TouchableOpacity} from 'react-native';
 import {Header, Left, Right, Icon} from 'native-base';
-import {fetchNewsForAll, fetchUserNews, fetchNews} from './api/fetchNews';
-import {useAuth} from '../../context/Authentication';
+import {fetchNewsForAll, fetchUserNews, fetchNews} from '../api/fetchNews';
+import {useAuth} from '../../../context/Authentication';
 
 export default function News(props) {
   const {user} = useAuth();
-
+  const [news, setNews] = useState([]);
+  const getNews = async () => {
+    const res = await fetchNews(user['role']);
+    setNews(res);
+  };
+  React.useEffect(() => {
+    getNews();
+  }, []);
   return (
     <View>
       <Header
@@ -35,30 +42,31 @@ export default function News(props) {
       </Header>
       <ScrollView style={{margin: 20}}>
         <Text />
-        <View>
-          <Text style={{alignSelf: 'center'}}>News</Text>
-          <Text />
-          <Button
-            title="Show my info"
-            onPress={() => {
-              console.log(user);
-            }}
-          />
-          <Text />
-          <Button
-            title={'Show news'}
-            onPress={() => {
-              fetchNews(user['role']);
-            }}
-          />
-          <Text />
-          <Button
-            title="Login Screen"
-            onPress={() => {
-              props.navigation.navigate('Login');
-            }}
-          />
-        </View>
+        <FlatList
+          data={news}
+          renderItem={({item}) => (
+            <View
+              style={{
+                borderColor: 'lightblue',
+                borderWidth: 1,
+                margin: 5,
+                padding: 10,
+                flexDirection: 'row',
+                borderRadius: 25,
+              }}>
+              <Text>{item.newsTitle}</Text>
+              <TouchableOpacity
+                style={{flex: 1, alignItems: 'center'}}
+                onPress={() => {
+                  props.properties.navigation.navigate('HTMLView', {
+                    content: item.newsText,
+                  });
+                }}>
+                <Text>View News</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        />
       </ScrollView>
     </View>
   );
