@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Text, ScrollView, View, FlatList, TouchableOpacity} from 'react-native';
+import {Text, ScrollView, View, FlatList} from 'react-native';
 import {Header, Left, Icon} from 'native-base';
 import {
   fetchTeacherSubjects,
@@ -12,6 +12,7 @@ import {Dropdown} from 'react-native-material-dropdown';
 export default function Subjects(props) {
   const {user} = useAuth();
   const [classes, setClasses] = useState([]);
+  const [drop, setDrop] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const getMyClasses = async () => {
     const res = await fetchTeacherClasses(user['id']);
@@ -28,6 +29,11 @@ export default function Subjects(props) {
   React.useEffect(() => {
     getMyClasses();
     getMySubjects();
+    let d = classes.map((item) => {
+      return {label: item.className, value: item.id};
+    });
+    d.unshift({label: 'All my subjects', value: 0});
+    setDrop(d);
   }, []);
   return (
     <View>
@@ -60,11 +66,13 @@ export default function Subjects(props) {
           <Text />
           <Dropdown
             label="My class Subjects"
-            data={classes.map((item) => {
-              return {label: item.className, value: item.id};
-            })}
+            data={drop}
             onChangeText={(value) => {
-              getMyClassSubjects(value);
+              if (value == 0) {
+                getMySubjects();
+              } else {
+                getMyClassSubjects(value);
+              }
             }}
           />
           <Text />
