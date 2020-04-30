@@ -323,10 +323,10 @@ export default function Class(props) {
                       .catch((error) => {
                         alert(error);
                       });*/
-                        props.properties.navigation.navigate(
-                          'TeacherInfo',
-                          item,
-                        );
+                        props.properties.navigation.navigate('TeacherInfo', {
+                          teacher: item,
+                          backScreen: 'Class',
+                        });
                       }}>
                       <Text style={{alignSelf: 'center'}}>
                         Show teacher info
@@ -390,10 +390,10 @@ export default function Class(props) {
                   .catch((error) => {
                     alert(error);
                   });*/
-                        props.properties.navigation.navigate(
-                          'TeacherInfo',
-                          item,
-                        );
+                        props.properties.navigation.navigate('TeacherInfo', {
+                          teacher: item,
+                          backScreen: 'Class',
+                        });
                       }}>
                       <Text style={{alignSelf: 'center'}}>
                         Show teacher info

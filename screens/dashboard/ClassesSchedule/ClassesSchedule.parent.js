@@ -17,6 +17,8 @@ export default function ClassSchedule(props) {
     const res2 = await fetchClassesSchedule(classe[0]['studentClass']);
     if (res2) {
       setSchedule(res2);
+    } else {
+      setSchedule([{}]);
     }
   };
   React.useEffect(() => {
@@ -92,7 +94,7 @@ export default function ClassSchedule(props) {
         </Text>
         <Text style={{width: '15%'}} />
       </Header>
-      <ScrollView style={{margin: 10}}>
+      <ScrollView style={{margin: 10, marginBottom: 80}}>
         <Dropdown
           label="Children classes schedules"
           data={children}

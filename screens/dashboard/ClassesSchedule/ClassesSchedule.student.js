@@ -11,7 +11,11 @@ export default function ClassSchedule(props) {
     try {
       fetchClassesSchedule(user['studentClass'])
         .then(async (res) => {
-          setSchedule(res);
+          if (res) {
+            setSchedule(res);
+          } else {
+            setSchedule([{}]);
+          }
         })
         .catch((error) => {
           alert(error);
@@ -49,7 +53,7 @@ export default function ClassSchedule(props) {
         </Text>
         <Text style={{width: '15%'}} />
       </Header>
-      <ScrollView style={{margin: 10}}>
+      <ScrollView style={{margin: 10, marginBottom: 80}}>
         <View style={styles.topView}>
           <View style={{flex: 1}}>
             <Text style={styles.text2}>Day</Text>

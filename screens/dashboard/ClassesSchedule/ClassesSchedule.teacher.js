@@ -18,6 +18,8 @@ export default function ClassSchedule(props) {
     const res = await fetchClassesSchedule(classId);
     if (res) {
       setSchedule(res);
+    } else {
+      setSchedule([{}]);
     }
   };
   React.useEffect(() => {
@@ -49,7 +51,7 @@ export default function ClassSchedule(props) {
         </Text>
         <Text style={{width: '15%'}} />
       </Header>
-      <ScrollView style={{margin: 10}}>
+      <ScrollView style={{margin: 10, marginBottom: 80}}>
         <Dropdown
           label="My classes"
           data={classes.map((obj) => {
