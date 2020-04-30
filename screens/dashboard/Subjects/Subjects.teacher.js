@@ -17,7 +17,13 @@ export default function Subjects(props) {
   const getMyClasses = async () => {
     const res = await fetchTeacherClasses(user['id']);
     setClasses(res);
+    let d = res.map((item) => {
+      return {label: item.className, value: item.id};
+    });
+    d.unshift({label: 'All my subjects', value: 0});
+    setDrop(d);
   };
+
   const getMySubjects = async () => {
     const res = await fetchTeacherSubjects(user['id']);
     setSubjects(res);
@@ -29,11 +35,9 @@ export default function Subjects(props) {
   React.useEffect(() => {
     getMyClasses();
     getMySubjects();
-    let d = classes.map((item) => {
-      return {label: item.className, value: item.id};
-    });
-    d.unshift({label: 'All my subjects', value: 0});
-    setDrop(d);
+
+    //
+    //console.log();
   }, []);
   return (
     <View>
