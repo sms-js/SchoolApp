@@ -35,9 +35,6 @@ export default function Subjects(props) {
   React.useEffect(() => {
     getMyClasses();
     getMySubjects();
-
-    //
-    //console.log();
   }, []);
   return (
     <View>
