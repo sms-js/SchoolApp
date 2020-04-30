@@ -15,7 +15,7 @@ export async function fetchClassesSchedule(classId) {
     });
     const responseJson = await response.json();
     if (response.ok) {
-      console.log(responseJson['class schedule']);
+      //console.log(responseJson['class schedule']);
       //let classSchedule = [{}];
       return responseJson['class schedule'];
     } else {
