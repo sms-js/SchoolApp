@@ -36,7 +36,10 @@ export default function Library(props) {
     setAssignments(res);
   };
   const getMySubjectAssignments = async (subjectId) => {
-    const res = await fetchStudentSubjectAssignments(subjectId);
+    const res = await fetchStudentSubjectAssignments(
+      user['studentClass'],
+      subjectId,
+    );
     setAssignments(res);
   };
   React.useEffect(() => {

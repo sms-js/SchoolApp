@@ -169,10 +169,10 @@ export async function fetchStudentAssignments(classId) {
   }
 }
 
-export async function fetchStudentSubjectAssignments(subjectId) {
+export async function fetchStudentSubjectAssignments(classId, subjectId) {
   try {
     const response = await fetch(
-      BASE_URL + '/AssignmentsFilterController.php',
+      BASE_URL + '/AssignmentsFilterController2.php',
       {
         method: 'post',
         header: {
@@ -181,18 +181,19 @@ export async function fetchStudentSubjectAssignments(subjectId) {
         },
         body: JSON.stringify({
           view: 'subjectid',
-          id: subjectId,
+          id: classId,
+          subjectId: subjectId,
         }),
       },
     );
     const responseJson = await response.json();
     if (response.ok) {
-      console.log(responseJson['subject assignments']);
+      console.log(responseJson['class subject assignments']);
       //let teacherSubjectAssignments = [{}];
-      return responseJson['subject assignments'];
+      return responseJson['class subject assignments'];
     } else {
       //return 'error !';
-      alert(responseJson['subject assignments']['error']);
+      alert(responseJson['class subject assignments']['error']);
     }
   } catch (error) {
     return error;
