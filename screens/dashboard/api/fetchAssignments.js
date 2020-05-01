@@ -198,3 +198,27 @@ export async function fetchStudentSubjectAssignments(subjectId) {
     return error;
   }
 }
+
+export async function clearAssignments() {
+  try {
+    const response = await fetch(BASE_URL + '/AssignmentsController.php', {
+      method: 'post',
+      header: {
+        Accept: 'application/json',
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        view: 'clear',
+      }),
+    });
+    const responseJson = await response.json();
+    if (response.ok) {
+      alert(responseJson['delete status']);
+    } else {
+      //return 'error !';
+      alert(responseJson['delete status']['error']);
+    }
+  } catch (error) {
+    return error;
+  }
+}

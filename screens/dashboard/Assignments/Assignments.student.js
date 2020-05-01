@@ -1,14 +1,47 @@
-import React from 'react';
-import {Text, ScrollView, View, Button} from 'react-native';
+import React, {useState} from 'react';
+import {
+  Text,
+  ScrollView,
+  View,
+  FlatList,
+  StyleSheet,
+  Button,
+} from 'react-native';
 import {Header, Left, Icon} from 'native-base';
 import {
   fetchStudentAssignments,
   fetchStudentSubjectAssignments,
+  clearAssignments,
 } from '../api/fetchAssignments';
+import {fetchClassSubjects} from '../api/fetchSubjects';
 import {useAuth} from '../../../context/Authentication';
+import {Dropdown} from 'react-native-material-dropdown';
 
 export default function Library(props) {
   const {user} = useAuth();
+  const [subjects, setSubjects] = useState([]);
+  const [assignments, setAssignments] = useState([]);
+  const getSubjects = async () => {
+    const res = await fetchClassSubjects(user['studentClass']);
+    if (res) {
+      let d = res.map((item) => {
+        return {label: item.subjectTitle, value: item.id};
+      });
+      d.unshift({label: 'All my subjects', value: 0});
+      setSubjects(d);
+    }
+  };
+  const getMyClassAssignments = async (classId) => {
+    const res = await fetchStudentAssignments(classId);
+    setAssignments(res);
+  };
+  const getMySubjectAssignments = async (subjectId) => {
+    const res = await fetchStudentSubjectAssignments(subjectId);
+    setAssignments(res);
+  };
+  React.useEffect(() => {
+    getSubjects();
+  }, []);
   return (
     <View>
       <Header
@@ -35,32 +68,61 @@ export default function Library(props) {
         </Text>
         <Text style={{width: '15%'}} />
       </Header>
-      <ScrollView style={{margin: 20}}>
+      <ScrollView style={{margin: 10, marginBottom: 80}}>
         <Text />
-        <View>
-          <Text style={{alignSelf: 'center'}}>Assignments</Text>
-          <Text />
-          <Button
-            title="Show my assignments"
-            onPress={() => {
-              fetchStudentAssignments(user['studentClass']);
-            }}
-          />
-          <Text />
-          <Button
-            title="Show Subject 1 assignments"
-            onPress={() => {
-              fetchStudentSubjectAssignments(1);
-            }}
-          />
-          <Text />
-          <Button
-            title="Login Screen"
-            onPress={() => {
-              props.properties.navigation.navigate('Login');
-            }}
-          />
-        </View>
+        <Dropdown
+          label="My class Subjects"
+          data={subjects}
+          onChangeText={(value) => {
+            if (value == 0) {
+              getMyClassAssignments(user['studentClass']);
+            } else {
+              getMySubjectAssignments(value);
+            }
+          }}
+        />
+        <Text />
+        <FlatList
+          data={assignments}
+          renderItem={({item}) => {
+            if (item.AssignFile != '') {
+              return (
+                <View
+                  style={{
+                    margin: 5,
+                    padding: 10,
+                    borderColor: 'lightblue',
+                    borderWidth: 1,
+                    borderRadius: 15,
+                  }}>
+                  <Text>Title : {item.AssignTitle}</Text>
+                  <Text>Description : </Text>
+                  <Text>{item.AssignDescription}</Text>
+                  <Text>Subject : {item.subjectTitle}</Text>
+                  <Text>Deadline : {item.AssignDeadLine}</Text>
+                  <Button title="Download" />
+                </View>
+              );
+            } else {
+              return (
+                <View
+                  style={{
+                    margin: 5,
+                    padding: 10,
+                    borderColor: 'lightblue',
+                    borderWidth: 1,
+                    borderRadius: 15,
+                  }}>
+                  <Text>Title : {item.AssignTitle}</Text>
+                  <Text>Description : </Text>
+                  <Text>{item.AssignDescription}</Text>
+                  <Text>Subject : {item.subjectTitle}</Text>
+                  <Text>Deadline : {item.AssignDeadLine}</Text>
+                </View>
+              );
+            }
+          }}
+        />
       </ScrollView>
     </View>
   );
