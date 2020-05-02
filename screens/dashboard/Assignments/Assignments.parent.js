@@ -130,6 +130,7 @@ export default function Assignments(props) {
           label="Children classes"
           data={children}
           onChangeText={(value) => {
+            setAssignments([]);
             getMyChildClass(value);
           }}
         />

@@ -14,6 +14,7 @@ import Messages from '../screens/dashboard/Messages';
 import News from './NewsStack';
 import Pages from './PagesStack';
 import Transportation from './TransportationStack';
+import Payments from './PaymentsStack';
 import Polls from '../screens/dashboard/Polls';
 import Profile from '../screens/dashboard/Profile';
 import NavigatorHeader from './navigatorHeader';
@@ -33,6 +34,7 @@ var dashboardNavigator = createDrawerNavigator(
     News,
     Pages,
     Transportation,
+    Payments,
     Polls,
     Profile,
   },

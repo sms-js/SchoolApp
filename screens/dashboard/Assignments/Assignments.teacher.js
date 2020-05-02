@@ -125,6 +125,7 @@ export default function Assignments(props) {
               setSubjects([]);
               getMyAssignments();
             } else {
+              setAssignments([]);
               setClasse(value);
               getMyClassSubjects(value);
             }
