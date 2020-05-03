@@ -125,7 +125,7 @@ export async function insertTeacherAssignments(
     );
     const responseJson = await response.json();
     if (response.ok) {
-      console.log(responseJson['insert status']);
+      alert(responseJson['insert status']);
       //let teacherSubjectAssignments = [{}];
       return responseJson['nsert status'];
     } else {

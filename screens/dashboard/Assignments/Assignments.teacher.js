@@ -24,7 +24,7 @@ import {Dropdown} from 'react-native-material-dropdown';
 export default function Assignments(props) {
   const {user} = useAuth();
   const [classes, setClasses] = useState([]);
-  const [classe, setClasse] = useState([]);
+  const [classe, setClasse] = useState();
   const [subjects, setSubjects] = useState([]);
   const [assignments, setAssignments] = useState([]);
 
@@ -63,30 +63,6 @@ export default function Assignments(props) {
     setAssignments(res);
   };
 
-  const [assignmentTitle, setAssignmentTitle] = useState('');
-  const [assignmentDescription, setAssignmentDescription] = useState('');
-  const [assignmentClass, setAssignmentClass] = useState('');
-  const [assignmentSubject, setAssignmentSubject] = useState('');
-  const [assignmentDeadLine, setAssignmentDeadLine] = useState('');
-  const [assignmentFile, setAssignmentFile] = useState('');
-  const assignmentTitleHandler = (title) => {
-    setAssignmentTitle(title);
-  };
-  const assignmentDescriptionHandler = (description) => {
-    setAssignmentDescription(description);
-  };
-  const assignmentclasseHandler = (classe) => {
-    setAssignmentClass(classe);
-  };
-  const assignmentSubjectHandler = (subject) => {
-    setAssignmentSubject(subject);
-  };
-  const assignmentDeadLineHandler = (deadLine) => {
-    setAssignmentDeadLine(deadLine);
-  };
-  const assignmentFileHandler = (file) => {
-    setAssignmentFile(file);
-  };
   React.useEffect(() => {
     getMyClasses();
   }, []);
@@ -187,61 +163,13 @@ export default function Assignments(props) {
             }
           }}
         />
+        <Button
+          title="Add"
+          onPress={() => {
+            props.properties.navigation.navigate('AddAssignment');
+          }}
+        />
       </ScrollView>
     </View>
   );
 }
-const styles = StyleSheet.create({
-  view: {borderColor: 'lightblue', borderWidth: 1, margin: 5},
-  textinput: {borderColor: 'lightblue', borderWidth: 1, padding: 10, margin: 5},
-  button: {alignSelf: 'center'},
-});
-/*
-  <View style={styles.view}>
-            <TextInput
-              placeholder="Assignment Title"
-              onChangeText={assignmentTitleHandler}
-              style={styles.textinput}
-            />
-            <TextInput
-              placeholder="Assignment Description"
-              onChangeText={assignmentDescriptionHandler}
-              style={styles.textinput}
-            />
-            <TextInput
-              placeholder="Assignment Class"
-              onChangeText={assignmentclasseHandler}
-              style={styles.textinput}
-            />
-            <TextInput
-              placeholder="Assignment Subject"
-              onChangeText={assignmentSubjectHandler}
-              style={styles.textinput}
-            />
-            <TextInput
-              placeholder="Assignment DeadLine"
-              onChangeText={assignmentDeadLineHandler}
-              style={styles.textinput}
-            />
-            <TextInput
-              placeholder="Assignment File"
-              onChangeText={assignmentFileHandler}
-              style={styles.textinput}
-            />
-            <Button
-              title="add assignment"
-              style={styles.button}
-              onPress={() => {
-                insertTeacherAssignments(
-                  assignmentClass,
-                  assignmentSubject,
-                  user['id'],
-                  assignmentTitle,
-                  setAssignmentDescription,
-                  setAssignmentFile,
-                  setAssignmentDeadLine,
-                );
-              }}
-            />
-          </View>
-*/
