@@ -44,6 +44,7 @@ export default function Library(props) {
   };
   React.useEffect(() => {
     getSubjects();
+    getMyClassAssignments(user['studentClass']);
   }, []);
   return (
     <View>
@@ -72,7 +73,6 @@ export default function Library(props) {
         <Text style={{width: '15%'}} />
       </Header>
       <ScrollView style={{margin: 10, marginBottom: 80}}>
-        <Text />
         <Dropdown
           label="My class Subjects"
           data={subjects}
