@@ -6,6 +6,7 @@ import {
   fetchPaidPayments,
   fetchUnpaidPayments,
 } from '../api/fetchPayments';
+import {fetchSchoolInfos} from '../api/fetchSchoolInfos';
 import {useAuth} from '../../../context/Authentication';
 import {Dropdown} from 'react-native-material-dropdown';
 
@@ -132,78 +133,57 @@ export default function Payments(props) {
         />
         <Text />
         <FlatList
-          data={payments}
-          renderItem={({item}) => {
-            if (item.paymentStatus == 0) {
-              return (
-                <View
-                  style={{
-                    margin: 5,
-                    padding: 10,
-                    borderColor: 'lightblue',
-                    borderWidth: 1,
-                    borderRadius: 25,
-                  }}>
-                  <Text>{item.paymentTitle}</Text>
-                  <Text>{item.paymentDescription}</Text>
-                  <Text>{item.paymentAmount}</Text>
-                  <Text>{item.paymentDate}</Text>
-                  <Text style={{color: 'red'}}>Unpaid</Text>
-                  <TouchableOpacity
-                    style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      alignSelf: 'center',
-                      backgroundColor: 'lightblue',
-                      height: 35,
-                      width: '50%',
-                      borderRadius: 25,
-                    }}
-                    onPress={() => {
-                      props.properties.navigation.navigate('PaymentInnovice', {
-                        payment: item,
-                      });
-                    }}>
-                    <Text>View Innovice</Text>
-                  </TouchableOpacity>
-                </View>
-              );
+          data={payments.map((obj) => {
+            if (obj.paymentStatus == 0) {
+              obj.paymentStatus = 'Unpaid';
+              return obj;
             } else {
-              return (
-                <View
-                  style={{
-                    margin: 5,
-                    padding: 10,
-                    borderColor: 'lightblue',
-                    borderWidth: 1,
-                    borderRadius: 25,
-                  }}>
-                  <Text>{item.paymentTitle}</Text>
-                  <Text>{item.paymentDescription}</Text>
-                  <Text>{item.paymentAmount}</Text>
-                  <Text>{item.paymentDate}</Text>
-                  <Text style={{color: 'green'}}>Unpaid</Text>
-                  <TouchableOpacity
-                    style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      alignSelf: 'center',
-                      backgroundColor: 'lightblue',
-                      height: 35,
-                      width: '50%',
-                      borderRadius: 25,
-                    }}
-                    onPress={() => {
-                      props.properties.navigation.navigate('PaymentInnovice', {
-                        payment: item,
-                      });
-                    }}>
-                    <Text>View Innovice</Text>
-                  </TouchableOpacity>
-                </View>
-              );
+              obj.paymentStatus = 'Paid';
+              return obj;
             }
-          }}
+          })}
+          renderItem={({item}) => (
+            <View
+              style={{
+                margin: 5,
+                padding: 10,
+                borderColor: 'lightblue',
+                borderWidth: 1,
+                borderRadius: 25,
+              }}>
+              <Text>{item.paymentTitle}</Text>
+              <Text>{item.paymentDescription}</Text>
+              <Text>{item.paymentAmount}</Text>
+              <Text>{item.paymentDate}</Text>
+              <Text
+                style={
+                  item.paymentStatus == 'Paid'
+                    ? {color: 'green'}
+                    : {color: 'red'}
+                }>
+                {item.paymentStatus}
+              </Text>
+              <TouchableOpacity
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  alignSelf: 'center',
+                  backgroundColor: 'lightblue',
+                  height: 35,
+                  width: '50%',
+                  borderRadius: 25,
+                }}
+                onPress={async () => {
+                  const res = await fetchSchoolInfos();
+                  props.properties.navigation.navigate('PaymentInnovice', {
+                    payment: item,
+                    school: res,
+                  });
+                }}>
+                <Text>View Innovice</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         />
       </ScrollView>
     </View>

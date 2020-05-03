@@ -15,7 +15,7 @@ export async function fetchAllPayments(studentId) {
     });
     const responseJson = await response.json();
     if (response.ok) {
-      console.log(responseJson['all payments']);
+      //console.log(responseJson['all payments']);
       //let allPolls = [{}];
       return responseJson['all payments'];
     } else {
@@ -42,7 +42,7 @@ export async function fetchPaidPayments(studentId) {
     });
     const responseJson = await response.json();
     if (response.ok) {
-      console.log(responseJson['paid payments']);
+      //console.log(responseJson['paid payments']);
       //let allPolls = [{}];
       return responseJson['paid payments'];
     } else {
@@ -69,7 +69,7 @@ export async function fetchUnpaidPayments(studentId) {
     });
     const responseJson = await response.json();
     if (response.ok) {
-      console.log(responseJson['unpaid payments']);
+      //console.log(responseJson['unpaid payments']);
       //let allPolls = [{}];
       return responseJson['unpaid payments'];
     } else {
