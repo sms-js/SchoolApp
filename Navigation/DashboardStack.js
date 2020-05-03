@@ -7,6 +7,7 @@ import Class from './ClassStack';
 import Assignments from './AssignmentsStack';
 import ClassSchedule from './ClassesScheduleStack';
 import Subjects from './SubjectsStack';
+import Attendance from './AttendanceStack';
 import Library from '../screens/dashboard/Library';
 import Exams from './ExamsStack';
 import Media from '../screens/dashboard/Media';
@@ -25,6 +26,7 @@ var dashboardNavigator = createDrawerNavigator(
     Class,
     ClassSchedule,
     Subjects,
+    Attendance,
     Assignments,
     Exams,
     Events,

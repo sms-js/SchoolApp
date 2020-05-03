@@ -200,11 +200,11 @@ export default function RegisterTeacher(props) {
           onChangeText={(text) => Validate(text, 'fullname')}
         />
         <DatePicker
-          style={{width: 381}}
+          style={{width: '97%'}}
           date={birthDay}
           mode="date"
           placeholder="select date"
-          format="DD/MM/YYYY"
+          format="MM/DD/YYYY"
           minDate="01/01/1930"
           maxDate="01/01/1990"
           confirmBtnText="Confirm"
