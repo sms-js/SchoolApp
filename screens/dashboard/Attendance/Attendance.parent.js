@@ -33,7 +33,6 @@ export default function Attendance(props) {
     console.log(res);
     setClasse(res[0]['studentClass']);
     const res1 = await fetchClassSubjects(res[0]['studentClass']);
-    console.log(res1);
     if (res1) {
       let d = res1.map((item) => {
         return {label: item.subjectTitle, value: item.id};
@@ -43,7 +42,6 @@ export default function Attendance(props) {
   };
   const getMyChildAttendance = async (classId, subjectId, studentId, date) => {
     const res = await fetchAttendance(classId, subjectId, studentId, date);
-    console.log(res);
     if (res) {
       let a = res.map((obj) => {
         switch (obj.status) {
@@ -159,6 +157,7 @@ export default function Attendance(props) {
           onChangeText={(value) => {
             setAttendance([]);
             setSubjects([]);
+            setSubject('');
             setChild(value);
             getMyChildSubjects(value);
           }}
