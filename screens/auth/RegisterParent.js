@@ -320,7 +320,14 @@ export default function RegisterParent(props) {
             placeholder="select date"
             format="MM/DD/YYYY"
             minDate="01/01/1930"
-            maxDate="01/01/1990"
+            maxDate={
+              new Date().getMonth() +
+              1 +
+              '/' +
+              new Date().getDate() +
+              '/' +
+              new Date().getFullYear()
+            }
             confirmBtnText="Confirm"
             cancelBtnText="Cancel"
             customStyles={{

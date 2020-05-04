@@ -16,10 +16,11 @@ import DatePicker from 'react-native-datepicker';
 
 export default function Attendance(props) {
   const {user} = useAuth();
-  const [subjects, setSubjects] = useState([]);
-  const [subject, setSubject] = useState([]);
-  const [date, setDate] = useState('');
-  const [attendance, setAttendance] = useState([]);
+  const [subjects, setSubjects] = useState();
+  const [subject, setSubject] = useState();
+  const [date, setDate] = useState();
+  const [attendance, setAttendance] = useState();
+
   const dateHandler = (value) => {
     setDate(value);
   };
@@ -34,11 +35,42 @@ export default function Attendance(props) {
   };
   const getMyAttendance = async (classId, subjectId, studentId, date) => {
     const res = await fetchAttendance(classId, subjectId, studentId, date);
-    setAttendance(res);
+    if (res) {
+      let a = res.map((obj) => {
+        switch (obj.status) {
+          case '0':
+            obj.status = 'Absent';
+            return obj;
+
+          case '1':
+            obj.status = 'Present';
+            return obj;
+
+          case '2':
+            obj.status = 'Late';
+            return obj;
+
+          case '3':
+            obj.status = 'Late with excuse';
+            return obj;
+
+          case '4':
+            obj.status = 'Early dismissal';
+            return obj;
+        }
+      });
+      setAttendance(a);
+    } else {
+      setAttendance([]);
+    }
   };
-  /*React.useEffect(() => {
+  React.useEffect(() => {
     getMyClassSubjects(user['studentClass']);
-  }, []);*/
+    let today = new Date();
+    let date =
+      today.getMonth() + 1 + '/' + today.getDate() + '/' + today.getFullYear();
+    setDate(date);
+  }, []);
   return (
     <View>
       <Header
@@ -66,6 +98,16 @@ export default function Attendance(props) {
         <Text style={{width: '15%'}} />
       </Header>
       <ScrollView style={{margin: 10, marginBottom: 80}}>
+        <Dropdown
+          label="My class subjects"
+          data={subjects}
+          onChangeText={(value) => {
+            setSubject(value);
+            if (date) {
+              getMyAttendance(user['studentClass'], value, user['id'], date);
+            }
+          }}
+        />
         <Text />
         <DatePicker
           style={{width: '97%'}}
@@ -74,7 +116,14 @@ export default function Attendance(props) {
           placeholder="select date"
           format="MM/DD/YYYY"
           minDate="01/01/1930"
-          maxDate="12/31/2020"
+          maxDate={
+            new Date().getMonth() +
+            1 +
+            '/' +
+            new Date().getDate() +
+            '/' +
+            new Date().getFullYear()
+          }
           confirmBtnText="Confirm"
           cancelBtnText="Cancel"
           customStyles={{
@@ -90,76 +139,54 @@ export default function Attendance(props) {
           }}
           onDateChange={(value) => {
             dateHandler(value);
-            getMyClassSubjects(user['studentClass']);
-          }}
-        />
-        <Dropdown
-          label="My class subjects"
-          data={subjects}
-          onChangeText={(value) => {
-            getMyAttendance(user['studentClass'], value, user['id'], date);
-          }}
-        />
-        <FlatList
-          data={attendance.map((obj) => {
-            switch (obj.status) {
-              case '0':
-                obj.status = 'Absent';
-                return obj;
-
-              case '1':
-                obj.status = 'Present';
-                return obj;
-
-              case '2':
-                obj.status = 'Late';
-                return obj;
-
-              case '3':
-                obj.status = 'Late with excuse';
-                return obj;
-
-              case '4':
-                obj.status = 'Early dismissal';
-                return obj;
+            if (subject) {
+              getMyAttendance(user['studentClass'], subject, user['id'], value);
             }
-          })}
-          renderItem={({item}) => (
-            <View
-              style={{
-                flexDirection: 'row',
-                borderColor: 'lightblue',
-                borderWidth: 1,
-                borderRadius: 25,
-                margin: 5,
-                padding: 10,
-              }}>
+          }}
+        />
+        <Text />
+        <FlatList
+          data={attendance}
+          renderItem={({item}) =>
+            item.status ? (
               <View
                 style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
+                  flexDirection: 'row',
+                  borderColor: 'lightblue',
+                  borderWidth: 1,
+                  borderRadius: 25,
+                  margin: 5,
+                  padding: 10,
                 }}>
-                <Text>{item.subjectTitle}</Text>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Text>{item.subjectTitle}</Text>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Text>{item.date}</Text>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Text>{item.status}</Text>
+                </View>
               </View>
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text>{item.date}</Text>
-              </View>
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text>{item.status}</Text>
-              </View>
-            </View>
-          )}
+            ) : (
+              <View />
+            )
+          }
         />
         <Text />
       </ScrollView>
