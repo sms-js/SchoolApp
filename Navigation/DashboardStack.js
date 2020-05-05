@@ -10,6 +10,7 @@ import Subjects from './SubjectsStack';
 import Attendance from './AttendanceStack';
 import Library from '../screens/dashboard/Library';
 import Exams from './ExamsStack';
+import ExamMarks from './ExamMarksStack';
 import Media from '../screens/dashboard/Media';
 import Messages from '../screens/dashboard/Messages';
 import News from './NewsStack';
@@ -29,6 +30,7 @@ var dashboardNavigator = createDrawerNavigator(
     Attendance,
     Assignments,
     Exams,
+    ExamMarks,
     Events,
     Media,
     Messages,
