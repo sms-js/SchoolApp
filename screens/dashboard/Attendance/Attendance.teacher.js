@@ -6,22 +6,24 @@ import {
   FlatList,
   StyleSheet,
   Button,
+  Image,
 } from 'react-native';
 import {Header, Left, Icon} from 'native-base';
-import {fetchAttendance} from '../api/fetchAttendance';
+import {fetchAttendance, fetchStudentsAttendance} from '../api/fetchAttendance';
 import {fetchClassSubjects} from '../api/fetchSubjects';
 import {fetchTeacherClasses} from '../api/fetchClasses';
 import {fetchClassStudents} from '../api/fetchClasses';
 import {useAuth} from '../../../context/Authentication';
 import {Dropdown} from 'react-native-material-dropdown';
 import DatePicker from 'react-native-datepicker';
+import {server, defaultUserImageURL} from '../../../utils/config';
 
 export default function Attendance(props) {
   const {user} = useAuth();
   const [students, setStudents] = useState([]);
-  const [student, setStudent] = useState([]);
-  const [classe, setClasse] = useState([]);
-  const [classes, setClasses] = useState([]);
+  const [student, setStudent] = useState();
+  const [classe, setClasse] = useState();
+  const [classes, setClasses] = useState();
   const [subjects, setSubjects] = useState();
   const [subject, setSubject] = useState();
   const [date, setDate] = useState();
@@ -58,12 +60,20 @@ export default function Attendance(props) {
         return {label: item.fullName, value: item.id};
       });
       setStudents(d);*/
-      setStudents(res);
+      let d = res;
+      d.unshift({fullName: 'All students', id: 0});
+      setStudents(d);
+      // setStudents(res);
     }
   };
 
   const getStudentAttendance = async (classId, subjectId, studentId, date) => {
-    const res = await fetchAttendance(classId, subjectId, studentId, date);
+    var res = [];
+    if (studentId == 0) {
+      res = await fetchStudentsAttendance(classId, subjectId, date);
+    } else {
+      res = await fetchAttendance(classId, subjectId, studentId, date);
+    }
     if (res) {
       let a = res.map((obj) => {
         switch (obj.status) {
@@ -131,10 +141,10 @@ export default function Attendance(props) {
           label="My classes"
           data={classes}
           onChangeText={(value) => {
-            setAttendance([]);
-            setSubjects([]);
-            setSubject('');
-            setStudent('');
+            setAttendance();
+            setSubjects();
+            setSubject();
+            setStudent(0);
             setClasse(value);
             getMyClassSubjects(value);
             getMyClassStudents(value);
@@ -145,7 +155,7 @@ export default function Attendance(props) {
           data={subjects}
           onChangeText={(value) => {
             setSubject(value);
-            if (date && student && classe) {
+            if (classe) {
               getStudentAttendance(classe, value, student, date);
             }
           }}
@@ -157,7 +167,7 @@ export default function Attendance(props) {
           })}
           onChangeText={(value) => {
             setStudent(value);
-            if (date && subject && classe) {
+            if (subject && classe) {
               getStudentAttendance(classe, subject, value, date);
             }
           }}
@@ -193,7 +203,7 @@ export default function Attendance(props) {
           }}
           onDateChange={(value) => {
             dateHandler(value);
-            if (subject && classe && student) {
+            if (subject && classe) {
               getStudentAttendance(classe, subject, student, value);
             }
           }}
@@ -212,29 +222,50 @@ export default function Attendance(props) {
                   margin: 5,
                   padding: 10,
                 }}>
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Text>{item.subjectTitle}</Text>
+                <View style={{flex: 1}}>
+                  <Image
+                    style={styles.profile}
+                    source={
+                      (item.photo = ''
+                        ? {
+                            uri: defaultUserImageURL,
+                          }
+                        : {
+                            uri: server + 'uploads/profile/' + item.photo,
+                          })
+                    }
+                  />
+                  <Text>{item.fullName}</Text>
                 </View>
                 <View
                   style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    flex: 3,
+                    flexDirection: 'row',
                   }}>
-                  <Text>{item.date}</Text>
-                </View>
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Text>{item.status}</Text>
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Text>{item.subjectTitle}</Text>
+                  </View>
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Text>{item.date}</Text>
+                  </View>
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Text>{item.status}</Text>
+                  </View>
                 </View>
               </View>
             ) : (
@@ -253,3 +284,13 @@ export default function Attendance(props) {
     </View>
   );
 }
+const styles = StyleSheet.create({
+  profile: {
+    width: 50,
+    height: 50,
+    borderRadius: 100,
+    margin: 5,
+    marginTop: 20,
+    resizeMode: 'center',
+  },
+});
