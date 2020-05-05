@@ -157,7 +157,7 @@ export default function Attendance(props) {
           })}
           onChangeText={(value) => {
             setStudent(value);
-            if (date && student && classe) {
+            if (date && subject && classe) {
               getStudentAttendance(classe, subject, value, date);
             }
           }}
