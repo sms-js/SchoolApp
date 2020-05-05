@@ -6,6 +6,7 @@ import {
   FlatList,
   StyleSheet,
   Button,
+  Image,
 } from 'react-native';
 import {Header, Left, Icon} from 'native-base';
 import {fetchAttendance, fetchSubjectsAttendance} from '../api/fetchAttendance';
@@ -13,6 +14,7 @@ import {fetchClassSubjects} from '../api/fetchSubjects';
 import {useAuth} from '../../../context/Authentication';
 import {Dropdown} from 'react-native-material-dropdown';
 import DatePicker from 'react-native-datepicker';
+import {server, defaultUserImageURL} from '../../../utils/config';
 
 export default function Attendance(props) {
   const {user} = useAuth();
@@ -160,29 +162,50 @@ export default function Attendance(props) {
                   margin: 5,
                   padding: 10,
                 }}>
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Text>{item.subjectTitle}</Text>
+                <View style={{flex: 1}}>
+                  <Image
+                    style={styles.profile}
+                    source={
+                      item.photo == ''
+                        ? {
+                            uri: defaultUserImageURL,
+                          }
+                        : {
+                            uri: server + 'uploads/profile/' + item.photo,
+                          }
+                    }
+                  />
+                  <Text>{item.fullName}</Text>
                 </View>
                 <View
                   style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    flex: 3,
+                    flexDirection: 'row',
                   }}>
-                  <Text>{item.date}</Text>
-                </View>
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Text>{item.status}</Text>
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Text>{item.subjectTitle}</Text>
+                  </View>
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Text>{item.date}</Text>
+                  </View>
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Text>{item.status}</Text>
+                  </View>
                 </View>
               </View>
             ) : (
@@ -195,3 +218,13 @@ export default function Attendance(props) {
     </View>
   );
 }
+const styles = StyleSheet.create({
+  profile: {
+    width: 50,
+    height: 50,
+    borderRadius: 100,
+    margin: 5,
+    marginTop: 20,
+    resizeMode: 'center',
+  },
+});

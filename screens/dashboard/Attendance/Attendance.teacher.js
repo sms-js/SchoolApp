@@ -226,13 +226,13 @@ export default function Attendance(props) {
                   <Image
                     style={styles.profile}
                     source={
-                      (item.photo = ''
+                      item.photo == ''
                         ? {
                             uri: defaultUserImageURL,
                           }
                         : {
                             uri: server + 'uploads/profile/' + item.photo,
-                          })
+                          }
                     }
                   />
                   <Text>{item.fullName}</Text>
