@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {Header, Left, Icon} from 'native-base';
 import {fetchStudentClass} from '../api/fetchStudentInfo';
-import {fetchAttendance} from '../api/fetchAttendance';
+import {fetchAttendance, fetchSubjectsAttendance} from '../api/fetchAttendance';
 import {fetchClassSubjects} from '../api/fetchSubjects';
 import {useAuth} from '../../../context/Authentication';
 import {Dropdown} from 'react-native-material-dropdown';
@@ -17,9 +17,9 @@ import DatePicker from 'react-native-datepicker';
 
 export default function Attendance(props) {
   const {user} = useAuth();
-  const [children, setChildren] = useState([]);
-  const [child, setChild] = useState([]);
-  const [classe, setClasse] = useState([]);
+  const [children, setChildren] = useState();
+  const [child, setChild] = useState();
+  const [classe, setClasse] = useState();
   const [subjects, setSubjects] = useState();
   const [subject, setSubject] = useState();
   const [date, setDate] = useState();
@@ -29,19 +29,25 @@ export default function Attendance(props) {
     setDate(value);
   };
   const getMyChildSubjects = async (studentId) => {
+    setChild(studentId);
     const res = await fetchStudentClass(studentId);
-    console.log(res);
     setClasse(res[0]['studentClass']);
     const res1 = await fetchClassSubjects(res[0]['studentClass']);
     if (res1) {
       let d = res1.map((item) => {
         return {label: item.subjectTitle, value: item.id};
       });
+      d.unshift({label: 'All subjects', value: 0});
       setSubjects(d);
     }
   };
   const getMyChildAttendance = async (classId, subjectId, studentId, date) => {
-    const res = await fetchAttendance(classId, subjectId, studentId, date);
+    var res = [];
+    if (subjectId == 0) {
+      res = await fetchSubjectsAttendance(classId, studentId, date);
+    } else {
+      res = await fetchAttendance(classId, subjectId, studentId, date);
+    }
     if (res) {
       let a = res.map((obj) => {
         switch (obj.status) {
@@ -157,9 +163,9 @@ export default function Attendance(props) {
           onChangeText={(value) => {
             setAttendance([]);
             setSubjects([]);
-            setSubject('');
-            setChild(value);
+            setSubject(0);
             getMyChildSubjects(value);
+            getMyChildAttendance(classe, 0, value, date);
           }}
         />
         <Dropdown
@@ -167,7 +173,7 @@ export default function Attendance(props) {
           data={subjects}
           onChangeText={(value) => {
             setSubject(value);
-            if (date && child && classe) {
+            if (child) {
               getMyChildAttendance(classe, value, child, date);
             }
           }}
@@ -198,13 +204,13 @@ export default function Attendance(props) {
               marginLeft: 8,
             },
             dateInput: {borderColor: 'lightblue', marginLeft: 50},
-
-            // ... You can check the source to find the other keys.
           }}
           onDateChange={(value) => {
             dateHandler(value);
-            if (subject && classe && child) {
+            if (child) {
               getMyChildAttendance(classe, subject, child, value);
+            } else {
+              alert('!!!!!!!');
             }
           }}
         />
