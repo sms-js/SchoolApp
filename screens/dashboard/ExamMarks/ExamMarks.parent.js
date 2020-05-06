@@ -130,7 +130,7 @@ export default function ExamMarks(props) {
       </Header>
       <ScrollView style={{margin: 10, marginBottom: 80}}>
         <Dropdown
-          label="Children attendance"
+          label="Children exam marks"
           data={children}
           onChangeText={(value) => {
             setExamMarks([]);
