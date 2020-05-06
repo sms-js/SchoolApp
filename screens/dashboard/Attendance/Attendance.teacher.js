@@ -277,7 +277,53 @@ export default function Attendance(props) {
         <Button
           title="control attendance"
           onPress={() => {
-            props.properties.navigation.navigate('ControlAttendance');
+            if (classe && subject && date && students && attendance) {
+              let c = {};
+              classes.map((obj) => {
+                if (obj.value == classe) {
+                  c = obj;
+                }
+              });
+              let s = {};
+              subjects.map((obj) => {
+                if (obj.value == subject) {
+                  s = obj;
+                }
+              });
+              let a = attendance.map((obj) => {
+                switch (obj.status) {
+                  case 'Absent':
+                    obj.status = 0;
+                    return obj;
+
+                  case 'Present':
+                    obj.status = 1;
+                    return obj;
+
+                  case 'Late':
+                    obj.status = 2;
+                    return obj;
+
+                  case 'Late with excuse':
+                    obj.status = 3;
+                    return obj;
+
+                  case 'Early dismissal':
+                    obj.status = 4;
+                    return obj;
+                }
+              });
+              console.log(a);
+              props.properties.navigation.navigate('ControlAttendance', {
+                classe: c,
+                subject: s,
+                date: date,
+                students: students,
+                attendance: a,
+              });
+            } else {
+              alert('Select Class / Subject / Date !');
+            }
           }}
         />
       </ScrollView>
