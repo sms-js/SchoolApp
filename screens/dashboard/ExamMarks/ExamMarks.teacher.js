@@ -9,7 +9,7 @@ import {
   Image,
 } from 'react-native';
 import {Header, Left, Icon} from 'native-base';
-import {fetchExamMarks} from '../api/fetchExamMarks';
+import {fetchExamMarks, fetchStudentsExamMarks} from '../api/fetchExamMarks';
 import {fetchClassSubjects} from '../api/fetchSubjects';
 import {fetchTeacherClasses} from '../api/fetchClasses';
 import {fetchClassStudents} from '../api/fetchClasses';
@@ -56,16 +56,16 @@ export default function ExamMarks(props) {
       });
       setStudents(d);*/
       let d = res;
-      //d.unshift({fullName: 'All students', id: 0});
-      //setStudents(d);
-      setStudents(res);
+      d.unshift({fullName: 'All students', id: 0});
+      setStudents(d);
+      //setStudents(res);
     }
   };
 
   const getStudentExamMarks = async (classId, subjectId, studentId) => {
     var res = [];
     if (studentId == 0) {
-      // res = await fetchStudentsAttendance(classId, subjectId);
+      res = await fetchStudentsExamMarks(classId, subjectId);
     } else {
       res = await fetchExamMarks(classId, subjectId, studentId);
     }

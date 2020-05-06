@@ -8,7 +8,7 @@ import {
   Image,
 } from 'react-native';
 import {Header, Left, Icon} from 'native-base';
-import {fetchExamMarks} from '../api/fetchExamMarks';
+import {fetchExamMarks, fetchSubjectsExamMarks} from '../api/fetchExamMarks';
 import {fetchClassSubjects} from '../api/fetchSubjects';
 import {useAuth} from '../../../context/Authentication';
 import {Dropdown} from 'react-native-material-dropdown';
@@ -26,14 +26,14 @@ export default function ExamMarks(props) {
       let d = res.map((item) => {
         return {label: item.subjectTitle, value: item.id};
       });
-      //d.unshift({label: 'All subjects', value: 0});
+      d.unshift({label: 'All subjects', value: 0});
       setSubjects(d);
     }
   };
   const getMyExamMarks = async (classId, subjectId, studentId) => {
     var res = [];
     if (subjectId == 0) {
-      //res = await fetchSubjectsAttendance(classId, studentId);
+      res = await fetchSubjectsExamMarks(classId, studentId);
     } else {
       res = await fetchExamMarks(classId, subjectId, studentId);
     }
@@ -45,9 +45,8 @@ export default function ExamMarks(props) {
   };
   React.useEffect(() => {
     getMyClassSubjects(user['studentClass']);
-
-    //setSubject(0);
-    //getMyExamMarks(user['studentClass'], 0, user['id']);
+    setSubject(0);
+    getMyExamMarks(user['studentClass'], 0, user['id']);
   }, []);
   return (
     <View>
