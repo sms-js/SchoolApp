@@ -96,12 +96,16 @@ export default function Attendance(props) {
           case '4':
             obj.status = 'Early dismissal';
             return obj;
+
+          default:
+            obj.status = 'Unspecified';
+            return obj;
         }
       });
       setAttendance(a);
-    } else {
-      setAttendance([]);
-    }
+    } /*else {
+      setAttendance();
+    }*/
   };
   React.useEffect(() => {
     getMyClasses();
@@ -109,6 +113,9 @@ export default function Attendance(props) {
     let date =
       today.getMonth() + 1 + '/' + today.getDate() + '/' + today.getFullYear();
     setDate(date);
+    /*if (classe && subject && date && student) {
+      getStudentAttendance(classe, subject, student, date);
+    }*/
   }, []);
   return (
     <View>
@@ -278,19 +285,31 @@ export default function Attendance(props) {
           title="control attendance"
           onPress={() => {
             if (classe && subject && date && students && attendance) {
+              let cc = [];
               let c = {};
-              classes.map((obj) => {
+              for (let i = 0; i < classes.length; i++) {
+                cc.push(classes[i]);
+              }
+              cc.map((obj) => {
                 if (obj.value == classe) {
                   c = obj;
                 }
               });
+              let ss = [];
               let s = {};
-              subjects.map((obj) => {
+              for (let i = 0; i < subjects.length; i++) {
+                ss.push(subjects[i]);
+              }
+              ss.map((obj) => {
                 if (obj.value == subject) {
                   s = obj;
                 }
               });
-              let a = attendance.map((obj) => {
+              let a = [];
+              for (let i = 0; i < attendance.length; i++) {
+                a.push(attendance[i]);
+              }
+              a.map((obj) => {
                 switch (obj.status) {
                   case 'Absent':
                     obj.status = 0;
@@ -311,9 +330,12 @@ export default function Attendance(props) {
                   case 'Early dismissal':
                     obj.status = 4;
                     return obj;
+
+                  case 'Unspecified':
+                    obj.status = 5;
+                    return obj;
                 }
               });
-              console.log(a);
               props.properties.navigation.navigate('ControlAttendance', {
                 classe: c,
                 subject: s,
@@ -321,6 +343,7 @@ export default function Attendance(props) {
                 students: students,
                 attendance: a,
               });
+              setAttendance();
             } else {
               alert('Select Class / Subject / Date !');
             }
