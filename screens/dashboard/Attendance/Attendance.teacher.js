@@ -274,7 +274,7 @@ export default function Attendance(props) {
         />
         <Text />
         <Button
-          title="control attendance"
+          title={attendance ? 'update attendance' : 'insert attendance'}
           onPress={() => {
             if (classe && subject && date && students) {
               let cc = [];
