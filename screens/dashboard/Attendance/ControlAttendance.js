@@ -90,14 +90,14 @@ export default function ControlAttendance(props) {
         <Text style={{width: '15%'}} />
       </Header>
       <ScrollView style={{margin: 10, marginBottom: 80}}>
-        <Text />
-        <Text>Control attendance for : </Text>
-        <Text>{props.navigation.state.params.classe.label}</Text>
-        <Text>{props.navigation.state.params.subject.label}</Text>
-        <Text>{props.navigation.state.params.date}</Text>
-        <Text />
         {props.navigation.state.params.attendance[0] ? (
           <View>
+            <Text />
+            <Text>Update attendance for : </Text>
+            <Text>{props.navigation.state.params.classe.label}</Text>
+            <Text>{props.navigation.state.params.subject.label}</Text>
+            <Text>{props.navigation.state.params.date}</Text>
+            <Text />
             <FlatList
               data={props.navigation.state.params.attendance}
               renderItem={({item}) => (
@@ -189,7 +189,12 @@ export default function ControlAttendance(props) {
           </View>
         ) : (
           <View>
-            <Text>!!!!!!</Text>
+            <Text />
+            <Text>Control attendance for : </Text>
+            <Text>{props.navigation.state.params.classe.label}</Text>
+            <Text>{props.navigation.state.params.subject.label}</Text>
+            <Text>Date : {props.navigation.state.params.date}</Text>
+            <Text />
             <Text />
             <Button
               title="insert attendance"
@@ -221,39 +226,3 @@ const styles = StyleSheet.create({
     resizeMode: 'center',
   },
 });
-/*
-{props.navigation.state.params.classes.map((obj) => {
-          if (obj.value == props.navigation.state.params.classe) {
-            return <Text>{obj.label}</Text>;
-          }
-        })}
-        {props.navigation.state.params.subjects.map((obj) => {
-          if (obj.value == props.navigation.state.params.subject) {
-            return <Text>{obj.label}</Text>;
-          }
-        })}
-
-        .map((obj) => {
-                switch (obj.status) {
-                  case 'Absent':
-                    obj.status = 0;
-                    return obj;
-
-                  case 'Present':
-                    obj.status = 1;
-                    return obj;
-
-                  case 'Late':
-                    obj.status = 2;
-                    return obj;
-
-                  case 'Late with excuse':
-                    obj.status = 3;
-                    return obj;
-
-                  case 'Early dismissal':
-                    obj.status = 4;
-                    return obj;
-                }
-              })
-*/

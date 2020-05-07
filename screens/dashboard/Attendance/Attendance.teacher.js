@@ -339,14 +339,14 @@ export default function Attendance(props) {
               });
               setAttendance();
               let today = new Date();
-              let date =
+              let d =
                 today.getMonth() +
                 1 +
                 '/' +
                 today.getDate() +
                 '/' +
                 today.getFullYear();
-              setDate(date);
+              setDate(d);
             } else {
               alert('Select Class / Subject / Date !');
             }
