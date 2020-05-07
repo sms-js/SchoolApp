@@ -330,11 +330,16 @@ export default function Attendance(props) {
                   }
                 });
               }
+              let st = [];
+              for (let i = 0; i < students.length; i++) {
+                st.push(students[i]);
+              }
+              st.shift(0);
               props.properties.navigation.navigate('ControlAttendance', {
                 classe: c,
                 subject: s,
                 date: date,
-                students: students,
+                students: st,
                 attendance: a,
               });
               setAttendance();

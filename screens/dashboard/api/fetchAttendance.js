@@ -124,3 +124,38 @@ export async function updateAttendance(
     return error;
   }
 }
+
+export async function insertAttendance(
+  classId,
+  subjectId,
+  studentId,
+  date,
+  status,
+) {
+  try {
+    const response = await fetch(BASE_URL + '/AttendanceInsertController.php', {
+      method: 'post',
+      header: {
+        Accept: 'application/json',
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        view: 'insert',
+        classId: classId,
+        subjectId: subjectId,
+        studentId: studentId,
+        date: date,
+        status: status,
+      }),
+    });
+    const responseJson = await response.json();
+    if (response.ok) {
+      console.log(responseJson['insert status']);
+      return responseJson['insert status'];
+    } else {
+      return responseJson['insert status']['error'];
+    }
+  } catch (error) {
+    return error;
+  }
+}

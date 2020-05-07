@@ -16,7 +16,7 @@ import RadioForm, {
   RadioButtonInput,
   RadioButtonLabel,
 } from 'react-native-simple-radio-button';
-import {updateAttendance} from '../api/fetchAttendance';
+import {updateAttendance, insertAttendance} from '../api/fetchAttendance';
 
 export default function ControlAttendance(props) {
   const [students, setStudents] = useState([]);
@@ -62,7 +62,46 @@ export default function ControlAttendance(props) {
       {cancelable: false},
     );
   };
-  const insertMyAttendance = async () => {};
+  const insertMyAttendance = async () => {
+    try {
+      var r = [];
+      var e = [];
+      for (let i = 0; i < students.length; i++) {
+        const res = await insertAttendance(
+          props.navigation.state.params.classe.value,
+          props.navigation.state.params.subject.value,
+          students[i],
+          props.navigation.state.params.date,
+          attendanceValue[i],
+        );
+        if (res == 'New record created successfully') {
+          r.push(res);
+        } else {
+          e.push(res);
+        }
+      }
+    } catch (error) {
+      alert(error);
+    }
+    let c1 = r.length;
+    let c2 = e.length;
+    Alert.alert(
+      'Insert Status',
+      'Attendance added successfuly : ' +
+        c1 +
+        '\nInsert errors encountered : ' +
+        c2,
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            props.navigation.navigate('Attendance');
+          },
+        },
+      ],
+      {cancelable: false},
+    );
+  };
   return (
     <View>
       <Header
@@ -190,11 +229,85 @@ export default function ControlAttendance(props) {
         ) : (
           <View>
             <Text />
-            <Text>Control attendance for : </Text>
+            <Text>Insert attendance for : </Text>
             <Text>{props.navigation.state.params.classe.label}</Text>
             <Text>{props.navigation.state.params.subject.label}</Text>
             <Text>Date : {props.navigation.state.params.date}</Text>
             <Text />
+            <FlatList
+              data={props.navigation.state.params.students}
+              renderItem={({item}) => (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    borderColor: 'lightblue',
+                    borderWidth: 1,
+                    borderRadius: 25,
+                    margin: 5,
+                    padding: 10,
+                  }}>
+                  <View style={{flex: 1}}>
+                    <Image
+                      style={styles.profile}
+                      source={
+                        item.photo == ''
+                          ? {
+                              uri: defaultUserImageURL,
+                            }
+                          : {
+                              uri: server + 'uploads/profile/' + item.photo,
+                            }
+                      }
+                    />
+                    <Text>{item.fullName}</Text>
+                  </View>
+                  <View
+                    style={{
+                      flex: 3,
+                    }}>
+                    <RadioForm
+                      radio_props={[
+                        {label: 'Absent', value: 0},
+                        {label: 'Present', value: 1},
+                        {label: 'Late', value: 2},
+                        {label: 'Late with excuse', value: 3},
+                        {label: 'Early dismissal', value: 4},
+                        {label: 'Unspecified', value: 5},
+                      ]}
+                      initial={5}
+                      onPress={(value) => {
+                        let b = 0;
+                        let n = 0;
+                        if (students.length > 0) {
+                          for (let i = 0; i < students.length; i++) {
+                            if (students[i] == item.id) {
+                              b = 1;
+                              n = i;
+                            }
+                          }
+                          if (b == 0) {
+                            students.push(item.id);
+                            //attendanceId.push(item.id);
+                            attendanceValue.push(value);
+                          } else {
+                            //attendanceId[n] = item.id;
+                            attendanceValue[n] = value;
+                            /*Alert.alert(
+                              'Insert Status',
+                              'Attendance already added for : ' + item.fullName,
+                            );*/
+                          }
+                        } else {
+                          students.push(item.id);
+                          //attendanceId.push(item.id);
+                          attendanceValue.push(value);
+                        }
+                      }}
+                    />
+                  </View>
+                </View>
+              )}
+            />
             <Text />
             <Button
               title="insert attendance"
