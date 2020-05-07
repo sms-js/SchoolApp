@@ -217,7 +217,14 @@ export default function ControlAttendance(props) {
             <Button
               title="update attendance"
               onPress={() => {
-                updateMyAttendance();
+                if (students[0]) {
+                  updateMyAttendance();
+                  setStudents([]);
+                  setAttendanceId([]);
+                  setAttendanceValue([]);
+                } else {
+                  Alert.alert('Update Status', 'No changes applied');
+                }
               }}
             />
           </View>

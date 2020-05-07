@@ -103,9 +103,9 @@ export default function Attendance(props) {
         }
       });
       setAttendance(a);
-    } /*else {
+    } else {
       setAttendance();
-    }*/
+    }
   };
   React.useEffect(() => {
     getMyClasses();
