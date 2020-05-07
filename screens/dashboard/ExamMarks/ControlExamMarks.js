@@ -20,6 +20,44 @@ export default function ControlExamMarks(props) {
   const [examAttendanceMarkValue, setexamAttendanceMarkValue] = useState([]);
   const [examMarkComments, setExamMarkComments] = useState([]);
   const [examMarkId, setExamMarkId] = useState([]);
+  const [examId, setExamId] = useState([]);
+
+  const examMarkInsertHandler = (
+    id,
+    student,
+    name,
+    exam,
+    attendance,
+    comment,
+  ) => {
+    let b = 0;
+    let n = 0;
+    if (students.length > 0) {
+      for (let i = 0; i < students.length; i++) {
+        if (students[i] == student) {
+          b = 1;
+          n = i;
+        }
+      }
+      if (b == 0) {
+        students.push(student);
+        examId.push(id);
+        examMarkValue.push(exam);
+        examAttendanceMarkValue.push(attendance);
+        examMarkComments.push(comment);
+      } else {
+        examMarkValue[n] = exam;
+        examAttendanceMarkValue[n] = attendance;
+        examMarkComments[n] = comment;
+      }
+    } else {
+      students.push(student);
+      examId.push(id);
+      examMarkValue.push(exam);
+      examAttendanceMarkValue.push(attendance);
+      examMarkComments.push(comment);
+    }
+  };
 
   const examMarkUpdateHandler = (
     id,
@@ -130,17 +168,20 @@ export default function ControlExamMarks(props) {
       {cancelable: false},
     );
   };
-  /*const insertMyAttendance = async () => {
+
+  const insertMyExamMarks = async () => {
     try {
       var r = [];
       var e = [];
       for (let i = 0; i < students.length; i++) {
-        const res = await insertAttendance(
+        const res = await insertExamMarks(
+          examId[i],
           props.navigation.state.params.classe.value,
           props.navigation.state.params.subject.value,
           students[i],
-          props.navigation.state.params.date,
-          attendanceValue[i],
+          examMarkValue[i],
+          examAttendanceMarkValue[i],
+          examMarkComments[i],
         );
         if (res == 'New record created successfully') {
           r.push(res);
@@ -155,7 +196,7 @@ export default function ControlExamMarks(props) {
     let c2 = e.length;
     Alert.alert(
       'Insert Status',
-      'Attendance added successfuly : ' +
+      'Exam marks added successfuly : ' +
         c1 +
         '\nInsert errors encountered : ' +
         c2,
@@ -163,13 +204,13 @@ export default function ControlExamMarks(props) {
         {
           text: 'OK',
           onPress: () => {
-            props.navigation.navigate('Attendance');
+            props.navigation.navigate('ExamMarks');
           },
         },
       ],
       {cancelable: false},
     );
-  };*/
+  };
 
   return (
     <View>
@@ -376,6 +417,10 @@ export default function ControlExamMarks(props) {
             <Button
               title="insert exam marks"
               onPress={() => {
+                console.log(examId);
+                console.log(examMarkValue);
+                console.log(examAttendanceMarkValue);
+                console.log(examMarkComments);
                 /*let n = [];
                 for (
                   let i = 0;
@@ -398,9 +443,11 @@ export default function ControlExamMarks(props) {
                 }
                 for (let i = 0; i < n.length; i++) {
                   students.push(n[i]);
-                  attendanceValue.push(5);
+                  examMarkValue.push('');
+                  examAttendanceMarkValue.push('');
+                  examMarkComments.push('');
                 }
-                insertMyAttendance();*/
+                insertMyExamMarks();*/
               }}
             />
           </View>

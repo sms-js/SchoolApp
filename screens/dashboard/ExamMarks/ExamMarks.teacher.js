@@ -72,7 +72,7 @@ export default function ExamMarks(props) {
     if (res) {
       setExamMarks(res);
     } else {
-      setExamMarks([]);
+      setExamMarks();
     }
   };
   React.useEffect(() => {
