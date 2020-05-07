@@ -56,14 +56,9 @@ export default function Attendance(props) {
   const getMyClassStudents = async (classId) => {
     const res = await fetchClassStudents(classId);
     if (res) {
-      /*let d = res.map((item) => {
-        return {label: item.fullName, value: item.id};
-      });
-      setStudents(d);*/
       let d = res;
       d.unshift({fullName: 'All students', id: 0});
       setStudents(d);
-      // setStudents(res);
     }
   };
 
@@ -113,9 +108,6 @@ export default function Attendance(props) {
     let date =
       today.getMonth() + 1 + '/' + today.getDate() + '/' + today.getFullYear();
     setDate(date);
-    /*if (classe && subject && date && student) {
-      getStudentAttendance(classe, subject, student, date);
-    }*/
   }, []);
   return (
     <View>
@@ -284,7 +276,7 @@ export default function Attendance(props) {
         <Button
           title="control attendance"
           onPress={() => {
-            if (classe && subject && date && students && attendance) {
+            if (classe && subject && date && students) {
               let cc = [];
               let c = {};
               for (let i = 0; i < classes.length; i++) {
@@ -306,36 +298,38 @@ export default function Attendance(props) {
                 }
               });
               let a = [];
-              for (let i = 0; i < attendance.length; i++) {
-                a.push(attendance[i]);
-              }
-              a.map((obj) => {
-                switch (obj.status) {
-                  case 'Absent':
-                    obj.status = 0;
-                    return obj;
-
-                  case 'Present':
-                    obj.status = 1;
-                    return obj;
-
-                  case 'Late':
-                    obj.status = 2;
-                    return obj;
-
-                  case 'Late with excuse':
-                    obj.status = 3;
-                    return obj;
-
-                  case 'Early dismissal':
-                    obj.status = 4;
-                    return obj;
-
-                  case 'Unspecified':
-                    obj.status = 5;
-                    return obj;
+              if (attendance) {
+                for (let i = 0; i < attendance.length; i++) {
+                  a.push(attendance[i]);
                 }
-              });
+                a.map((obj) => {
+                  switch (obj.status) {
+                    case 'Absent':
+                      obj.status = 0;
+                      return obj;
+
+                    case 'Present':
+                      obj.status = 1;
+                      return obj;
+
+                    case 'Late':
+                      obj.status = 2;
+                      return obj;
+
+                    case 'Late with excuse':
+                      obj.status = 3;
+                      return obj;
+
+                    case 'Early dismissal':
+                      obj.status = 4;
+                      return obj;
+
+                    case 'Unspecified':
+                      obj.status = 5;
+                      return obj;
+                  }
+                });
+              }
               props.properties.navigation.navigate('ControlAttendance', {
                 classe: c,
                 subject: s,
@@ -344,6 +338,15 @@ export default function Attendance(props) {
                 attendance: a,
               });
               setAttendance();
+              let today = new Date();
+              let date =
+                today.getMonth() +
+                1 +
+                '/' +
+                today.getDate() +
+                '/' +
+                today.getFullYear();
+              setDate(date);
             } else {
               alert('Select Class / Subject / Date !');
             }

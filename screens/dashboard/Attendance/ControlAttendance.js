@@ -96,7 +96,7 @@ export default function ControlAttendance(props) {
         <Text>{props.navigation.state.params.subject.label}</Text>
         <Text>{props.navigation.state.params.date}</Text>
         <Text />
-        {props.navigation.state.params.attendance ? (
+        {props.navigation.state.params.attendance[0] ? (
           <View>
             <FlatList
               data={props.navigation.state.params.attendance}
@@ -144,47 +144,6 @@ export default function ControlAttendance(props) {
                         ].status
                       }
                       onPress={(value) => {
-                        /*let b = 0;
-                        if (attendanceValue.length > 0) {
-                          for (let i = 0; i < attendanceValue.length; i++) {
-                            if (attendanceValue[i] == value) {
-                              b = 1;
-                            }
-                          }
-                          if ((b = 0)) {
-                            attendanceValue.push(value);
-                          }
-                        } else {
-                          attendanceValue.push(value);
-                        }
-
-                        b = 0;
-                        if (students.length > 0) {
-                          for (let i = 0; i < attendanceValue.length; i++) {
-                            if (students[i] == item.studentId) {
-                              b = 1;
-                            }
-                          }
-                          if ((b = 0)) {
-                            students.push(item.studentId);
-                          }
-                        } else {
-                          students.push(item.studentId);
-                        }
-
-                        b = 0;
-                        if (attendanceId.length > 0) {
-                          for (let i = 0; i < attendanceValue.length; i++) {
-                            if (attendanceId[i] == item.id) {
-                              b = 1;
-                            }
-                          }
-                          if ((b = 0)) {
-                            attendanceId.push(item.id);
-                          }
-                        } else {
-                          attendanceId.push(item.id);
-                        }*/
                         let b = 0;
                         let n = 0;
                         if (students.length > 0) {
