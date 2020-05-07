@@ -312,6 +312,30 @@ export default function ControlAttendance(props) {
             <Button
               title="insert attendance"
               onPress={() => {
+                let n = [];
+                for (
+                  let i = 0;
+                  i < props.navigation.state.params.students.length;
+                  i++
+                ) {
+                  let b = 0;
+
+                  for (let j = 0; j < students.length; j++) {
+                    if (
+                      props.navigation.state.params.students[i]['id'] ==
+                      students[j]
+                    ) {
+                      b = 1;
+                    }
+                  }
+                  if (b == 0) {
+                    n.push(props.navigation.state.params.students[i]['id']);
+                  }
+                }
+                for (let i = 0; i < n.length; i++) {
+                  students.push(n[i]);
+                  attendanceValue.push(5);
+                }
                 insertMyAttendance();
               }}
             />
