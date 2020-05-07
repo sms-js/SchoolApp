@@ -124,6 +124,12 @@ export default function ExamMarks(props) {
                 {item.attendanceMark != '' ? (
                   <Text>Attendance mark : {item.attendanceMark}</Text>
                 ) : null}
+                {item.markComments != '' ? (
+                  <View>
+                    <Text>Mark comments : </Text>
+                    <Text>{item.markComments}</Text>
+                  </View>
+                ) : null}
               </View>
             </View>
           )}

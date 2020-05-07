@@ -181,15 +181,56 @@ export default function ExamMarks(props) {
                 {item.attendanceMark != '' ? (
                   <Text>Attendance mark : {item.attendanceMark}</Text>
                 ) : null}
+                {item.markComments != '' ? (
+                  <View>
+                    <Text>Mark comments : </Text>
+                    <Text>{item.markComments}</Text>
+                  </View>
+                ) : null}
               </View>
             </View>
           )}
         />
         <Text />
         <Button
-          title="control exam marks"
+          title={examMarks ? 'update exam marks' : 'insert exam marks'}
           onPress={() => {
-            props.properties.navigation.navigate('ControlExamMarks');
+            if (classe && subject && students) {
+              let cc = [];
+              let c = {};
+              for (let i = 0; i < classes.length; i++) {
+                cc.push(classes[i]);
+              }
+              cc.map((obj) => {
+                if (obj.value == classe) {
+                  c = obj;
+                }
+              });
+              let ss = [];
+              let s = {};
+              for (let i = 0; i < subjects.length; i++) {
+                ss.push(subjects[i]);
+              }
+              ss.map((obj) => {
+                if (obj.value == subject) {
+                  s = obj;
+                }
+              });
+
+              let st = [];
+              for (let i = 0; i < students.length; i++) {
+                st.push(students[i]);
+              }
+              st.shift(0);
+              props.properties.navigation.navigate('ControlExamMarks', {
+                classe: c,
+                subject: s,
+                students: st,
+                examMarks: examMarks,
+              });
+            } else {
+              alert('Select Class / Subject !');
+            }
           }}
         />
       </ScrollView>

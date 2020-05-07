@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Text,
   ScrollView,
@@ -6,9 +6,171 @@ import {
   FlatList,
   StyleSheet,
   Button,
+  Image,
+  Alert,
+  TextInput,
 } from 'react-native';
 import {Header, Left, Icon} from 'native-base';
+import {server, defaultUserImageURL} from '../../../utils/config';
+import {insertExamMarks, updateExamMarks} from '../api/fetchExamMarks';
+
 export default function ControlExamMarks(props) {
+  const [students, setStudents] = useState([]);
+  const [examMarkValue, setexamMarkValue] = useState([]);
+  const [examAttendanceMarkValue, setexamAttendanceMarkValue] = useState([]);
+  const [examMarkComments, setExamMarkComments] = useState([]);
+  const [examMarkId, setExamMarkId] = useState([]);
+
+  const examMarkUpdateHandler = (
+    id,
+    student,
+    exam,
+    attendance,
+    comment,
+    type,
+  ) => {
+    let b = 0;
+    let n = 0;
+    if (students.length > 0) {
+      for (let i = 0; i < students.length; i++) {
+        if (students[i] == student) {
+          b = 1;
+          n = i;
+        }
+      }
+      switch (type) {
+        case 'exam':
+          if (b == 0) {
+            students.push(student);
+            examMarkId.push(id);
+            examMarkValue.push(exam);
+            examAttendanceMarkValue.push(attendance);
+            examMarkComments.push(comment);
+          } else {
+            //examMarkId[n] = id;
+            examMarkValue[n] = exam;
+            //examAttendanceMarkValue[n] = attendance;
+            //examMarkComments[n] = comment;
+          }
+          break;
+
+        case 'attendance':
+          if (b == 0) {
+            students.push(student);
+            examMarkId.push(id);
+            examMarkValue.push(exam);
+            examAttendanceMarkValue.push(attendance);
+            examMarkComments.push(comment);
+          } else {
+            //examMarkId[n] = id;
+            //examMarkValue[n] = exam;
+            examAttendanceMarkValue[n] = attendance;
+            //examMarkComments[n] = comment;
+          }
+          break;
+
+        case 'comment':
+          if (b == 0) {
+            students.push(student);
+            examMarkId.push(id);
+            examMarkValue.push(exam);
+            examAttendanceMarkValue.push(attendance);
+            examMarkComments.push(comment);
+          } else {
+            //examMarkId[n] = id;
+            //examMarkValue[n] = exam;
+            //examAttendanceMarkValue[n] = attendance;
+            examMarkComments[n] = comment;
+          }
+          break;
+      }
+    } else {
+      students.push(student);
+      examMarkId.push(id);
+      examMarkValue.push(exam);
+      examAttendanceMarkValue.push(attendance);
+      examMarkComments.push(comment);
+    }
+  };
+
+  const updateMyExamMarks = async () => {
+    try {
+      var r = [];
+      var e = [];
+      for (let i = 0; i < students.length; i++) {
+        const res = await updateExamMarks(
+          examMarkId[i],
+          examMarkValue[i],
+          examAttendanceMarkValue[i],
+          examMarkComments[i],
+        );
+        if (res == 'Record(s) updated successfully') {
+          r.push(res);
+        } else {
+          e.push(res);
+        }
+      }
+    } catch (error) {
+      alert(error);
+    }
+    let c1 = r.length;
+    let c2 = e.length;
+    Alert.alert(
+      'Update Status',
+      'Exam marks updated successfuly : ' +
+        c1 +
+        '\nUpdate errors encountered : ' +
+        c2,
+      [
+        {
+          text: 'OK',
+          onPress: () => {},
+        },
+      ],
+      {cancelable: false},
+    );
+  };
+  /*const insertMyAttendance = async () => {
+    try {
+      var r = [];
+      var e = [];
+      for (let i = 0; i < students.length; i++) {
+        const res = await insertAttendance(
+          props.navigation.state.params.classe.value,
+          props.navigation.state.params.subject.value,
+          students[i],
+          props.navigation.state.params.date,
+          attendanceValue[i],
+        );
+        if (res == 'New record created successfully') {
+          r.push(res);
+        } else {
+          e.push(res);
+        }
+      }
+    } catch (error) {
+      alert(error);
+    }
+    let c1 = r.length;
+    let c2 = e.length;
+    Alert.alert(
+      'Insert Status',
+      'Attendance added successfuly : ' +
+        c1 +
+        '\nInsert errors encountered : ' +
+        c2,
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            props.navigation.navigate('Attendance');
+          },
+        },
+      ],
+      {cancelable: false},
+    );
+  };*/
+
   return (
     <View>
       <Header
@@ -36,7 +198,213 @@ export default function ControlExamMarks(props) {
         <Text style={{width: '15%'}} />
       </Header>
       <ScrollView style={{margin: 10, marginBottom: 80}}>
-        <Text>Control Exam Marks</Text>
+        {props.navigation.state.params.examMarks ? (
+          <View>
+            <Text />
+            <Text>Update exam marks for : </Text>
+            <Text>{props.navigation.state.params.classe.label}</Text>
+            <Text>{props.navigation.state.params.subject.label}</Text>
+            <Text />
+            <FlatList
+              data={props.navigation.state.params.examMarks}
+              renderItem={({item}) => (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    borderColor: 'lightblue',
+                    borderWidth: 1,
+                    borderRadius: 25,
+                    margin: 5,
+                    padding: 10,
+                  }}>
+                  <View style={{flex: 1}}>
+                    <Image
+                      style={styles.profile}
+                      source={
+                        item.photo == ''
+                          ? {
+                              uri: defaultUserImageURL,
+                            }
+                          : {
+                              uri: server + 'uploads/profile/' + item.photo,
+                            }
+                      }
+                    />
+                    <Text>{item.fullName}</Text>
+                  </View>
+                  <View
+                    style={{
+                      flex: 3,
+                    }}>
+                    <Text>Exam : {item.examTitle}</Text>
+                    <Text>Exam description : </Text>
+                    <Text>{item.examDescription}</Text>
+                    <Text>Exam date : {item.examDate}</Text>
+                    <View style={{flexDirection: 'row', marginBottom: 5}}>
+                      <Text style={{textAlignVertical: 'center', width: '60%'}}>
+                        Exam mark :{' '}
+                      </Text>
+                      <TextInput
+                        style={{
+                          borderColor: 'lightblue',
+                          borderWidth: 1,
+                          width: '30%',
+                        }}
+                        defaultValue={item.examMark}
+                        onChangeText={(value) => {
+                          examMarkUpdateHandler(
+                            item.id,
+                            item.studentId,
+                            value,
+                            item.attendanceMark,
+                            item.markComments,
+                            'exam',
+                          );
+                        }}
+                      />
+                    </View>
+
+                    <View style={{flexDirection: 'row', marginBottom: 5}}>
+                      <Text style={{textAlignVertical: 'center', width: '60%'}}>
+                        Attendance mark :{' '}
+                      </Text>
+                      <TextInput
+                        style={{
+                          borderColor: 'lightblue',
+                          borderWidth: 1,
+                          width: '30%',
+                        }}
+                        defaultValue={item.attendanceMark}
+                        onChangeText={(value) => {
+                          examMarkUpdateHandler(
+                            item.id,
+                            item.studentId,
+                            item.examMark,
+                            value,
+                            item.markComments,
+                            'attendance',
+                          );
+                        }}
+                      />
+                    </View>
+                    <Text>Mark comments : </Text>
+                    <TextInput
+                      style={{
+                        borderColor: 'lightblue',
+                        borderWidth: 1,
+                        height: 60,
+                        width: '90%',
+                        textAlignVertical: 'top',
+                      }}
+                      defaultValue={item.markComments}
+                      onChangeText={(value) => {
+                        examMarkUpdateHandler(
+                          item.id,
+                          item.studentId,
+                          item.examMark,
+                          item.attendanceMark,
+                          value,
+                          'comment',
+                        );
+                      }}
+                    />
+                  </View>
+                </View>
+              )}
+            />
+            <Text />
+            <Button
+              title="update exam marks"
+              onPress={() => {
+                /*console.log(examMarkId);
+                console.log(examMarkValue);
+                console.log(examMarkComments);*/
+                if (students[0]) {
+                  updateMyExamMarks();
+                  setStudents([]);
+                  setExamMarkId([]);
+                  setexamMarkValue([]);
+                  setExamMarkComments([]);
+                } else {
+                  Alert.alert('Update Status', 'No changes applied');
+                }
+              }}
+            />
+          </View>
+        ) : (
+          <View>
+            <Text />
+            <Text>Insert exam marks for : </Text>
+            <Text>{props.navigation.state.params.classe.label}</Text>
+            <Text>{props.navigation.state.params.subject.label}</Text>
+            <Text />
+            <FlatList
+              data={props.navigation.state.params.students}
+              renderItem={({item}) => (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    borderColor: 'lightblue',
+                    borderWidth: 1,
+                    borderRadius: 25,
+                    margin: 5,
+                    padding: 10,
+                  }}>
+                  <View style={{flex: 1}}>
+                    <Image
+                      style={styles.profile}
+                      source={
+                        item.photo == ''
+                          ? {
+                              uri: defaultUserImageURL,
+                            }
+                          : {
+                              uri: server + 'uploads/profile/' + item.photo,
+                            }
+                      }
+                    />
+                    <Text>{item.fullName}</Text>
+                  </View>
+                  <View
+                    style={{
+                      flex: 3,
+                    }}></View>
+                </View>
+              )}
+            />
+            <Text />
+            <Button
+              title="insert exam marks"
+              onPress={() => {
+                /*let n = [];
+                for (
+                  let i = 0;
+                  i < props.navigation.state.params.students.length;
+                  i++
+                ) {
+                  let b = 0;
+
+                  for (let j = 0; j < students.length; j++) {
+                    if (
+                      props.navigation.state.params.students[i]['id'] ==
+                      students[j]
+                    ) {
+                      b = 1;
+                    }
+                  }
+                  if (b == 0) {
+                    n.push(props.navigation.state.params.students[i]['id']);
+                  }
+                }
+                for (let i = 0; i < n.length; i++) {
+                  students.push(n[i]);
+                  attendanceValue.push(5);
+                }
+                insertMyAttendance();*/
+              }}
+            />
+          </View>
+        )}
         <Text />
         <Button
           title="back"
@@ -48,3 +416,64 @@ export default function ControlExamMarks(props) {
     </View>
   );
 }
+const styles = StyleSheet.create({
+  profile: {
+    width: 50,
+    height: 50,
+    borderRadius: 100,
+    margin: 5,
+    marginTop: 20,
+    resizeMode: 'center',
+  },
+});
+/*
+//////////////////////update///////////////////
+let b = 0;
+                        let n = 0;
+                        if (students.length > 0) {
+                          for (let i = 0; i < students.length; i++) {
+                            if (students[i] == item.studentId) {
+                              b = 1;
+                              n = i;
+                            }
+                          }
+                          if (b == 0) {
+                            students.push(item.studentId);
+                            attendanceId.push(item.id);
+                            attendanceValue.push(value);
+                          } else {
+                            attendanceId[n] = item.id;
+                            attendanceValue[n] = value;
+                          }
+                        } else {
+                          students.push(item.studentId);
+                          attendanceId.push(item.id);
+                          attendanceValue.push(value);
+                        }
+                        /////////////////insert/////////////////////
+                        let b = 0;
+                        let n = 0;
+                        if (students.length > 0) {
+                          for (let i = 0; i < students.length; i++) {
+                            if (students[i] == item.id) {
+                              b = 1;
+                              n = i;
+                            }
+                          }
+                          if (b == 0) {
+                            students.push(item.id);
+                            //attendanceId.push(item.id);
+                            attendanceValue.push(value);
+                          } else {
+                            //attendanceId[n] = item.id;
+                            attendanceValue[n] = value;
+                            /*Alert.alert(
+                              'Insert Status',
+                              'Attendance already added for : ' + item.fullName,
+                            );*/
+/*}
+                        } else {
+                          students.push(item.id);
+                          //attendanceId.push(item.id);
+                          attendanceValue.push(value);
+                        }*/
