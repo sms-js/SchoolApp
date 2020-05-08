@@ -29,9 +29,10 @@ export default function ControlExamMarks(props) {
   const examMarkInsertHandler = (
     id,
     student,
-    exam,
+    value,
+    /*exam,
     attendance,
-    comment,
+    comment,*/
     type,
   ) => {
     let b = 0;
@@ -48,11 +49,15 @@ export default function ControlExamMarks(props) {
           if (b == 0) {
             students.push(student);
             examId.push(id);
-            examMarkValue.push(exam);
+            /*examMarkValue.push(exam);
             examAttendanceMarkValue.push(attendance);
-            examMarkComments.push(comment);
+            examMarkComments.push(comment);*/
+            examMarkValue.push(value);
+            examAttendanceMarkValue.push('');
+            examMarkComments.push('');
           } else {
-            examMarkValue[n] = exam;
+            //examMarkValue[n] = exam;
+            examMarkValue[n] = value;
           }
           break;
 
@@ -60,11 +65,15 @@ export default function ControlExamMarks(props) {
           if (b == 0) {
             students.push(student);
             examId.push(id);
-            examMarkValue.push(exam);
+            /*examMarkValue.push(exam);
             examAttendanceMarkValue.push(attendance);
-            examMarkComments.push(comment);
+            examMarkComments.push(comment);*/
+            examMarkValue.push('');
+            examAttendanceMarkValue.push(value);
+            examMarkComments.push('');
           } else {
-            examAttendanceMarkValue[n] = attendance;
+            //examAttendanceMarkValue[n] = attendance;
+            examAttendanceMarkValue[n] = value;
           }
           break;
 
@@ -72,20 +81,47 @@ export default function ControlExamMarks(props) {
           if (b == 0) {
             students.push(student);
             examId.push(id);
-            examMarkValue.push(exam);
+            /*examMarkValue.push(exam);
             examAttendanceMarkValue.push(attendance);
-            examMarkComments.push(comment);
+            examMarkComments.push(comment);*/
+            examMarkValue.push('');
+            examAttendanceMarkValue.push('');
+            examMarkComments.push(value);
           } else {
-            examMarkComments[n] = comment;
+            //examMarkComments[n] = comment;
+            examMarkComments[n] = value;
           }
           break;
       }
     } else {
-      students.push(student);
+      /*students.push(student);
       examId.push(id);
       examMarkValue.push(exam);
       examAttendanceMarkValue.push(attendance);
-      examMarkComments.push(comment);
+      examMarkComments.push(comment);*/
+      switch (type) {
+        case 'exam':
+          students.push(student);
+          examId.push(id);
+          examMarkValue.push(value);
+          examAttendanceMarkValue.push('');
+          examMarkComments.push('');
+          break;
+        case 'attendance':
+          students.push(student);
+          examId.push(id);
+          examMarkValue.push('');
+          examAttendanceMarkValue.push(value);
+          examMarkComments.push('');
+          break;
+        case 'comment':
+          students.push(student);
+          examId.push(id);
+          examMarkValue.push('');
+          examAttendanceMarkValue.push('');
+          examMarkComments.push(value);
+          break;
+      }
     }
   };
 
@@ -200,12 +236,19 @@ export default function ControlExamMarks(props) {
   };
 
   const insertMyExamMarks = async () => {
+    /*console.log('////////////////////////////////////');
+    console.log('/////////students//////////////////\n' + students);
+    console.log('/////////exam//////////////////\n' + examMarkValue);
+    console.log(
+      '/////////attendance//////////////////\n' + examAttendanceMarkValue,
+    );
+    console.log('/////////comments//////////////////\n' + examMarkComments);*/
     try {
       var r = [];
       var e = [];
       for (let i = 0; i < students.length; i++) {
         const res = await insertExamMarks(
-          examId[i],
+          exam['id'],
           props.navigation.state.params.classe.value,
           props.navigation.state.params.subject.value,
           students[i],
@@ -476,15 +519,19 @@ export default function ControlExamMarks(props) {
                         }}
                         defaultValue=""
                         onChangeText={(value) => {
-                          examMarkInsertHandler(
-                            exam['id'],
-                            props.navigation.state.params.classe.value,
-                            item.id,
-                            value,
-                            '',
-                            '',
-                            'exam',
-                          );
+                          if (exam) {
+                            examMarkInsertHandler(
+                              exam['id'],
+                              //props.navigation.state.params.classe.value,
+                              item.id,
+                              value,
+                              //examAttendanceMarkValue[students.indexOf(item.id)],
+                              //examMarkComments[students.indexOf(item.id)],
+                              'exam',
+                            );
+                          } else {
+                            alert('Select exam !');
+                          }
                         }}
                       />
                     </View>
@@ -501,15 +548,19 @@ export default function ControlExamMarks(props) {
                         }}
                         defaultValue={item.attendanceMark}
                         onChangeText={(value) => {
-                          examMarkUpdateHandler(
-                            exam['id'],
-                            props.navigation.state.params.classe.value,
-                            item.id,
-                            '',
-                            value,
-                            '',
-                            'attendance',
-                          );
+                          if (exam) {
+                            examMarkInsertHandler(
+                              exam['id'],
+                              //props.navigation.state.params.classe.value,
+                              item.id,
+                              //examMarkValue[students.indexOf(item.id)],
+                              value,
+                              //examMarkComments[students.indexOf(item.id)],
+                              'attendance',
+                            );
+                          } else {
+                            alert('Select exam !');
+                          }
                         }}
                       />
                     </View>
@@ -524,15 +575,19 @@ export default function ControlExamMarks(props) {
                       }}
                       defaultValue={item.markComments}
                       onChangeText={(value) => {
-                        examMarkUpdateHandler(
-                          exam['id'],
-                          props.navigation.state.params.classe.value,
-                          item.id,
-                          '',
-                          '',
-                          value,
-                          'comment',
-                        );
+                        if (exam) {
+                          examMarkInsertHandler(
+                            exam['id'],
+                            //props.navigation.state.params.classe.value,
+                            item.id,
+                            //examMarkValue[students.indexOf(item.id)],
+                            //examAttendanceMarkValue[students.indexOf(item.id)],
+                            value,
+                            'comment',
+                          );
+                        } else {
+                          alert('Select exam !');
+                        }
                       }}
                     />
                   </View>
@@ -543,37 +598,42 @@ export default function ControlExamMarks(props) {
             <Button
               title="insert exam marks"
               onPress={() => {
-                console.log(examId);
-                console.log(examMarkValue);
-                console.log(examAttendanceMarkValue);
-                console.log(examMarkComments);
-                /*let n = [];
-                for (
-                  let i = 0;
-                  i < props.navigation.state.params.students.length;
-                  i++
-                ) {
-                  let b = 0;
+                if (exam) {
+                  /*console.log('///////////////////////////////////////');
+                  console.log(examId);
+                  console.log(examMarkValue);
+                  console.log(examAttendanceMarkValue);
+                  console.log(examMarkComments);*/
+                  let n = [];
+                  for (
+                    let i = 0;
+                    i < props.navigation.state.params.students.length;
+                    i++
+                  ) {
+                    let b = 0;
 
-                  for (let j = 0; j < students.length; j++) {
-                    if (
-                      props.navigation.state.params.students[i]['id'] ==
-                      students[j]
-                    ) {
-                      b = 1;
+                    for (let j = 0; j < students.length; j++) {
+                      if (
+                        props.navigation.state.params.students[i]['id'] ==
+                        students[j]
+                      ) {
+                        b = 1;
+                      }
+                    }
+                    if (b == 0) {
+                      n.push(props.navigation.state.params.students[i]['id']);
                     }
                   }
-                  if (b == 0) {
-                    n.push(props.navigation.state.params.students[i]['id']);
+                  for (let i = 0; i < n.length; i++) {
+                    students.push(n[i]);
+                    examMarkValue.push('');
+                    examAttendanceMarkValue.push('');
+                    examMarkComments.push('');
                   }
+                  insertMyExamMarks();
+                } else {
+                  alert('Select exam !');
                 }
-                for (let i = 0; i < n.length; i++) {
-                  students.push(n[i]);
-                  examMarkValue.push('');
-                  examAttendanceMarkValue.push('');
-                  examMarkComments.push('');
-                }
-                insertMyExamMarks();*/
               }}
             />
           </View>

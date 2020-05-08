@@ -142,6 +142,7 @@ export default function Attendance(props) {
           onChangeText={(value) => {
             setAttendance();
             setSubjects();
+            setStudents();
             setSubject();
             setStudent(0);
             setClasse(value);
@@ -161,9 +162,13 @@ export default function Attendance(props) {
         />
         <Dropdown
           label="My class students"
-          data={students.map((item) => {
-            return {label: item.fullName, value: item.id};
-          })}
+          data={
+            students
+              ? students.map((item) => {
+                  return {label: item.fullName, value: item.id};
+                })
+              : []
+          }
           onChangeText={(value) => {
             setStudent(value);
             if (subject && classe) {
@@ -342,16 +347,6 @@ export default function Attendance(props) {
                 students: st,
                 attendance: a,
               });
-              setAttendance();
-              let today = new Date();
-              let d =
-                today.getMonth() +
-                1 +
-                '/' +
-                today.getDate() +
-                '/' +
-                today.getFullYear();
-              setDate(d);
             } else {
               alert('Select Class / Subject / Date !');
             }

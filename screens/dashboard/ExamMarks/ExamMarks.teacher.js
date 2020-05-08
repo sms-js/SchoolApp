@@ -120,6 +120,7 @@ export default function ExamMarks(props) {
             setExamMarks();
             setSubjects();
             setSubject();
+            setStudents();
             setStudent(0);
             setClasse(value);
             getMyClassSubjects(value);
@@ -138,9 +139,13 @@ export default function ExamMarks(props) {
         />
         <Dropdown
           label="My class students"
-          data={students.map((item) => {
-            return {label: item.fullName, value: item.id};
-          })}
+          data={
+            students
+              ? students.map((item) => {
+                  return {label: item.fullName, value: item.id};
+                })
+              : []
+          }
           onChangeText={(value) => {
             setStudent(value);
             if (subject && classe) {
@@ -201,7 +206,65 @@ export default function ExamMarks(props) {
         />
         <Text />
         <Button
-          title={examMarks ? 'update exam marks' : 'insert exam marks'}
+          title="update exam marks"
+          onPress={() => {
+            if (classe && subject && students && examMarks) {
+              let cc = [];
+              let c = {};
+              for (let i = 0; i < classes.length; i++) {
+                cc.push(classes[i]);
+              }
+              cc.map((obj) => {
+                if (obj.value == classe) {
+                  c = obj;
+                }
+              });
+              let ss = [];
+              let s = {};
+              for (let i = 0; i < subjects.length; i++) {
+                ss.push(subjects[i]);
+              }
+              ss.map((obj) => {
+                if (obj.value == subject) {
+                  s = obj;
+                }
+              });
+
+              let st = [];
+              for (let i = 0; i < students.length; i++) {
+                st.push(students[i]);
+              }
+              st.shift(0);
+              //if (examMarks) {
+              props.properties.navigation.navigate('ControlExamMarks', {
+                classe: c,
+                subject: s,
+                students: st,
+                examMarks: examMarks,
+              });
+              /*} else {
+                props.properties.navigation.navigate('ControlExamMarks', {
+                  classe: c,
+                  subject: s,
+                  students: st,
+                  examMarks: examMarks,
+                  exams: exams,
+                });
+                setExamMarks();
+                setSubjects();
+                setStudents();
+                setClasse();
+                setSubject();
+                setStudent();
+              }*/
+            } else {
+              alert('Select Class / Subject !');
+            }
+          }}
+        />
+        <Text />
+        <Button
+          title="insert exam marks"
           onPress={() => {
             if (classe && subject && students) {
               let cc = [];
@@ -230,22 +293,28 @@ export default function ExamMarks(props) {
                 st.push(students[i]);
               }
               st.shift(0);
-              if (examMarks) {
+              /*if (examMarks) {
                 props.properties.navigation.navigate('ControlExamMarks', {
                   classe: c,
                   subject: s,
                   students: st,
                   examMarks: examMarks,
                 });
-              } else {
-                props.properties.navigation.navigate('ControlExamMarks', {
-                  classe: c,
-                  subject: s,
-                  students: st,
-                  examMarks: examMarks,
-                  exams: exams,
-                });
-              }
+                setExamMarks();
+                setSubjects();
+                setStudents();
+                setClasse();
+                setSubject();
+                setStudent();
+              } else {*/
+              props.properties.navigation.navigate('ControlExamMarks', {
+                classe: c,
+                subject: s,
+                students: st,
+                //examMarks: examMarks,
+                exams: exams,
+              });
+              //}
             } else {
               alert('Select Class / Subject !');
             }
