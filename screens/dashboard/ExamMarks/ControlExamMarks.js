@@ -26,15 +26,7 @@ export default function ControlExamMarks(props) {
 
   const [exam, setExam] = useState();
 
-  const examMarkInsertHandler = (
-    id,
-    student,
-    value,
-    /*exam,
-    attendance,
-    comment,*/
-    type,
-  ) => {
+  const examMarkInsertHandler = (id, student, value, type) => {
     let b = 0;
     let n = 0;
     if (students.length > 0) {
@@ -49,14 +41,10 @@ export default function ControlExamMarks(props) {
           if (b == 0) {
             students.push(student);
             examId.push(id);
-            /*examMarkValue.push(exam);
-            examAttendanceMarkValue.push(attendance);
-            examMarkComments.push(comment);*/
             examMarkValue.push(value);
             examAttendanceMarkValue.push('');
             examMarkComments.push('');
           } else {
-            //examMarkValue[n] = exam;
             examMarkValue[n] = value;
           }
           break;
@@ -65,14 +53,10 @@ export default function ControlExamMarks(props) {
           if (b == 0) {
             students.push(student);
             examId.push(id);
-            /*examMarkValue.push(exam);
-            examAttendanceMarkValue.push(attendance);
-            examMarkComments.push(comment);*/
             examMarkValue.push('');
             examAttendanceMarkValue.push(value);
             examMarkComments.push('');
           } else {
-            //examAttendanceMarkValue[n] = attendance;
             examAttendanceMarkValue[n] = value;
           }
           break;
@@ -81,24 +65,15 @@ export default function ControlExamMarks(props) {
           if (b == 0) {
             students.push(student);
             examId.push(id);
-            /*examMarkValue.push(exam);
-            examAttendanceMarkValue.push(attendance);
-            examMarkComments.push(comment);*/
             examMarkValue.push('');
             examAttendanceMarkValue.push('');
             examMarkComments.push(value);
           } else {
-            //examMarkComments[n] = comment;
             examMarkComments[n] = value;
           }
           break;
       }
     } else {
-      /*students.push(student);
-      examId.push(id);
-      examMarkValue.push(exam);
-      examAttendanceMarkValue.push(attendance);
-      examMarkComments.push(comment);*/
       switch (type) {
         case 'exam':
           students.push(student);
@@ -151,10 +126,7 @@ export default function ControlExamMarks(props) {
             examAttendanceMarkValue.push(attendance);
             examMarkComments.push(comment);
           } else {
-            //examMarkId[n] = id;
             examMarkValue[n] = exam;
-            //examAttendanceMarkValue[n] = attendance;
-            //examMarkComments[n] = comment;
           }
           break;
 
@@ -166,10 +138,7 @@ export default function ControlExamMarks(props) {
             examAttendanceMarkValue.push(attendance);
             examMarkComments.push(comment);
           } else {
-            //examMarkId[n] = id;
-            //examMarkValue[n] = exam;
             examAttendanceMarkValue[n] = attendance;
-            //examMarkComments[n] = comment;
           }
           break;
 
@@ -181,9 +150,6 @@ export default function ControlExamMarks(props) {
             examAttendanceMarkValue.push(attendance);
             examMarkComments.push(comment);
           } else {
-            //examMarkId[n] = id;
-            //examMarkValue[n] = exam;
-            //examAttendanceMarkValue[n] = attendance;
             examMarkComments[n] = comment;
           }
           break;
@@ -236,13 +202,6 @@ export default function ControlExamMarks(props) {
   };
 
   const insertMyExamMarks = async () => {
-    /*console.log('////////////////////////////////////');
-    console.log('/////////students//////////////////\n' + students);
-    console.log('/////////exam//////////////////\n' + examMarkValue);
-    console.log(
-      '/////////attendance//////////////////\n' + examAttendanceMarkValue,
-    );
-    console.log('/////////comments//////////////////\n' + examMarkComments);*/
     try {
       var r = [];
       var e = [];
@@ -430,9 +389,6 @@ export default function ControlExamMarks(props) {
             <Button
               title="update exam marks"
               onPress={() => {
-                /*console.log(examMarkId);
-                console.log(examMarkValue);
-                console.log(examMarkComments);*/
                 if (students[0]) {
                   updateMyExamMarks();
                   setStudents([]);
@@ -522,11 +478,8 @@ export default function ControlExamMarks(props) {
                           if (exam) {
                             examMarkInsertHandler(
                               exam['id'],
-                              //props.navigation.state.params.classe.value,
                               item.id,
                               value,
-                              //examAttendanceMarkValue[students.indexOf(item.id)],
-                              //examMarkComments[students.indexOf(item.id)],
                               'exam',
                             );
                           } else {
@@ -551,11 +504,8 @@ export default function ControlExamMarks(props) {
                           if (exam) {
                             examMarkInsertHandler(
                               exam['id'],
-                              //props.navigation.state.params.classe.value,
                               item.id,
-                              //examMarkValue[students.indexOf(item.id)],
                               value,
-                              //examMarkComments[students.indexOf(item.id)],
                               'attendance',
                             );
                           } else {
@@ -578,10 +528,7 @@ export default function ControlExamMarks(props) {
                         if (exam) {
                           examMarkInsertHandler(
                             exam['id'],
-                            //props.navigation.state.params.classe.value,
                             item.id,
-                            //examMarkValue[students.indexOf(item.id)],
-                            //examAttendanceMarkValue[students.indexOf(item.id)],
                             value,
                             'comment',
                           );
@@ -599,11 +546,6 @@ export default function ControlExamMarks(props) {
               title="insert exam marks"
               onPress={() => {
                 if (exam) {
-                  /*console.log('///////////////////////////////////////');
-                  console.log(examId);
-                  console.log(examMarkValue);
-                  console.log(examAttendanceMarkValue);
-                  console.log(examMarkComments);*/
                   let n = [];
                   for (
                     let i = 0;
@@ -659,15 +601,3 @@ const styles = StyleSheet.create({
     resizeMode: 'center',
   },
 });
-/*
-if (b == 0) {
-        students.push(student);
-        examId.push(id);
-        examMarkValue.push(exam);
-        examAttendanceMarkValue.push(attendance);
-        examMarkComments.push(comment);
-      } else {
-        examMarkValue[n] = exam;
-        examAttendanceMarkValue[n] = attendance;
-        examMarkComments[n] = comment;
-      }*/

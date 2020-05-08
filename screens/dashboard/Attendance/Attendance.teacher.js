@@ -202,8 +202,6 @@ export default function Attendance(props) {
               marginLeft: 8,
             },
             dateInput: {borderColor: 'lightblue', marginLeft: 50},
-
-            // ... You can check the source to find the other keys.
           }}
           onDateChange={(value) => {
             dateHandler(value);
