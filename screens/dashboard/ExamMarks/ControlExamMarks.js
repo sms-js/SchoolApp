@@ -394,6 +394,7 @@ export default function ControlExamMarks(props) {
                   setStudents([]);
                   setExamMarkId([]);
                   setexamMarkValue([]);
+                  setexamAttendanceMarkValue([]);
                   setExamMarkComments([]);
                 } else {
                   Alert.alert('Update Status', 'No changes applied');
