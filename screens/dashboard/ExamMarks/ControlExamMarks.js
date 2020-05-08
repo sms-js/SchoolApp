@@ -13,7 +13,7 @@ import {
 import {Header, Left, Icon} from 'native-base';
 import {server, defaultUserImageURL} from '../../../utils/config';
 import {insertExamMarks, updateExamMarks} from '../api/fetchExamMarks';
-import {fetchExams} from '../api/fetchExams';
+
 import {Dropdown} from 'react-native-material-dropdown';
 
 export default function ControlExamMarks(props) {
@@ -24,15 +24,7 @@ export default function ControlExamMarks(props) {
   const [examMarkId, setExamMarkId] = useState([]);
   const [examId, setExamId] = useState([]);
 
-  const [exams, setExams] = useState();
   const [exam, setExam] = useState();
-  const getExams = async () => {
-    const res = await fetchExams();
-    setExams(res);
-  };
-  React.useEffect(() => {
-    getExams();
-  }, []);
 
   const examMarkInsertHandler = (
     id,
@@ -412,23 +404,27 @@ export default function ControlExamMarks(props) {
           </View>
         ) : (
           <View>
-            <Dropdown
-              label="Exams"
-              data={exams.map((obj) => {
-                return {label: obj.examTitle, value: obj};
-              })}
-              onChangeText={(value) => {
-                for (let i = 0; i < exams.length; i++) {
-                  if (exams[i]['id'] == value) {
-                    setExam(exams[i]);
-                  }
-                }
-              }}
-            />
             <Text />
             <Text>Insert exam marks for : </Text>
             <Text>{props.navigation.state.params.classe.label}</Text>
             <Text>{props.navigation.state.params.subject.label}</Text>
+            <Dropdown
+              label="Exams"
+              data={props.navigation.state.params.exams.map((obj) => {
+                return {label: obj.examTitle, value: obj.id};
+              })}
+              onChangeText={(value) => {
+                for (
+                  let i = 0;
+                  i < props.navigation.state.params.exams.length;
+                  i++
+                ) {
+                  if (props.navigation.state.params.exams[i]['id'] == value) {
+                    setExam(props.navigation.state.params.exams[i]);
+                  }
+                }
+              }}
+            />
             {exam ? (
               <View>
                 <Text>{exam['examTitle']}</Text>

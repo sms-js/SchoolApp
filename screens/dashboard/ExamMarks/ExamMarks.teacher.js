@@ -13,6 +13,7 @@ import {fetchExamMarks, fetchStudentsExamMarks} from '../api/fetchExamMarks';
 import {fetchClassSubjects} from '../api/fetchSubjects';
 import {fetchTeacherClasses} from '../api/fetchClasses';
 import {fetchClassStudents} from '../api/fetchClasses';
+import {fetchExams} from '../api/fetchExams';
 import {useAuth} from '../../../context/Authentication';
 import {Dropdown} from 'react-native-material-dropdown';
 import {server, defaultUserImageURL} from '../../../utils/config';
@@ -26,6 +27,12 @@ export default function ExamMarks(props) {
   const [subjects, setSubjects] = useState();
   const [subject, setSubject] = useState();
   const [examMarks, setExamMarks] = useState();
+
+  const [exams, setExams] = useState();
+  const getExams = async () => {
+    const res = await fetchExams();
+    setExams(res);
+  };
 
   const getMyClasses = async () => {
     try {
@@ -77,6 +84,7 @@ export default function ExamMarks(props) {
   };
   React.useEffect(() => {
     getMyClasses();
+    getExams();
   }, []);
   return (
     <View>
@@ -222,12 +230,22 @@ export default function ExamMarks(props) {
                 st.push(students[i]);
               }
               st.shift(0);
-              props.properties.navigation.navigate('ControlExamMarks', {
-                classe: c,
-                subject: s,
-                students: st,
-                examMarks: examMarks,
-              });
+              if (examMarks) {
+                props.properties.navigation.navigate('ControlExamMarks', {
+                  classe: c,
+                  subject: s,
+                  students: st,
+                  examMarks: examMarks,
+                });
+              } else {
+                props.properties.navigation.navigate('ControlExamMarks', {
+                  classe: c,
+                  subject: s,
+                  students: st,
+                  examMarks: examMarks,
+                  exams: exams,
+                });
+              }
             } else {
               alert('Select Class / Subject !');
             }
