@@ -23,7 +23,7 @@ export default function Pages(props) {
           <Icon
             name="menu"
             onPress={() => {
-              props.navigation.openDrawer();
+              props.properties.navigation.openDrawer();
             }}
           />
         </Left>

@@ -25,7 +25,7 @@ export default function News(props) {
           <Icon
             name="menu"
             onPress={() => {
-              props.navigation.openDrawer();
+              props.properties.navigation.openDrawer();
             }}
           />
         </Left>
