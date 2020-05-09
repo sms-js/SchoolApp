@@ -3,7 +3,7 @@ import {Text, ScrollView, Button, View} from 'react-native';
 import {Header, Left, Icon} from 'native-base';
 import {useAuth} from '../../context/Authentication';
 
-export default function Home(props) {
+export default function Profile(props) {
   const {logout, user} = useAuth();
 
   return (

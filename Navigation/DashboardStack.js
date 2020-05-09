@@ -15,6 +15,7 @@ import Media from '../screens/dashboard/Media';
 import Messages from '../screens/dashboard/Messages';
 import News from './NewsStack';
 import Pages from './PagesStack';
+import GradeLevels from '../screens/dashboard/GradeLevels';
 import Transportation from './TransportationStack';
 import Payments from './PaymentsStack';
 import Polls from '../screens/dashboard/Polls';
@@ -37,6 +38,7 @@ var dashboardNavigator = createDrawerNavigator(
     Library,
     News,
     Pages,
+    GradeLevels,
     Transportation,
     Payments,
     Polls,
