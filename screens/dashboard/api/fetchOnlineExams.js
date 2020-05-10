@@ -117,7 +117,7 @@ export async function fetchSubjectOnlineExams(
       body: JSON.stringify({
         view: 'get',
         classId: classId,
-        subjectId: studentId,
+        subjectId: subjectId,
         studentId: studentId,
         date: date,
       }),
