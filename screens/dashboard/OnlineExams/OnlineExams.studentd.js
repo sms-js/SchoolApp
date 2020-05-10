@@ -160,10 +160,9 @@ export default function OnlineExams(props) {
                       onPress={async () => {
                         const res = await fetchExamMark(item.id, user['id']);
 
-                        /*props.properties.navigation.navigate(
-                            'OnlineExamMark',
-                            {mark: res},
-                          );*/
+                        props.properties.navigation.navigate('OnlineExamMark', {
+                          mark: res,
+                        });
                       }}>
                       <Text>View My Mark</Text>
                     </TouchableOpacity>

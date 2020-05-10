@@ -40,6 +40,13 @@ export default function OnlineExamMark(props) {
         <Text>Exam Mark</Text>
         <Text />
         <Button
+          title="show mark"
+          onPress={() => {
+            console.log(props.navigation.state.params.mark);
+          }}
+        />
+        <Text />
+        <Button
           title="back"
           onPress={() => {
             props.navigation.navigate('OnlineExams');

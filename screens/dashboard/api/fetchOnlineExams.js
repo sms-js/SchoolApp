@@ -1,5 +1,25 @@
 import {BASE_URL} from '../../../utils/config';
 
+// eslint-disable-next-line no-extend-native
+String.prototype.extract = function (prefix, suffix) {
+  let s = this;
+  var i = s.indexOf(prefix);
+  if (i >= 0) {
+    s = s.substring(i + prefix.length);
+  } else {
+    return '';
+  }
+  if (suffix) {
+    i = s.indexOf(suffix);
+    if (i >= 0) {
+      s = s.substring(0, i);
+    } else {
+      return '';
+    }
+  }
+  return s;
+};
+
 export async function fetchOnlineExams(classId, studentId, date) {
   try {
     const response = await fetch(BASE_URL + '/OnlineExamsController.php', {
@@ -18,9 +38,60 @@ export async function fetchOnlineExams(classId, studentId, date) {
     const responseJson = await response.json();
     if (response.ok) {
       console.log('////////////////////////////////');
-      console.log(responseJson['online exams']);
-      //let exams = [{}];
-      return responseJson['online exams'];
+      //console.log(responseJson['online exams']);
+      let exams = responseJson['online exams'];
+      for (let i = 0; i < exams.length; i++) {
+        let exam = [];
+        let examQuestion = responseJson['online exams'][i]['examQuestion'];
+        examQuestion = examQuestion.extract('[', ']');
+        while (examQuestion != '') {
+          let question = examQuestion.extract('', '}');
+          question = question.extract('{', '');
+          let questionText = examQuestion.extract('', ',');
+          examQuestion = examQuestion.substring(question.length + 3);
+          question = question.substring(questionText.length);
+          questionText = questionText.substring('"title":'.length + 1);
+          questionText = questionText.extract('"', '"');
+
+          let answer1 = question.extract('', ',');
+          question = question.substring(answer1.length + 1);
+          answer1 = answer1.substring('"ans1":'.length);
+          answer1 = answer1.extract('"', '"');
+
+          let answer2 = question.extract('', ',');
+          question = question.substring(answer2.length + 1);
+          answer2 = answer2.substring('"ans2":'.length);
+          answer2 = answer2.extract('"', '"');
+
+          let answer3 = question.extract('', ',');
+          question = question.substring(answer3.length + 1);
+          answer3 = answer3.substring('"ans3":'.length);
+          answer3 = answer3.extract('"', '"');
+
+          let answer4 = question.extract('', ',');
+          question = question.substring(answer4.length + 1);
+          answer4 = answer4.substring('"ans4":'.length);
+          answer4 = answer4.extract('"', '"');
+
+          let Tanswer = question;
+          question = question.substring(Tanswer.length + 1);
+          Tanswer = Tanswer.substring('"Tans":'.length);
+          Tanswer = Tanswer.extract('"', '"');
+
+          exam.push({
+            questionText: questionText,
+            answer1: answer1,
+            answer2: answer2,
+            answer3: answer3,
+            answer4: answer4,
+            Tanswer: Tanswer,
+          });
+        }
+        exams[i]['examQuestion'] = exam;
+      }
+      console.log(exams);
+      return exams;
+      //return responseJson['online exams'];
     } else {
       //return 'error !';
       alert(responseJson['online exams']['error']);
@@ -53,10 +124,61 @@ export async function fetchSubjectOnlineExams(
     });
     const responseJson = await response.json();
     if (response.ok) {
-      console.log('////////////////////////////////');
-      console.log(responseJson['online exams']);
-      //let exams = [{}];
-      return responseJson['online exams'];
+      //console.log('////////////////////////////////');
+      //console.log(responseJson['online exams']);
+      let exams = responseJson['online exams'];
+      for (let i = 0; i < exams.length; i++) {
+        let exam = [];
+        let examQuestion = responseJson['online exams'][i]['examQuestion'];
+        examQuestion = examQuestion.extract('[', ']');
+        while (examQuestion != '') {
+          let question = examQuestion.extract('', '}');
+          question = question.extract('{', '');
+          let questionText = examQuestion.extract('', ',');
+          examQuestion = examQuestion.substring(question.length + 3);
+          question = question.substring(questionText.length);
+          questionText = questionText.substring('"title":'.length + 1);
+          questionText = questionText.extract('"', '"');
+
+          let answer1 = question.extract('', ',');
+          question = question.substring(answer1.length + 1);
+          answer1 = answer1.substring('"ans1":'.length);
+          answer1 = answer1.extract('"', '"');
+
+          let answer2 = question.extract('', ',');
+          question = question.substring(answer2.length + 1);
+          answer2 = answer2.substring('"ans2":'.length);
+          answer2 = answer2.extract('"', '"');
+
+          let answer3 = question.extract('', ',');
+          question = question.substring(answer3.length + 1);
+          answer3 = answer3.substring('"ans3":'.length);
+          answer3 = answer3.extract('"', '"');
+
+          let answer4 = question.extract('', ',');
+          question = question.substring(answer4.length + 1);
+          answer4 = answer4.substring('"ans4":'.length);
+          answer4 = answer4.extract('"', '"');
+
+          let Tanswer = question;
+          question = question.substring(Tanswer.length + 1);
+          Tanswer = Tanswer.substring('"Tans":'.length);
+          Tanswer = Tanswer.extract('"', '"');
+
+          exam.push({
+            questionText: questionText,
+            answer1: answer1,
+            answer2: answer2,
+            answer3: answer3,
+            answer4: answer4,
+            Tanswer: Tanswer,
+          });
+        }
+        exams[i]['examQuestion'] = exam;
+      }
+      //console.log(exams);
+      return exams;
+      // return responseJson['online exams'];
     } else {
       //return 'error !';
       alert(responseJson['online exams']['error']);
@@ -82,28 +204,8 @@ export async function fetchExamMark(examId, studentId) {
     });
     const responseJson = await response.json();
 
-    // eslint-disable-next-line no-extend-native
-    String.prototype.extract = function (prefix, suffix) {
-      let s = this;
-      var i = s.indexOf(prefix);
-      if (i >= 0) {
-        s = s.substring(i + prefix.length);
-      } else {
-        return '';
-      }
-      if (suffix) {
-        i = s.indexOf(suffix);
-        if (i >= 0) {
-          s = s.substring(0, i);
-        } else {
-          return '';
-        }
-      }
-      return s;
-    };
-
     if (response.ok) {
-      console.log('////////////////////////////////');
+      //console.log('////////////////////////////////');
       //console.log(responseJson['exam mark']);
 
       let mark = {
@@ -164,8 +266,8 @@ export async function fetchExamMark(examId, studentId) {
           answer: answer,
         });
       }
-      console.log(mark);
-      return responseJson['exam mark'];
+      return mark;
+      //return responseJson['exam mark'];
     } else {
       //return 'error !';
       alert(responseJson['exam mark']['error']);
