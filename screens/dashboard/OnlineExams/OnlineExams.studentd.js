@@ -17,6 +17,7 @@ import {
 } from '../api/fetchOnlineExams';
 import {fetchClassSubjects} from '../api/fetchSubjects';
 import {useAuth} from '../../../context/Authentication';
+import {Dropdown} from 'react-native-material-dropdown';
 
 export default function OnlineExams(props) {
   const {user} = useAuth();
@@ -34,7 +35,7 @@ export default function OnlineExams(props) {
       setSubjects(d);
     }
   };
-  const getMyOnlineExams = async (classId, studentId, subjectId, date) => {
+  const getMyOnlineExams = async (classId, studentId, subjectId) => {
     var res = [];
     if (subjectId == 0) {
       res = await fetchOnlineExams(
@@ -109,6 +110,15 @@ export default function OnlineExams(props) {
         <Text style={{width: '15%'}} />
       </Header>
       <ScrollView style={{margin: 5, marginBottom: 80}}>
+        <Dropdown
+          label="My class subjects"
+          data={subjects}
+          onChangeText={(value) => {
+            setSubject(value);
+            getMyOnlineExams(user['studentClass'], user['id'], value);
+          }}
+        />
+        <Text />
         <FlatList
           data={onlineExams}
           renderItem={({item}) => {
