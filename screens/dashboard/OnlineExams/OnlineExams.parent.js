@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  Alert,
 } from 'react-native';
 import {Header, Left, Icon} from 'native-base';
 import {fetchClassSubjects} from '../api/fetchSubjects';
@@ -152,7 +153,7 @@ export default function OnlineExams(props) {
       </Header>
       <ScrollView style={{margin: 5, marginBottom: 80}}>
         <Dropdown
-          label="Children exam marks"
+          label="Children online exams"
           data={children}
           onChangeText={(value) => {
             setOnlineExams([]);

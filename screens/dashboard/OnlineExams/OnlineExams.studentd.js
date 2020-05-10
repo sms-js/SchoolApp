@@ -189,6 +189,12 @@ export default function OnlineExams(props) {
 }
 const styles = StyleSheet.create({
   view: {
+    /*flexDirection: 'row',
+    borderColor: 'lightblue',
+    borderWidth: 1,
+    borderRadius: 25,
+    margin: 5,
+    padding: 10,*/
     margin: 5,
     padding: 10,
     borderWidth: 1,
@@ -200,7 +206,7 @@ const styles = StyleSheet.create({
   },
   opacity: {
     height: 40,
-    width: '50%',
+    width: '70%',
     backgroundColor: 'lightblue',
     borderRadius: 25,
     flex: 1,
@@ -208,4 +214,129 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
   },
+  profile: {
+    width: 50,
+    height: 50,
+    borderRadius: 100,
+    margin: 5,
+    marginTop: 20,
+    resizeMode: 'center',
+  },
 });
+/*
+renderItem={({item}) => {
+            switch (item.status) {
+              case 0:
+                return (
+                  <View style={styles.view}>
+                    <View style={{flex: 1}}>
+                      <Image
+                        style={styles.profile}
+                        source={
+                          item.photo == ''
+                            ? {
+                                uri: defaultUserImageURL,
+                              }
+                            : {
+                                uri: server + 'uploads/profile/' + item.photo,
+                              }
+                        }
+                      />
+                      <Text>{item.fullName}</Text>
+                    </View>
+                    <View style={{flex: 3}}>
+                      <Text>{item.subjectTitle}</Text>
+                      <Text>{item.examTitle}</Text>
+                      <Text>{item.examDescription}</Text>
+                      <Text>{item.examDate}</Text>
+                      <Text style={{color: 'red'}}>{item.ExamEndDate}</Text>
+                      <Text
+                        style={{
+                          color: 'red',
+                          alignSelf: 'center',
+                          fontSize: 30,
+                        }}>
+                        Missed this exam !
+                      </Text>
+                    </View>
+                  </View>
+                );
+              case 1:
+                return (
+                  <View style={styles.view}>
+                    <View style={{flex: 1}}>
+                      <Image
+                        style={styles.profile}
+                        source={
+                          item.photo == ''
+                            ? {
+                                uri: defaultUserImageURL,
+                              }
+                            : {
+                                uri: server + 'uploads/profile/' + item.photo,
+                              }
+                        }
+                      />
+                      <Text>{item.fullName}</Text>
+                    </View>
+                    <View style={{flex: 3}}>
+                      <Text>{item.subjectTitle}</Text>
+                      <Text>{item.examTitle}</Text>
+                      <Text>{item.examDescription}</Text>
+                      <Text>{item.examDate}</Text>
+                      <Text style={{color: 'green'}}>{item.ExamEndDate}</Text>
+                      <Text
+                        style={{
+                          color: 'green',
+                          alignSelf: 'center',
+                          fontSize: 30,
+                        }}>
+                        Still didn't take exam !
+                      </Text>
+                    </View>
+                  </View>
+                );
+              case 2:
+                return (
+                  <View style={styles.view}>
+                    <View style={{flex: 1}}>
+                      <Image
+                        style={styles.profile}
+                        source={
+                          item.photo == ''
+                            ? {
+                                uri: defaultUserImageURL,
+                              }
+                            : {
+                                uri: server + 'uploads/profile/' + item.photo,
+                              }
+                        }
+                      />
+                      <Text>{item.fullName}</Text>
+                    </View>
+                    <View style={{flex: 3}}>
+                      <Text>{item.subjectTitle}</Text>
+                      <Text>{item.examTitle}</Text>
+                      <Text>{item.examDescription}</Text>
+                      <Text>{item.examDate}</Text>
+                      <Text style={{color: 'green'}}>{item.ExamEndDate}</Text>
+                      <TouchableOpacity
+                        style={styles.opacity}
+                        onPress={async () => {
+                          const res = await fetchExamMark(item.id, child);
+
+                          props.properties.navigation.navigate(
+                            'OnlineExamMark',
+                            {
+                              mark: res,
+                            },
+                          );
+                        }}>
+                        <Text>View My Child's Mark</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                );
+            }
+          }}
+*/
