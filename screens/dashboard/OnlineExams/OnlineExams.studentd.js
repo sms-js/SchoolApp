@@ -141,7 +141,9 @@ export default function OnlineExams(props) {
                     <TouchableOpacity
                       style={styles.opacity}
                       onPress={() => {
-                        props.properties.navigation.navigate('TakeOnlineExam');
+                        props.properties.navigation.navigate('TakeOnlineExam', {
+                          exam: item,
+                        });
                       }}>
                       <Text>Take Exam</Text>
                     </TouchableOpacity>

@@ -40,6 +40,13 @@ export default function TakeOnlineExam(props) {
         <Text>Take Online Exam</Text>
         <Text />
         <Button
+          title="show exam"
+          onPress={() => {
+            console.log(props.navigation.state.params.exam);
+          }}
+        />
+        <Text />
+        <Button
           title="back"
           onPress={() => {
             props.navigation.navigate('OnlineExams');

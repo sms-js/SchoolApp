@@ -89,7 +89,7 @@ export async function fetchOnlineExams(classId, studentId, date) {
         }
         exams[i]['examQuestion'] = exam;
       }
-      console.log(exams);
+      //console.log(exams);
       return exams;
       //return responseJson['online exams'];
     } else {
