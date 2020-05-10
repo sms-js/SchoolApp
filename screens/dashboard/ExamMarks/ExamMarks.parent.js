@@ -8,7 +8,7 @@ import {
   Image,
 } from 'react-native';
 import {Header, Left, Icon} from 'native-base';
-import {fetchExamMarks} from '../api/fetchExamMarks';
+import {fetchExamMarks, fetchSubjectsExamMarks} from '../api/fetchExamMarks';
 import {fetchClassSubjects} from '../api/fetchSubjects';
 import {fetchStudentClass} from '../api/fetchStudentInfo';
 import {useAuth} from '../../../context/Authentication';
@@ -33,7 +33,7 @@ export default function ExamMarks(props) {
       let d = res1.map((item) => {
         return {label: item.subjectTitle, value: item.id};
       });
-      //d.unshift({label: 'All subjects', value: 0});
+      d.unshift({label: 'All subjects', value: 0});
       setSubjects(d);
     }
   };
@@ -41,7 +41,7 @@ export default function ExamMarks(props) {
   const getMyChildExamMarks = async (classId, subjectId, studentId) => {
     var res = [];
     if (subjectId == 0) {
-      //res = await fetchSubjectsAttendance(classId, studentId);
+      res = await fetchSubjectsExamMarks(classId, studentId);
     } else {
       res = await fetchExamMarks(classId, subjectId, studentId);
     }
