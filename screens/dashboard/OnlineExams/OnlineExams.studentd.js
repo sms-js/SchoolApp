@@ -173,6 +173,7 @@ export default function OnlineExams(props) {
                         const res = await fetchExamMark(item.id, user['id']);
 
                         props.properties.navigation.navigate('OnlineExamMark', {
+                          exam: item,
                           mark: res,
                         });
                       }}>

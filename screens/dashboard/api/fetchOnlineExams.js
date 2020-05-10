@@ -432,10 +432,11 @@ export async function fetchExamMark(examId, studentId) {
 
         mark['questions'].push({
           questionText: questionText,
-          answer1: answer1,
+          answers: [answer1, answer2, answer3, answer4],
+          /*answer1: answer1,
           answer2: answer2,
           answer3: answer3,
-          answer4: answer4,
+          answer4: answer4,*/
           Tanswer: Tanswer,
           answer: answer,
         });
