@@ -154,6 +154,7 @@ export default function OnlineExams(props) {
                         props.properties.navigation.navigate('TakeOnlineExam', {
                           exam: item,
                         });
+                        setOnlineExams();
                       }}>
                       <Text>Take Exam</Text>
                     </TouchableOpacity>

@@ -451,3 +451,39 @@ export async function fetchExamMark(examId, studentId) {
     return error;
   }
 }
+
+export async function takeOnlineExam(
+  examId,
+  studentId,
+  examQuestionsAnswers,
+  examGrade,
+  examDate,
+) {
+  try {
+    const response = await fetch(BASE_URL + '/OnlineExamPassController.php', {
+      method: 'post',
+      header: {
+        Accept: 'application/json',
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        view: 'insert',
+        examId: examId,
+        studentId: studentId,
+        examQuestionsAnswers: examQuestionsAnswers,
+        examGrade: examGrade,
+        examDate: examDate,
+      }),
+    });
+    const responseJson = await response.json();
+    if (response.ok) {
+      console.log(responseJson['insert status']);
+      return responseJson['insert status'];
+    } else {
+      //return 'error !';
+      alert(responseJson['insert status']['error']);
+    }
+  } catch (error) {
+    return error;
+  }
+}

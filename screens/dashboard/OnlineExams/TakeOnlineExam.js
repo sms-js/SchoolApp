@@ -6,6 +6,7 @@ import {
   FlatList,
   StyleSheet,
   Button,
+  Alert,
 } from 'react-native';
 import {Header, Left, Icon} from 'native-base';
 import RadioForm, {
@@ -13,9 +14,72 @@ import RadioForm, {
   RadioButtonInput,
   RadioButtonLabel,
 } from 'react-native-simple-radio-button';
+import {takeOnlineExam} from '../api/fetchOnlineExams';
+import {useAuth} from '../../../context/Authentication';
 
 export default function TakeOnlineExam(props) {
-  const [a, setA] = useState();
+  const {user} = useAuth();
+  const [answers, setAnswers] = useState(
+    props.navigation.state.params.exam.examQuestion.map((obj) => {
+      return {
+        info: obj,
+        question:
+          props.navigation.state.params.exam.examQuestion.indexOf(obj) + 1,
+        answer: 0,
+      };
+    }),
+  );
+  const answerHandler = (info, question, answer) => {
+    if (answers.length > 0) {
+      let b = 0;
+      let n = 0;
+      for (let i = 0; i < answers.length; i++) {
+        if (answers[i]['question'] == question) {
+          b = 1;
+          n = i;
+        }
+      }
+      if (b == 1) {
+        if (answers[n]['answer'] != answer) {
+          answers[n]['answer'] = answer;
+        }
+      } else {
+        answers.push({info: info, question: question, answer: answer});
+      }
+    } else {
+      answers.push({info: info, question: question, answer: answer});
+    }
+  };
+
+  const submitAnswers = async (
+    examId,
+    studentId,
+    examQuestionsAnswers,
+    examGrade,
+    examDate,
+  ) => {
+    try {
+      const res = await takeOnlineExam(
+        examId,
+        studentId,
+        examQuestionsAnswers,
+        examGrade,
+        examDate,
+      );
+      if (res == 'New record created successfully') {
+        Alert.alert('Exam Answers', 'Answers submitted successfully !', [
+          {
+            text: 'OK',
+            onPress: () => {
+              props.navigation.navigate('OnlineExams');
+            },
+          },
+        ]);
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
 
   return (
     <View>
@@ -43,12 +107,13 @@ export default function TakeOnlineExam(props) {
         </Text>
         <Text style={{width: '15%'}} />
       </Header>
-      <ScrollView style={{margin: 20, marginBottom: 60}}>
+      <ScrollView style={{margin: 5, marginBottom: 80}}>
         <Text>{props.navigation.state.params.exam.subjectTitle}</Text>
         <Text>{props.navigation.state.params.exam.examTitle}</Text>
         <Text>{props.navigation.state.params.exam.examDescription}</Text>
         <Text>{props.navigation.state.params.exam.examDate}</Text>
         <Text>{props.navigation.state.params.exam.ExamEndDate}</Text>
+        <Text />
         <FlatList
           data={props.navigation.state.params.exam.examQuestion}
           renderItem={({item}) => (
@@ -62,15 +127,21 @@ export default function TakeOnlineExam(props) {
               <Text />
               <RadioForm
                 radio_props={[
+                  {label: 'no answer', value: 0},
                   {label: item.answer1, value: 1},
                   {label: item.answer2, value: 2},
                   {label: item.answer3, value: 3},
                   {label: item.answer4, value: 4},
-                  {label: 'no answer', value: 5},
                 ]}
-                initial={5}
+                initial={0}
                 onPress={(value) => {
-                  setA(value);
+                  answerHandler(
+                    item,
+                    props.navigation.state.params.exam.examQuestion.indexOf(
+                      item,
+                    ) + 1,
+                    value,
+                  );
                 }}
               />
             </View>
@@ -78,10 +149,69 @@ export default function TakeOnlineExam(props) {
         />
         <Text />
         <Button
-          title="show exam"
+          title="submit"
           onPress={() => {
-            alert(a);
-            // console.log(props.navigation.state.params.exam);
+            Alert.alert('Exam Answers', 'Confirm to submit your answers', [
+              {text: 'Cancel', onPress: () => {}, style: 'cancel'},
+              {
+                text: 'OK',
+                onPress: () => {
+                  let grade = 0;
+                  for (let i = 0; i < answers.length; i++) {
+                    if (answers[i]['info']['Tanswer'] == answers[i]['answer']) {
+                      grade++;
+                    }
+                  }
+                  let answer = '[';
+                  for (let i = 0; i < answers.length; i++) {
+                    if (i == answers.length - 1) {
+                      answer =
+                        answer +
+                        '{"title":"' +
+                        answers[i]['info']['questionText'] +
+                        '","ans1":"' +
+                        answers[i]['info']['answer1'] +
+                        '","ans2":"' +
+                        answers[i]['info']['answer2'] +
+                        '","ans3":"' +
+                        answers[i]['info']['answer3'] +
+                        '","ans4":"' +
+                        answers[i]['info']['answer4'] +
+                        '","Tans":"' +
+                        answers[i]['info']['Tanswer'] +
+                        '","answer":"' +
+                        answers[i]['answer'] +
+                        '"}]';
+                    } else {
+                      answer =
+                        answer +
+                        '{"title":"' +
+                        answers[i]['info']['questionText'] +
+                        '","ans1":"' +
+                        answers[i]['info']['answer1'] +
+                        '","ans2":"' +
+                        answers[i]['info']['answer2'] +
+                        '","ans3":"' +
+                        answers[i]['info']['answer3'] +
+                        '","ans4":"' +
+                        answers[i]['info']['answer4'] +
+                        '","Tans":"' +
+                        answers[i]['info']['Tanswer'] +
+                        '","answer":"' +
+                        answers[i]['answer'] +
+                        '"},';
+                    }
+                  }
+                  submitAnswers(
+                    props.navigation.state.params.exam.id,
+                    user['id'],
+                    answer,
+                    grade,
+                    props.navigation.state.params.exam.examDate,
+                  );
+                },
+              },
+            ]);
           }}
         />
         <Text />
