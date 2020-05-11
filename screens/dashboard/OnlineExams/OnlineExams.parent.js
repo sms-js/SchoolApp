@@ -160,7 +160,7 @@ export default function OnlineExams(props) {
             setSubjects([]);
             setSubject(0);
             getMyChildSubjects(value);
-            //getMyChildExamMarks(classe, 0, value);
+            getMyChildOnlineExams(classe, 0, value);
           }}
         />
         <Dropdown
