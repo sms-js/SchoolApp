@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  Button,
 } from 'react-native';
 import {Header, Left, Icon} from 'native-base';
 import {fetchClassSubjects} from '../api/fetchSubjects';
@@ -203,6 +204,15 @@ export default function OnlineExams(props) {
                   </View>
                 );
             }
+          }}
+        />
+        <Text />
+        <Button
+          title="add exam"
+          onPress={() => {
+            props.properties.navigation.navigate('AddOnlineExam', {
+              classes: classes,
+            });
           }}
         />
       </ScrollView>

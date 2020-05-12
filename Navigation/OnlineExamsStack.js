@@ -5,6 +5,7 @@ import OnlineExams from '../screens/dashboard/OnlineExams/index';
 import ControlOnlineExams from '../screens/dashboard/OnlineExams/ControlOnlineExams';
 import TakeOnlineExam from '../screens/dashboard/OnlineExams/TakeOnlineExam';
 import OnlineExamMark from '../screens/dashboard/OnlineExams/OnlineExamMark';
+import AddOnlineExam from '../screens/dashboard/OnlineExams/AddOnlineExam';
 
 const OnlineExamsStack = createStackNavigator({
   OnlineExams: {screen: OnlineExams, navigationOptions: {header: null}},
@@ -18,6 +19,10 @@ const OnlineExamsStack = createStackNavigator({
   },
   OnlineExamMark: {
     screen: OnlineExamMark,
+    navigationOptions: {header: null},
+  },
+  AddOnlineExam: {
+    screen: AddOnlineExam,
     navigationOptions: {header: null},
   },
 });
