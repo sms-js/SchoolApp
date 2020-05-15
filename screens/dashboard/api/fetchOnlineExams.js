@@ -22,19 +22,30 @@ String.prototype.extract = function (prefix, suffix) {
 
 export async function fetchOnlineExams(classId, studentId, date) {
   try {
-    const response = await fetch(BASE_URL + '/OnlineExamsController.php', {
-      method: 'post',
-      header: {
-        Accept: 'application/json',
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify({
+    const response = await fetch(
+      BASE_URL +
+        '/OnlineExamsController.php' +
+        '?view=get&classId=' +
+        classId +
+        '&studentId=' +
+        studentId +
+        '&date=' +
+        date,
+      +{
+        //method: 'post',
+        method: 'get',
+        header: {
+          Accept: 'application/json',
+          'Content-type': 'application/json',
+        },
+        /*body: JSON.stringify({
         view: 'get',
         classId: classId,
         studentId: studentId,
         date: date,
-      }),
-    });
+      }),*/
+      },
+    );
     const responseJson = await response.json();
     if (response.ok) {
       console.log('////////////////////////////////');
@@ -122,10 +133,10 @@ export async function fetchSubjectOnlineExams(
         date: date,
       }),
     });
+
     const responseJson = await response.json();
     if (response.ok) {
-      //console.log('////////////////////////////////');
-      //console.log(responseJson['online exams']);
+      console.log(responseJson['online exams']);
       let exams = responseJson['online exams'];
       for (let i = 0; i < exams.length; i++) {
         let exam = [];

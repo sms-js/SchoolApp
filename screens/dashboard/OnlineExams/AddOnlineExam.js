@@ -79,15 +79,61 @@ export default function AddOnlineExam(props) {
           id: id,
           questionText: questionText,
           answers: [
-            {answer1: answer1},
+            /* {answer1: answer1},
             {answer2: answer2},
             {answer3: answer3},
-            {answer4: answer4},
+            {answer4: answer4},*/
+            answer1,
+            answer2,
+            answer3,
+            answer4,
           ],
           Tanswer: Tanswer,
         },
       ];
     });
+  };
+  const submitExam = async () => {
+    if (classesFor.length > 0) {
+      let exam = '[';
+      for (let i = 0; i < questions.length; i++) {
+        if (i == questions.length - 1) {
+          exam = exam + '{"title":"' + questions[i]['questionText'] + '",';
+          for (let j = 0; j < questions[i]['answers'].length; j++) {
+            exam =
+              exam +
+              '"ans' +
+              (j + 1) +
+              '":"' +
+              questions[i]['answers'][j] +
+              '",';
+          }
+          exam = exam + '"Tans":"' + questions[i]['Tanswer'] + '"}]';
+        } else {
+          exam = exam + '{"title":"' + questions[i]['questionText'] + '",';
+          for (let j = 0; j < questions[i]['answers'].length; j++) {
+            exam =
+              exam +
+              '"ans' +
+              (j + 1) +
+              '":"' +
+              questions[i]['answers'][j] +
+              '",';
+          }
+          exam = exam + '"Tans":"' + questions[i]['Tanswer'] + '"},';
+        }
+      }
+      let classe = '[';
+      for (let i = 0; i < classesFor.length; i++) {
+        if (i == classesFor.length - 1) {
+          classe = classe + '"' + classesFor[i]['id'] + '"]';
+        } else {
+          classe = classe + '"' + classesFor[i]['id'] + '",';
+        }
+      }
+    } else {
+      alert('Enter exam classes !');
+    }
   };
 
   React.useEffect(() => {
@@ -211,6 +257,7 @@ export default function AddOnlineExam(props) {
             onChangeText={(value) => {
               setQuestionTxt(value);
             }}
+            value={questionTxt}
           />
           <Text>Answer 1 : </Text>
           <TextInput
@@ -219,6 +266,7 @@ export default function AddOnlineExam(props) {
             onChangeText={(value) => {
               setAns1(value);
             }}
+            value={ans1}
           />
           <Text>Answer 2 : </Text>
           <TextInput
@@ -227,6 +275,7 @@ export default function AddOnlineExam(props) {
             onChangeText={(value) => {
               setAns2(value);
             }}
+            value={ans2}
           />
           <Text>Answer 3 : </Text>
           <TextInput
@@ -235,6 +284,7 @@ export default function AddOnlineExam(props) {
             onChangeText={(value) => {
               setAns3(value);
             }}
+            value={ans3}
           />
           <Text>Answer 4 : </Text>
           <TextInput
@@ -243,6 +293,7 @@ export default function AddOnlineExam(props) {
             onChangeText={(value) => {
               setAns4(value);
             }}
+            value={ans4}
           />
           <Text>Correct answer : </Text>
           <RadioForm
@@ -255,6 +306,7 @@ export default function AddOnlineExam(props) {
             onPress={(value) => {
               setTans(value);
             }}
+            initial={Tans}
           />
           <Text />
           <Button
@@ -284,7 +336,10 @@ export default function AddOnlineExam(props) {
                           addQuestionHandler(
                             questions.length + 1,
                             questionTxt,
-                            [ans1, ans2, ans3, ans4],
+                            ans1,
+                            ans2,
+                            ans3,
+                            ans4,
                             Tans,
                           );
                           setQuestionTxt('');
@@ -321,12 +376,46 @@ export default function AddOnlineExam(props) {
             data={questions}
             renderItem={({item}) => (
               <View style={styles.question}>
-                <Text>{item.id}</Text>
+                <Text style={{alignSelf: 'center'}}>Question {item.id}</Text>
                 <Text>{item.questionText}</Text>
-                <Text>{item.answers[0]['answer1']}</Text>
-                <Text>{item.answers[1]['answer2']}</Text>
-                <Text>{item.answers[2]['answer3']}</Text>
-                <Text>{item.answers[3]['answer4']}</Text>
+                <Text
+                  style={
+                    questions[questions.indexOf(item)].Tanswer == 1
+                      ? {color: 'green'}
+                      : {}
+                  }>
+                  {item.answers[0]}
+                </Text>
+                <Text
+                  style={
+                    questions[questions.indexOf(item)].Tanswer == 2
+                      ? {color: 'green'}
+                      : {}
+                  }>
+                  {item.answers[1]}
+                </Text>
+                <Text
+                  style={
+                    questions[questions.indexOf(item)].Tanswer == 3
+                      ? {color: 'green'}
+                      : {}
+                  }>
+                  {item.answers[2]}
+                </Text>
+                <Text
+                  style={
+                    questions[questions.indexOf(item)].Tanswer == 4
+                      ? {color: 'green'}
+                      : {}
+                  }>
+                  {item.answers[3]}
+                </Text>
+                <Button
+                  title="remove"
+                  onPress={() => {
+                    removeQuestionHandler(item.id);
+                  }}
+                />
               </View>
             )}
           />
@@ -338,6 +427,17 @@ export default function AddOnlineExam(props) {
               title="remove all"
               onPress={() => {
                 removeAllQuestionsHandler();
+              }}
+            />
+          </View>
+        ) : null}
+        {questions.length > 0 ? (
+          <View>
+            <Text />
+            <Button
+              title="submit exam"
+              onPress={() => {
+                submitExam();
               }}
             />
           </View>
