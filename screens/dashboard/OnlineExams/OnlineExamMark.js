@@ -168,7 +168,7 @@ export default function OnlineExamMark(props) {
         <Button
           title="back"
           onPress={() => {
-            props.navigation.navigate('OnlineExams');
+            props.navigation.navigate(props.navigation.state.params.backScreen);
           }}
         />
       </ScrollView>

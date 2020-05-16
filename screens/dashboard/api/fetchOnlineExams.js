@@ -498,3 +498,167 @@ export async function takeOnlineExam(
     return error;
   }
 }
+
+export async function addOnlineExam(
+  examTitle,
+  examDescription,
+  examClass,
+  examTeacher,
+  examSubject,
+  examDate,
+  ExamEndDate,
+  examQuestion,
+) {
+  try {
+    const response = await fetch(BASE_URL + '/OnlineExamPassController.php', {
+      method: 'post',
+      header: {
+        Accept: 'application/json',
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        view: 'insert',
+        examTitle: examTitle,
+        examDescription: examDescription,
+        examClass: examClass,
+        examTeacher: examTeacher,
+        examSubject: examSubject,
+        examDate: examDate,
+        ExamEndDate: ExamEndDate,
+        examQuestion: examQuestion,
+      }),
+    });
+    const responseJson = await response.json();
+    if (response.ok) {
+      console.log(responseJson['insert status']);
+      return responseJson['insert status'];
+    } else {
+      //return 'error !';
+      alert(responseJson['insert status']['error']);
+    }
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function fetchExamMarks(examId) {
+  try {
+    const response = await fetch(BASE_URL + '/OnlineExamMarksController.php', {
+      method: 'post',
+      header: {
+        Accept: 'application/json',
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        view: 'get',
+        examId: examId,
+      }),
+    });
+    const responseJson = await response.json();
+
+    if (response.ok) {
+      //console.log('////////////////////////////////');
+      //console.log(responseJson['exam marks']);
+      let marks = [];
+
+      for (let i = 0; i < responseJson['exam marks'].length; i++) {
+        let mark = [];
+        let examQuestionsAnswers =
+          responseJson['exam marks'][i]['examQuestionsAnswers'];
+        examQuestionsAnswers = examQuestionsAnswers.extract('[', ']');
+        while (examQuestionsAnswers != '') {
+          let question = examQuestionsAnswers.extract('', '}');
+          question = question.extract('{', '');
+          let questionText = examQuestionsAnswers.extract('', ',');
+          examQuestionsAnswers = examQuestionsAnswers.substring(
+            question.length + 3,
+          );
+          question = question.substring(questionText.length);
+          questionText = questionText.substring('"title":'.length + 1);
+          questionText = questionText.extract('"', '"');
+
+          let answer1 = question.extract('', ',');
+          question = question.substring(answer1.length + 1);
+          answer1 = answer1.substring('"ans1":'.length);
+          answer1 = answer1.extract('"', '"');
+
+          let answer2 = question.extract('', ',');
+          question = question.substring(answer2.length + 1);
+          answer2 = answer2.substring('"ans2":'.length);
+          answer2 = answer2.extract('"', '"');
+
+          let answer3 = question.extract('', ',');
+          question = question.substring(answer3.length + 1);
+          answer3 = answer3.substring('"ans3":'.length);
+          answer3 = answer3.extract('"', '"');
+
+          let answer4 = question.extract('', ',');
+          question = question.substring(answer4.length + 1);
+          answer4 = answer4.substring('"ans4":'.length);
+          answer4 = answer4.extract('"', '"');
+
+          let Tanswer = question.extract('', ',');
+          question = question.substring(Tanswer.length + 1);
+          Tanswer = Tanswer.substring('"Tans":'.length);
+          Tanswer = Tanswer.extract('"', '"');
+
+          let answer = question;
+          question = question.substring(answer.length);
+          answer = answer.substring('"answer":'.length);
+          answer = answer.extract('"', '"');
+
+          mark.push({
+            questionText: questionText,
+            answers: [answer1, answer2, answer3, answer4],
+            /*answer1: answer1,
+          answer2: answer2,
+          answer3: answer3,
+          answer4: answer4,*/
+            Tanswer: Tanswer,
+            answer: answer,
+          });
+        }
+        marks.push({
+          examGrade: responseJson['exam marks'][i]['examGrade'],
+          examQuestionsAnswers: mark,
+          fullName: responseJson['exam marks'][i]['fullName'],
+          photo: responseJson['exam marks'][i]['photo'],
+        });
+      }
+      // console.log(marks);
+      return marks;
+      //return responseJson['exam marks'];
+    } else {
+      //return 'error !';
+      return responseJson['exam marks']['error'];
+    }
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function deleteOnlineExam(examId) {
+  try {
+    const response = await fetch(BASE_URL + '/OnlineExamDeleteController.php', {
+      method: 'post',
+      header: {
+        Accept: 'application/json',
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        view: 'delete',
+        examId: examId,
+      }),
+    });
+    const responseJson = await response.json();
+    if (response.ok) {
+      console.log(responseJson['delete status']);
+      return responseJson['delete status'];
+    } else {
+      //return 'error !';
+      alert(responseJson['delete status']['error']);
+    }
+  } catch (error) {
+    return error;
+  }
+}

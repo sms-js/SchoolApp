@@ -1,7 +1,7 @@
 import React from 'react';
 import {useAuth} from '../../../context/Authentication';
 import OnlineExamsParent from './OnlineExams.parent';
-import OnlineExamsStudent from './OnlineExams.studentd';
+import OnlineExamsStudent from './OnlineExams.student';
 import OnlineExamsTeacher from './OnlineExams.teacher';
 export default function OnlineExams(props) {
   const {user} = useAuth();

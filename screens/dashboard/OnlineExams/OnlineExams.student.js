@@ -176,6 +176,7 @@ export default function OnlineExams(props) {
                         props.properties.navigation.navigate('OnlineExamMark', {
                           exam: item,
                           mark: res,
+                          backScreen: 'OnlineExams',
                         });
                       }}>
                       <Text>View My Mark</Text>

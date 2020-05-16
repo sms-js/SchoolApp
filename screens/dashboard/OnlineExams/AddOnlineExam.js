@@ -11,7 +11,8 @@ import {
   TextInput,
 } from 'react-native';
 import {Header, Left, Icon} from 'native-base';
-import {fetchTeacherClasses} from '../api/fetchClasses';
+//import {fetchTeacherClasses} from '../api/fetchClasses';
+import {fetchClassSubjects} from '../api/fetchSubjects';
 import {useAuth} from '../../../context/Authentication';
 import {Dropdown} from 'react-native-material-dropdown';
 import RadioForm, {
@@ -19,14 +20,23 @@ import RadioForm, {
   RadioButtonInput,
   RadioButtonLabel,
 } from 'react-native-simple-radio-button';
+import DatePicker from 'react-native-datepicker';
+import {addOnlineExam} from '../api/fetchOnlineExams';
 
 export default function AddOnlineExam(props) {
   const {user} = useAuth();
+  const [title, setTitle] = useState();
+  const [description, setDescription] = useState();
+  const [date, setDate] = useState();
+  const [endDate, setEndDate] = useState();
   const [classes, setClasses] = useState();
+  //const [classe, setClasse] = useState();
   const [classesFor, setClassesFor] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+  const [subject, setSubject] = useState();
   const [questions, setQuestions] = useState([]);
   const [questionTxt, setQuestionTxt] = useState('');
-  const [questionId, setQuestionId] = useState('');
+  //const [questionId, setQuestionId] = useState('');
   const [ans1, setAns1] = useState('');
   const [ans2, setAns2] = useState('');
   const [ans3, setAns3] = useState('');
@@ -37,11 +47,17 @@ export default function AddOnlineExam(props) {
     setClassesFor((prevClasses) => {
       return prevClasses.filter((classe) => classe.id != id);
     });
+    setSubjects((prevSubjects) => {
+      return prevSubjects.filter((subject) => subject.classe != id);
+    });
   };
 
   const removeAllClassesHandler = () => {
     setClassesFor((prevClasses) => {
       return prevClasses.filter((classe) => classe.id === 0);
+    });
+    setSubjects((prevSubjects) => {
+      return prevSubjects.filter((subject) => subject.classe === 0);
     });
   };
 
@@ -93,46 +109,70 @@ export default function AddOnlineExam(props) {
       ];
     });
   };
+
+  const getMyClassSubjects = async (classId) => {
+    const res = await fetchClassSubjects(classId);
+    if (res) {
+      let d = res.map((item) => {
+        return {label: item.subjectTitle, value: item.id, classe: classId};
+      });
+      console.log(d);
+      for (let i = 0; i < d.length; i++) {
+        subjects.push(d[i]);
+      }
+    }
+  };
+
   const submitExam = async () => {
-    if (classesFor.length > 0) {
-      let exam = '[';
-      for (let i = 0; i < questions.length; i++) {
-        if (i == questions.length - 1) {
-          exam = exam + '{"title":"' + questions[i]['questionText'] + '",';
-          for (let j = 0; j < questions[i]['answers'].length; j++) {
-            exam =
-              exam +
-              '"ans' +
-              (j + 1) +
-              '":"' +
-              questions[i]['answers'][j] +
-              '",';
-          }
-          exam = exam + '"Tans":"' + questions[i]['Tanswer'] + '"}]';
-        } else {
-          exam = exam + '{"title":"' + questions[i]['questionText'] + '",';
-          for (let j = 0; j < questions[i]['answers'].length; j++) {
-            exam =
-              exam +
-              '"ans' +
-              (j + 1) +
-              '":"' +
-              questions[i]['answers'][j] +
-              '",';
-          }
-          exam = exam + '"Tans":"' + questions[i]['Tanswer'] + '"},';
+    let exam = '[';
+    for (let i = 0; i < questions.length; i++) {
+      if (i == questions.length - 1) {
+        exam = exam + '{"title":"' + questions[i]['questionText'] + '",';
+        for (let j = 0; j < questions[i]['answers'].length; j++) {
+          exam =
+            exam + '"ans' + (j + 1) + '":"' + questions[i]['answers'][j] + '",';
         }
-      }
-      let classe = '[';
-      for (let i = 0; i < classesFor.length; i++) {
-        if (i == classesFor.length - 1) {
-          classe = classe + '"' + classesFor[i]['id'] + '"]';
-        } else {
-          classe = classe + '"' + classesFor[i]['id'] + '",';
+        exam = exam + '"Tans":"' + questions[i]['Tanswer'] + '"}]';
+      } else {
+        exam = exam + '{"title":"' + questions[i]['questionText'] + '",';
+        for (let j = 0; j < questions[i]['answers'].length; j++) {
+          exam =
+            exam + '"ans' + (j + 1) + '":"' + questions[i]['answers'][j] + '",';
         }
+        exam = exam + '"Tans":"' + questions[i]['Tanswer'] + '"},';
       }
-    } else {
-      alert('Enter exam classes !');
+    }
+    let classe = '[';
+    for (let i = 0; i < classesFor.length; i++) {
+      if (i == classesFor.length - 1) {
+        classe = classe + '"' + classesFor[i]['id'] + '"]';
+      } else {
+        classe = classe + '"' + classesFor[i]['id'] + '",';
+      }
+    }
+    try {
+      const res = await addOnlineExam(
+        title,
+        description,
+        classe,
+        user['id'],
+        subject,
+        date,
+        endDate,
+        exam,
+      );
+      if (res == 'New record created successfully') {
+        Alert.alert('Exam submission', 'Exam submitted successfully !', [
+          {
+            text: 'OK',
+            onPress: () => {
+              props.navigation.navigate('OnlineExams');
+            },
+          },
+        ]);
+      }
+    } catch (error) {
+      alert(error);
     }
   };
 
@@ -213,6 +253,14 @@ export default function AddOnlineExam(props) {
                 }
               }
             }
+            getMyClassSubjects(value);
+          }}
+        />
+        <Dropdown
+          label="Exam subject"
+          data={subjects}
+          onChangeText={(value) => {
+            setSubject(value);
           }}
         />
         <View
@@ -249,6 +297,80 @@ export default function AddOnlineExam(props) {
             <Text />
           </View>
         ) : null}
+        <TextInput
+          placeholder="Exam Title"
+          style={styles.input2}
+          onChangeText={(value) => {
+            setTitle(value);
+          }}
+        />
+        <TextInput
+          placeholder="Exam Description"
+          style={styles.input}
+          onChangeText={(value) => {
+            setDescription(value);
+          }}
+        />
+        <DatePicker
+          style={{width: '100%', marginBottom: 10}}
+          date={date}
+          mode="date"
+          placeholder="select exam date"
+          format="MM/DD/YYYY"
+          maxDate={12 + '/' + 31 + '/' + new Date().getFullYear()}
+          minDate={
+            new Date().getMonth() +
+            1 +
+            '/' +
+            new Date().getDate() +
+            '/' +
+            new Date().getFullYear()
+          }
+          confirmBtnText="Confirm"
+          cancelBtnText="Cancel"
+          customStyles={{
+            dateIcon: {
+              position: 'absolute',
+              left: 0,
+              top: 4,
+              marginLeft: 8,
+            },
+            dateInput: {borderColor: 'lightblue', marginLeft: 50},
+          }}
+          onDateChange={(value) => {
+            setDate(value);
+          }}
+        />
+        <DatePicker
+          style={{width: '100%', marginBottom: 10}}
+          date={endDate}
+          mode="date"
+          placeholder="select exam end date"
+          format="MM/DD/YYYY"
+          maxDate={12 + '/' + 31 + '/' + new Date().getFullYear()}
+          minDate={
+            new Date().getMonth() +
+            1 +
+            '/' +
+            new Date().getDate() +
+            '/' +
+            new Date().getFullYear()
+          }
+          confirmBtnText="Confirm"
+          cancelBtnText="Cancel"
+          customStyles={{
+            dateIcon: {
+              position: 'absolute',
+              left: 0,
+              top: 4,
+              marginLeft: 8,
+            },
+            dateInput: {borderColor: 'lightblue', marginLeft: 50},
+          }}
+          onDateChange={(value) => {
+            setEndDate(value);
+          }}
+        />
         <View style={styles.question}>
           <Text>Question : </Text>
           <TextInput
@@ -437,7 +559,19 @@ export default function AddOnlineExam(props) {
             <Button
               title="submit exam"
               onPress={() => {
-                submitExam();
+                if (classesFor.length > 0) {
+                  if (subject) {
+                    if (title && description && date && endDate) {
+                      submitExam();
+                    } else {
+                      Alert.alert('Exam submission', 'Enter exam details !');
+                    }
+                  } else {
+                    Alert.alert('Exam submission', 'Enter exam subject !');
+                  }
+                } else {
+                  Alert.alert('Exam submission', 'Enter exam class !');
+                }
               }}
             />
           </View>
@@ -479,6 +613,15 @@ const styles = StyleSheet.create({
     height: 80,
     width: '100%',
     textAlignVertical: 'top',
+    marginTop: 10,
+    marginBottom: 15,
+    padding: 5,
+  },
+  input2: {
+    borderColor: 'lightblue',
+    borderWidth: 1,
+    height: 50,
+    width: '100%',
     marginTop: 10,
     marginBottom: 15,
     padding: 5,

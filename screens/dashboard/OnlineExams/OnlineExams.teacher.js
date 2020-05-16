@@ -17,6 +17,8 @@ import {Dropdown} from 'react-native-material-dropdown';
 import {
   fetchTeacherOnlineExams,
   fetchTeacherSubjectOnlineExams,
+  fetchExamMarks,
+  deleteOnlineExam,
 } from '../api/fetchOnlineExams';
 
 export default function OnlineExams(props) {
@@ -79,6 +81,33 @@ export default function OnlineExams(props) {
       setOnlineExams(res);
     } else {
       setOnlineExams();
+    }
+  };
+
+  const examMarks = async (exam) => {
+    try {
+      const res = await fetchExamMarks(exam.id);
+      if (res != 'No exam marks found!') {
+        props.properties.navigation.navigate('OnlineExamMarks', {
+          exam: exam,
+          marks: res,
+        });
+      } else {
+        alert(res);
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const deleteExam = async (examId) => {
+    try {
+      const res = await deleteOnlineExam(examId);
+      if (res == 'Record(s) deleted successfully') {
+        Alert.alert('Delete Exam', 'Exam deleted successfully !');
+      }
+    } catch (error) {
+      alert(error);
     }
   };
 
@@ -149,13 +178,21 @@ export default function OnlineExams(props) {
                     <Text>{item.examDate}</Text>
                     <Text style={{color: 'red'}}>{item.ExamEndDate}</Text>
                     <View style={{flexDirection: 'row'}}>
-                      <TouchableOpacity style={styles.opacity}>
+                      <TouchableOpacity
+                        style={styles.opacity}
+                        onPress={() => {
+                          examMarks(item);
+                        }}>
                         <Text>Marks</Text>
                       </TouchableOpacity>
                       <TouchableOpacity style={styles.opacity}>
                         <Text>Edit</Text>
                       </TouchableOpacity>
-                      <TouchableOpacity style={styles.opacity}>
+                      <TouchableOpacity
+                        style={styles.opacity}
+                        onPress={() => {
+                          deleteExam(item.id);
+                        }}>
                         <Text>Delete</Text>
                       </TouchableOpacity>
                     </View>
@@ -170,13 +207,21 @@ export default function OnlineExams(props) {
                     <Text>{item.examDate}</Text>
                     <Text style={{color: 'green'}}>{item.ExamEndDate}</Text>
                     <View style={{flexDirection: 'row'}}>
-                      <TouchableOpacity style={styles.opacity}>
+                      <TouchableOpacity
+                        style={styles.opacity}
+                        onPress={() => {
+                          examMarks(item);
+                        }}>
                         <Text>Marks</Text>
                       </TouchableOpacity>
                       <TouchableOpacity style={styles.opacity}>
                         <Text>Edit</Text>
                       </TouchableOpacity>
-                      <TouchableOpacity style={styles.opacity}>
+                      <TouchableOpacity
+                        style={styles.opacity}
+                        onPress={() => {
+                          deleteExam(item.id);
+                        }}>
                         <Text>Delete</Text>
                       </TouchableOpacity>
                     </View>
@@ -191,13 +236,21 @@ export default function OnlineExams(props) {
                     <Text>{item.examDate}</Text>
                     <Text style={{color: 'green'}}>{item.ExamEndDate}</Text>
                     <View style={{flexDirection: 'row'}}>
-                      <TouchableOpacity style={styles.opacity}>
+                      <TouchableOpacity
+                        style={styles.opacity}
+                        onPress={() => {
+                          examMarks(item);
+                        }}>
                         <Text>Marks</Text>
                       </TouchableOpacity>
                       <TouchableOpacity style={styles.opacity}>
                         <Text>Edit</Text>
                       </TouchableOpacity>
-                      <TouchableOpacity style={styles.opacity}>
+                      <TouchableOpacity
+                        style={styles.opacity}
+                        onPress={() => {
+                          deleteExam(item.id);
+                        }}>
                         <Text>Delete</Text>
                       </TouchableOpacity>
                     </View>
