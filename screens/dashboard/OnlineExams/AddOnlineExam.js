@@ -181,10 +181,10 @@ export default function AddOnlineExam(props) {
     for (let i = 0; i < props.navigation.state.params.classes.length; i++) {
       clsss.push(props.navigation.state.params.classes[i]);
     }
-    clsss.unshift({
+    /*clsss.unshift({
       label: 'All classes',
       value: 0,
-    });
+    });*/
     setClasses(clsss);
   }, []);
 
@@ -219,7 +219,7 @@ export default function AddOnlineExam(props) {
           label="Add classes"
           data={classes}
           onChangeText={(value) => {
-            if (value == 0) {
+            /*if (value == 0) {
               let clsss = [];
               for (let i = 1; i < classes.length; i++) {
                 clsss.push({
@@ -228,32 +228,40 @@ export default function AddOnlineExam(props) {
                 });
               }
               setClassesFor(clsss);
-            } else {
-              if (classesFor.length > 0) {
-                let b = 0;
-                for (let i = 0; i < classesFor.length; i++) {
-                  if (classesFor[i]['id'] == value) {
-                    b = 1;
-                  }
+
+              for (let i = 1; i < classes.length; i++) {
+                getMyClassSubjects(classes[i].value);
+              }
+            } else {*/
+            if (classesFor.length > 0) {
+              let b = 0;
+              for (let i = 0; i < classesFor.length; i++) {
+                if (classesFor[i]['id'] == value) {
+                  b = 1;
                 }
-                if (b == 0) {
-                  for (let i = 1; i < classes.length; i++) {
-                    if (classes[i]['value'] == value) {
-                      addClassHandler(value, classes[i]['label']);
-                    }
-                  }
-                } else {
-                  Alert.alert('Exam classes', 'Class added already !');
-                }
-              } else {
-                for (let i = 1; i < classes.length; i++) {
+              }
+              if (b == 0) {
+                //for (let i = 1; i < classes.length; i++) {
+                for (let i = 0; i < classes.length; i++) {
                   if (classes[i]['value'] == value) {
                     addClassHandler(value, classes[i]['label']);
+                    getMyClassSubjects(value);
                   }
+                }
+              } else {
+                Alert.alert('Exam classes', 'Class added already !');
+              }
+            } else {
+              //for (let i = 1; i < classes.length; i++) {
+              for (let i = 0; i < classes.length; i++) {
+                if (classes[i]['value'] == value) {
+                  addClassHandler(value, classes[i]['label']);
+                  getMyClassSubjects(value);
                 }
               }
             }
-            getMyClassSubjects(value);
+
+            // }
           }}
         />
         <Dropdown

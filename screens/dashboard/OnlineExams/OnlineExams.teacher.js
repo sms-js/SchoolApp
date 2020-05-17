@@ -185,7 +185,17 @@ export default function OnlineExams(props) {
                         }}>
                         <Text>Marks</Text>
                       </TouchableOpacity>
-                      <TouchableOpacity style={styles.opacity}>
+                      <TouchableOpacity
+                        style={styles.opacity}
+                        onPress={() => {
+                          props.properties.navigation.navigate(
+                            'EditOnlineExam',
+                            {
+                              classes: classes,
+                              exam: item,
+                            },
+                          );
+                        }}>
                         <Text>Edit</Text>
                       </TouchableOpacity>
                       <TouchableOpacity
@@ -214,7 +224,17 @@ export default function OnlineExams(props) {
                         }}>
                         <Text>Marks</Text>
                       </TouchableOpacity>
-                      <TouchableOpacity style={styles.opacity}>
+                      <TouchableOpacity
+                        style={styles.opacity}
+                        onPress={() => {
+                          props.properties.navigation.navigate(
+                            'EditOnlineExam',
+                            {
+                              classes: classes,
+                              exam: item,
+                            },
+                          );
+                        }}>
                         <Text>Edit</Text>
                       </TouchableOpacity>
                       <TouchableOpacity
@@ -243,7 +263,17 @@ export default function OnlineExams(props) {
                         }}>
                         <Text>Marks</Text>
                       </TouchableOpacity>
-                      <TouchableOpacity style={styles.opacity}>
+                      <TouchableOpacity
+                        style={styles.opacity}
+                        onPress={() => {
+                          props.properties.navigation.navigate(
+                            'EditOnlineExam',
+                            {
+                              classes: classes,
+                              exam: item,
+                            },
+                          );
+                        }}>
                         <Text>Edit</Text>
                       </TouchableOpacity>
                       <TouchableOpacity

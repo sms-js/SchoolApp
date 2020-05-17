@@ -223,6 +223,15 @@ export async function fetchTeacherOnlineExams(classId, teacherId, date) {
       //console.log(responseJson['online exams']);
       let exams = responseJson['online exams'];
       for (let i = 0; i < exams.length; i++) {
+        let classes = [];
+        let examClass = responseJson['online exams'][i]['examClass'];
+        examClass = examClass.extract('[', ']');
+        while (examClass != '') {
+          let classe = examClass.extract('"', '"');
+          examClass = examClass.substring(classe.length + 3);
+          classes.push(classe);
+        }
+        exams[i]['examClass'] = classes;
         let exam = [];
         let examQuestion = responseJson['online exams'][i]['examQuestion'];
         examQuestion = examQuestion.extract('[', ']');
@@ -313,6 +322,15 @@ export async function fetchTeacherSubjectOnlineExams(
       //console.log(responseJson['online exams']);
       let exams = responseJson['online exams'];
       for (let i = 0; i < exams.length; i++) {
+        let classes = [];
+        let examClass = responseJson['online exams'][i]['examClass'];
+        examClass = examClass.extract('[', ']');
+        while (examClass != '') {
+          let classe = examClass.extract('"', '"');
+          examClass = examClass.substring(classe.length + 3);
+          classes.push(classe);
+        }
+        exams[i]['examClass'] = classes;
         let exam = [];
         let examQuestion = responseJson['online exams'][i]['examQuestion'];
         examQuestion = examQuestion.extract('[', ']');
@@ -510,7 +528,7 @@ export async function addOnlineExam(
   examQuestion,
 ) {
   try {
-    const response = await fetch(BASE_URL + '/OnlineExamPassController.php', {
+    const response = await fetch(BASE_URL + '/OnlineExamInsertController.php', {
       method: 'post',
       header: {
         Accept: 'application/json',
@@ -657,6 +675,48 @@ export async function deleteOnlineExam(examId) {
     } else {
       //return 'error !';
       alert(responseJson['delete status']['error']);
+    }
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function editOnlineExam(
+  examTitle,
+  examDescription,
+  examClass,
+  examTeacher,
+  examSubject,
+  examDate,
+  ExamEndDate,
+  examQuestion,
+) {
+  try {
+    const response = await fetch(BASE_URL + '/OnlineExamUpdateController.php', {
+      method: 'post',
+      header: {
+        Accept: 'application/json',
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        view: 'update',
+        examTitle: examTitle,
+        examDescription: examDescription,
+        examClass: examClass,
+        examTeacher: examTeacher,
+        examSubject: examSubject,
+        examDate: examDate,
+        ExamEndDate: ExamEndDate,
+        examQuestion: examQuestion,
+      }),
+    });
+    const responseJson = await response.json();
+    if (response.ok) {
+      console.log(responseJson['update status']);
+      return responseJson['update status'];
+    } else {
+      //return 'error !';
+      alert(responseJson['update status']['error']);
     }
   } catch (error) {
     return error;
