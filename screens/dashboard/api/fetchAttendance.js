@@ -98,19 +98,20 @@ export async function updateAttendance(
 ) {
   try {
     const response = await fetch(BASE_URL + '/AttendanceUpdateController.php', {
-      method: 'post',
+      method: 'PUT',
       header: {
+        //'HTTP-ACCEPT': 'application/json',
         Accept: 'application/json',
         'Content-type': 'application/json',
       },
       body: JSON.stringify({
         view: 'update',
         id: id,
-        classId: classId,
+        status: status,
+        /*classId: classId,
         subjectId: subjectId,
         studentId: studentId,
-        date: date,
-        status: status,
+        date: date,*/
       }),
     });
     const responseJson = await response.json();
@@ -118,6 +119,7 @@ export async function updateAttendance(
       console.log(responseJson['update status']);
       return responseJson['update status'];
     } else {
+      console.log(responseJson['update status']['error']);
       return responseJson['update status']['error'];
     }
   } catch (error) {

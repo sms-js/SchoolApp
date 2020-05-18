@@ -382,6 +382,7 @@ export default function AddOnlineExam(props) {
         <View style={styles.question}>
           <Text>Question : </Text>
           <TextInput
+            multiline={true}
             style={styles.input}
             placeholder={'Question'}
             onChangeText={(value) => {

@@ -658,7 +658,7 @@ export async function fetchExamMarks(examId) {
 export async function deleteOnlineExam(examId) {
   try {
     const response = await fetch(BASE_URL + '/OnlineExamDeleteController.php', {
-      method: 'post',
+      method: 'delete',
       header: {
         Accept: 'application/json',
         'Content-type': 'application/json',

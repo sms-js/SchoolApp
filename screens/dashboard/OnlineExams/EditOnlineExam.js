@@ -41,6 +41,7 @@ export default function ControlOnlineExams(props) {
   const [ans3, setAns3] = useState('');
   const [ans4, setAns4] = useState('');
   const [Tans, setTans] = useState('');
+  const [test, setTest] = useState('2');
 
   const removeClassHandler = (id) => {
     setClassesFor((prevClasses) => {
@@ -66,16 +67,24 @@ export default function ControlOnlineExams(props) {
     });
   };
 
-  const removeQuestionHandler = (id) => {
+  const removeQuestionHandler = (index) => {
     setQuestions((prevQuestions) => {
-      return prevQuestions.filter((question) => question.id != id);
+      return prevQuestions.filter(
+        (question) => prevQuestions.indexOf(question) != index,
+      );
     });
   };
 
   const removeAllQuestionsHandler = () => {
     setQuestions((prevQuestions) => {
-      return prevQuestions.filter((question) => question.id === 0);
+      return prevQuestions.filter(
+        (question) => prevQuestions.indexOf(question) === prevQuestions.length,
+      );
     });
+  };
+
+  const TanswerHandler = async (index, Tanswer) => {
+    questions[index]['Tanswer'] = Tanswer;
   };
 
   const addQuestionHandler = (
@@ -437,7 +446,7 @@ export default function ControlOnlineExams(props) {
             onPress={(value) => {
               setTans(value);
             }}
-            initial={Tans}
+            initial={0}
           />
           <Text />
           <Button
@@ -510,51 +519,81 @@ export default function ControlOnlineExams(props) {
                 <Text>Question : </Text>
                 <TextInput
                   style={styles.input}
-                  value={item.questionText}
-                  onChangeText={(value) => {}}
+                  defaultValue={item.questionText}
+                  onChangeText={(value) => {
+                    item.questionText = value;
+                  }}
                 />
                 <Text>Answer 1 : </Text>
                 <TextInput
                   style={styles.input}
-                  value={item.answer1}
-                  onChangeText={(value) => {}}
+                  defaultValue={item.answer1}
+                  onChangeText={(value) => {
+                    item.answer1 = value;
+                  }}
                 />
                 <Text>Answer 2 : </Text>
                 <TextInput
                   style={styles.input}
-                  value={item.answer2}
-                  onChangeText={(value) => {}}
+                  defaultValue={item.answer2}
+                  onChangeText={(value) => {
+                    item.answer2 = value;
+                  }}
                 />
                 <Text>Answer 3 : </Text>
                 <TextInput
                   style={styles.input}
-                  value={item.answer3}
-                  onChangeText={(value) => {}}
+                  defaultValue={item.answer3}
+                  onChangeText={(value) => {
+                    item.answer3 = value;
+                  }}
                 />
                 <Text>Answer 4 : </Text>
                 <TextInput
                   style={styles.input}
-                  value={item.answer4}
-                  onChangeText={(value) => {}}
+                  defaultValue={item.answer4}
+                  onChangeText={(value) => {
+                    item.answer4 = value;
+                  }}
                 />
                 <Text>Correct answer : </Text>
-                <Picker
-                  selectedValue={'js'}
-                  onValueChange={(itemValue, itemIndex) => {}}>
-                  <Picker.Item label="Java" value="java" />
-                  <Picker.Item label="JavaScript" value="js" />
-                </Picker>
+                <RadioForm
+                  radio_props={[
+                    {label: 'Answer1', value: 1},
+                    {label: 'Answer2', value: 2},
+                    {label: 'Answer3', value: 3},
+                    {label: 'Answer4', value: 4},
+                  ]}
+                  onPress={(value) => {
+                    item.Tanswer = value;
+                  }}
+                  initial={item.Tanswer}
+                />
                 <Text />
-                <Button title="remove question" onPress={() => {}} />
+                <Button
+                  title="remove question"
+                  onPress={() => {
+                    removeQuestionHandler(questions.indexOf(item));
+                  }}
+                />
               </View>
             )}
           />
+          {questions.length > 1 ? (
+            <Button
+              title="remove all"
+              onPress={() => {
+                removeAllQuestionsHandler();
+              }}
+            />
+          ) : null}
         </View>
         <Text />
         <Button
           title="show"
           onPress={() => {
-            console.log(props.navigation.state.params);
+            alert(questions[0]['questionText']);
+            //console.log(props.navigation.state.params);
           }}
         />
         <Text />
@@ -608,3 +647,15 @@ const styles = StyleSheet.create({
     padding: 5,
   },
 });
+/*
+ <Picker
+                  selectedValue={item.Tanswer}
+                  onValueChange={(itemValue) => {
+                    item.Tanswer = itemValue;
+                  }}>
+                  <Picker.Item label="Answer 1" value="1" />
+                  <Picker.Item label="Answer 2" value="2" />
+                  <Picker.Item label="Answer 3" value="3" />
+                  <Picker.Item label="Answer 4" value="4" />
+                </Picker>
+*/
