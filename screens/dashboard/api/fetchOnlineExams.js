@@ -682,6 +682,7 @@ export async function deleteOnlineExam(examId) {
 }
 
 export async function editOnlineExam(
+  examId,
   examTitle,
   examDescription,
   examClass,
@@ -692,24 +693,28 @@ export async function editOnlineExam(
   examQuestion,
 ) {
   try {
-    const response = await fetch(BASE_URL + '/OnlineExamUpdateController.php', {
-      method: 'post',
-      header: {
-        Accept: 'application/json',
-        'Content-type': 'application/json',
+    const response = await fetch(
+      BASE_URL + '/OnlineExamsUpdateController.php',
+      {
+        method: 'PUT',
+        header: {
+          Accept: 'application/json',
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          view: 'update',
+          examId: examId,
+          examTitle: examTitle,
+          examDescription: examDescription,
+          examClass: examClass,
+          examTeacher: examTeacher,
+          examSubject: examSubject,
+          examDate: examDate,
+          ExamEndDate: ExamEndDate,
+          examQuestion: examQuestion,
+        }),
       },
-      body: JSON.stringify({
-        view: 'update',
-        examTitle: examTitle,
-        examDescription: examDescription,
-        examClass: examClass,
-        examTeacher: examTeacher,
-        examSubject: examSubject,
-        examDate: examDate,
-        ExamEndDate: ExamEndDate,
-        examQuestion: examQuestion,
-      }),
-    });
+    );
     const responseJson = await response.json();
     if (response.ok) {
       console.log(responseJson['update status']);

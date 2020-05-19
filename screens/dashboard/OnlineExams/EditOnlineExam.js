@@ -41,7 +41,7 @@ export default function ControlOnlineExams(props) {
   const [ans3, setAns3] = useState('');
   const [ans4, setAns4] = useState('');
   const [Tans, setTans] = useState('');
-  const [test, setTest] = useState('2');
+  //const [test, setTest] = useState('2');
 
   const removeClassHandler = (id) => {
     setClassesFor((prevClasses) => {
@@ -83,12 +83,12 @@ export default function ControlOnlineExams(props) {
     });
   };
 
-  const TanswerHandler = async (index, Tanswer) => {
+  /*const TanswerHandler = async (index, Tanswer) => {
     questions[index]['Tanswer'] = Tanswer;
-  };
+  };*/
 
   const addQuestionHandler = (
-    id,
+    //id,
     questionText,
     answer1,
     answer2,
@@ -99,19 +99,27 @@ export default function ControlOnlineExams(props) {
     setQuestions((prevQuestions) => {
       return [
         ...prevQuestions,
-        {
+        ,
+        /*{
           id: id,
           questionText: questionText,
           answers: [
-            /* {answer1: answer1},
+             {answer1: answer1},
             {answer2: answer2},
             {answer3: answer3},
-            {answer4: answer4},*/
+            {answer4: answer4},
             answer1,
             answer2,
             answer3,
             answer4,
           ],
+          Tanswer: Tanswer,
+        }*/ {
+          questionText: questionText,
+          answer1: answer1,
+          answer2: answer2,
+          answer3: answer3,
+          answer4: answer4,
           Tanswer: Tanswer,
         },
       ];
@@ -136,10 +144,10 @@ export default function ControlOnlineExams(props) {
     for (let i = 0; i < questions.length; i++) {
       if (i == questions.length - 1) {
         exam = exam + '{"title":"' + questions[i]['questionText'] + '",';
-        for (let j = 0; j < questions[i]['answers'].length; j++) {
-          exam =
-            exam + '"ans' + (j + 1) + '":"' + questions[i]['answers'][j] + '",';
-        }
+        exam = exam + '"ans1' + '":"' + questions[i]['answer1'] + '",';
+        exam = exam + '"ans2' + '":"' + questions[i]['answer2'] + '",';
+        exam = exam + '"ans3' + '":"' + questions[i]['answer3'] + '",';
+        exam = exam + '"ans4' + '":"' + questions[i]['answer4'] + '",';
         exam = exam + '"Tans":"' + questions[i]['Tanswer'] + '"}]';
       } else {
         exam = exam + '{"title":"' + questions[i]['questionText'] + '",';
@@ -153,13 +161,23 @@ export default function ControlOnlineExams(props) {
     let classe = '[';
     for (let i = 0; i < classesFor.length; i++) {
       if (i == classesFor.length - 1) {
-        classe = classe + '"' + classesFor[i]['id'] + '"]';
+        classe = classe + '"' + classesFor[i]['value'] + '"]';
       } else {
-        classe = classe + '"' + classesFor[i]['id'] + '",';
+        classe = classe + '"' + classesFor[i]['value'] + '",';
       }
     }
+    /*console.log(props.navigation.state.params.exam.id);
+    console.log(title);
+    console.log(description);
+    console.log(classe);
+    console.log(user['id']);
+    console.log(subject);
+    console.log(date);
+    console.log(endDate);
+    console.log(exam);*/
     try {
       const res = await editOnlineExam(
+        props.navigation.state.params.exam.id,
         title,
         description,
         classe,
@@ -169,8 +187,8 @@ export default function ControlOnlineExams(props) {
         endDate,
         exam,
       );
-      if (res == 'New record created successfully') {
-        Alert.alert('Exam submission', 'Exam submitted successfully !', [
+      if (res == 'Record(s) updated successfully') {
+        Alert.alert('Exam update', 'Exam updated successfully !', [
           {
             text: 'OK',
             onPress: () => {
@@ -206,6 +224,7 @@ export default function ControlOnlineExams(props) {
     setTitle(props.navigation.state.params.exam.examTitle);
     setDescription(props.navigation.state.params.exam.examDescription);
     setQuestions(props.navigation.state.params.exam.examQuestion);
+    setSubject(props.navigation.state.params.exam.subjectId);
     /*setQuestionTxt(
       props.navigation.state.params.exam.examQuestion[0].questionText,
     );*/
@@ -446,7 +465,7 @@ export default function ControlOnlineExams(props) {
             onPress={(value) => {
               setTans(value);
             }}
-            initial={0}
+            initial={-1}
           />
           <Text />
           <Button
@@ -474,7 +493,7 @@ export default function ControlOnlineExams(props) {
                           );
                         } else {
                           addQuestionHandler(
-                            questions.length + 1,
+                            //questions.length + 1,
                             questionTxt,
                             ans1,
                             ans2,
@@ -511,89 +530,143 @@ export default function ControlOnlineExams(props) {
             }}
           />
         </View>
-        <View>
-          <FlatList
-            data={questions}
-            renderItem={({item}) => (
-              <View style={styles.question}>
-                <Text>Question : </Text>
-                <TextInput
-                  style={styles.input}
-                  defaultValue={item.questionText}
-                  onChangeText={(value) => {
-                    item.questionText = value;
-                  }}
-                />
-                <Text>Answer 1 : </Text>
-                <TextInput
-                  style={styles.input}
-                  defaultValue={item.answer1}
-                  onChangeText={(value) => {
-                    item.answer1 = value;
-                  }}
-                />
-                <Text>Answer 2 : </Text>
-                <TextInput
-                  style={styles.input}
-                  defaultValue={item.answer2}
-                  onChangeText={(value) => {
-                    item.answer2 = value;
-                  }}
-                />
-                <Text>Answer 3 : </Text>
-                <TextInput
-                  style={styles.input}
-                  defaultValue={item.answer3}
-                  onChangeText={(value) => {
-                    item.answer3 = value;
-                  }}
-                />
-                <Text>Answer 4 : </Text>
-                <TextInput
-                  style={styles.input}
-                  defaultValue={item.answer4}
-                  onChangeText={(value) => {
-                    item.answer4 = value;
-                  }}
-                />
-                <Text>Correct answer : </Text>
-                <RadioForm
-                  radio_props={[
-                    {label: 'Answer1', value: 1},
-                    {label: 'Answer2', value: 2},
-                    {label: 'Answer3', value: 3},
-                    {label: 'Answer4', value: 4},
-                  ]}
-                  onPress={(value) => {
-                    item.Tanswer = value;
-                  }}
-                  initial={item.Tanswer}
-                />
-                <Text />
-                <Button
-                  title="remove question"
-                  onPress={() => {
-                    removeQuestionHandler(questions.indexOf(item));
-                  }}
-                />
-              </View>
-            )}
+        <FlatList
+          data={questions}
+          renderItem={({item}) => (
+            <View style={styles.question}>
+              <Text>Question : </Text>
+              <TextInput
+                style={styles.input}
+                defaultValue={item.questionText}
+                onChangeText={(value) => {
+                  item.questionText = value;
+                }}
+              />
+              <Text>Answer 1 : </Text>
+              <TextInput
+                style={styles.input}
+                defaultValue={item.answer1}
+                onChangeText={(value) => {
+                  item.answer1 = value;
+                }}
+              />
+              <Text>Answer 2 : </Text>
+              <TextInput
+                style={styles.input}
+                defaultValue={item.answer2}
+                onChangeText={(value) => {
+                  item.answer2 = value;
+                }}
+              />
+              <Text>Answer 3 : </Text>
+              <TextInput
+                style={styles.input}
+                defaultValue={item.answer3}
+                onChangeText={(value) => {
+                  item.answer3 = value;
+                }}
+              />
+              <Text>Answer 4 : </Text>
+              <TextInput
+                style={styles.input}
+                defaultValue={item.answer4}
+                onChangeText={(value) => {
+                  item.answer4 = value;
+                }}
+              />
+              <Text>Correct answer : </Text>
+              <Text>Answer{item.Tanswer}</Text>
+              <RadioForm
+                radio_props={[
+                  {label: 'Answer1', value: 1},
+                  {label: 'Answer2', value: 2},
+                  {label: 'Answer3', value: 3},
+                  {label: 'Answer4', value: 4},
+                ]}
+                onPress={(value) => {
+                  item.Tanswer = value;
+                }}
+                initial={item.Tanswer}
+              />
+              <Text />
+              <Button
+                title="remove question"
+                onPress={() => {
+                  removeQuestionHandler(questions.indexOf(item));
+                }}
+              />
+            </View>
+          )}
+        />
+        {questions.length > 1 ? (
+          <Button
+            title="remove all"
+            onPress={() => {
+              removeAllQuestionsHandler();
+            }}
           />
-          {questions.length > 1 ? (
-            <Button
-              title="remove all"
-              onPress={() => {
-                removeAllQuestionsHandler();
-              }}
-            />
-          ) : null}
-        </View>
+        ) : null}
         <Text />
         <Button
-          title="show"
+          title="update exam"
           onPress={() => {
-            alert(questions[0]['questionText']);
-            //console.log(props.navigation.state.params);
+            //submitExam();
+            /*console.log('////////////////////////');
+            console.log(props.navigation.state.params.exam.ExamEndDate);
+            console.log(endDate);
+            console.log('////////////////////////');
+            console.log(props.navigation.state.params.exam.examDate);
+            console.log(date);
+            console.log('////////////////////////');
+            console.log(props.navigation.state.params.exam.examTitle);
+            console.log(title);
+            console.log('////////////////////////');
+            console.log(props.navigation.state.params.exam.examDescription);
+            console.log(description);
+            console.log('////////////////////////');
+            console.log(props.navigation.state.params.exam.subjectId);
+            console.log(subject);
+            console.log('////////////////////////');
+            console.log(props.navigation.state.params.exam.examClass);
+            console.log(classesFor.map((obj) => obj.value));
+            console.log('////////////////////////');
+            console.log(props.navigation.state.params.exam.examQuestion);
+            console.log(questions);*/
+            let b = 1;
+            for (
+              let i = 0;
+              i < props.navigation.state.params.exam.examQuestion.length;
+              i++
+            ) {
+              if (
+                classesFor[i]['value'] !=
+                props.navigation.state.params.exam.examQuestion[i]
+              ) {
+                b = 0;
+              }
+            }
+            if (
+              props.navigation.state.params.exam.ExamEndDate === endDate &&
+              props.navigation.state.params.exam.subjectId === subject &&
+              // props.navigation.state.params.exam.examClass === classe &&
+              b == 0 &&
+              props.navigation.state.params.exam.examDate === date &&
+              props.navigation.state.params.exam.examDescription ===
+                description &&
+              props.navigation.state.params.exam.examTitle === title &&
+              props.navigation.state.params.exam.examQuestion === questions
+            ) {
+              Alert.alert('Exam update', 'No changes applied !');
+            } else {
+              submitExam();
+            }
+          }}
+        />
+        <Text />
+        <Button
+          title="qs"
+          onPress={() => {
+            console.log(questions);
           }}
         />
         <Text />
