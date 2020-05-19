@@ -44,13 +44,6 @@ export default function Polls(props) {
               fetchPolls(user['role']);
             }}
           />
-          <Text />
-          <Button
-            title="Login Screen"
-            onPress={() => {
-              props.navigation.navigate('Login');
-            }}
-          />
         </View>
       </ScrollView>
     </View>
