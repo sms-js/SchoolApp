@@ -29,19 +29,16 @@ export default function ControlOnlineExams(props) {
   const [date, setDate] = useState();
   const [endDate, setEndDate] = useState();
   const [classes, setClasses] = useState();
-  //const [classe, setClasse] = useState();
   const [classesFor, setClassesFor] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [subject, setSubject] = useState();
   const [questions, setQuestions] = useState([]);
   const [questionTxt, setQuestionTxt] = useState('');
-  //const [questionId, setQuestionId] = useState('');
   const [ans1, setAns1] = useState('');
   const [ans2, setAns2] = useState('');
   const [ans3, setAns3] = useState('');
   const [ans4, setAns4] = useState('');
   const [Tans, setTans] = useState('');
-  //const [test, setTest] = useState('2');
 
   const removeClassHandler = (id) => {
     setClassesFor((prevClasses) => {
@@ -83,12 +80,7 @@ export default function ControlOnlineExams(props) {
     });
   };
 
-  /*const TanswerHandler = async (index, Tanswer) => {
-    questions[index]['Tanswer'] = Tanswer;
-  };*/
-
   const addQuestionHandler = (
-    //id,
     questionText,
     answer1,
     answer2,
@@ -99,22 +91,7 @@ export default function ControlOnlineExams(props) {
     setQuestions((prevQuestions) => {
       return [
         ...prevQuestions,
-        ,
-        /*{
-          id: id,
-          questionText: questionText,
-          answers: [
-             {answer1: answer1},
-            {answer2: answer2},
-            {answer3: answer3},
-            {answer4: answer4},
-            answer1,
-            answer2,
-            answer3,
-            answer4,
-          ],
-          Tanswer: Tanswer,
-        }*/ {
+        {
           questionText: questionText,
           answer1: answer1,
           answer2: answer2,
@@ -151,10 +128,10 @@ export default function ControlOnlineExams(props) {
         exam = exam + '"Tans":"' + questions[i]['Tanswer'] + '"}]';
       } else {
         exam = exam + '{"title":"' + questions[i]['questionText'] + '",';
-        for (let j = 0; j < questions[i]['answers'].length; j++) {
-          exam =
-            exam + '"ans' + (j + 1) + '":"' + questions[i]['answers'][j] + '",';
-        }
+        exam = exam + '"ans1' + '":"' + questions[i]['answer1'] + '",';
+        exam = exam + '"ans2' + '":"' + questions[i]['answer2'] + '",';
+        exam = exam + '"ans3' + '":"' + questions[i]['answer3'] + '",';
+        exam = exam + '"ans4' + '":"' + questions[i]['answer4'] + '",';
         exam = exam + '"Tans":"' + questions[i]['Tanswer'] + '"},';
       }
     }
@@ -166,15 +143,6 @@ export default function ControlOnlineExams(props) {
         classe = classe + '"' + classesFor[i]['value'] + '",';
       }
     }
-    /*console.log(props.navigation.state.params.exam.id);
-    console.log(title);
-    console.log(description);
-    console.log(classe);
-    console.log(user['id']);
-    console.log(subject);
-    console.log(date);
-    console.log(endDate);
-    console.log(exam);*/
     try {
       const res = await editOnlineExam(
         props.navigation.state.params.exam.id,
@@ -214,10 +182,6 @@ export default function ControlOnlineExams(props) {
         getMyClassSubjects(props.navigation.state.params.classes[i].value);
       }
     }
-    /*clsss.unshift({
-      label: 'All classes',
-      value: 0,
-    });*/
     setClasses(clsss);
     setDate(props.navigation.state.params.exam.examDate);
     setEndDate(props.navigation.state.params.exam.ExamEndDate);
@@ -225,9 +189,6 @@ export default function ControlOnlineExams(props) {
     setDescription(props.navigation.state.params.exam.examDescription);
     setQuestions(props.navigation.state.params.exam.examQuestion);
     setSubject(props.navigation.state.params.exam.subjectId);
-    /*setQuestionTxt(
-      props.navigation.state.params.exam.examQuestion[0].questionText,
-    );*/
   }, []);
 
   return (
@@ -261,20 +222,6 @@ export default function ControlOnlineExams(props) {
           label="Add classes"
           data={classes}
           onChangeText={(value) => {
-            /*if (value == 0) {
-              let clsss = [];
-              for (let i = 1; i < classes.length; i++) {
-                clsss.push({
-                  id: classes[i]['value'],
-                  className: classes[i]['label'],
-                });
-              }
-              setClassesFor(clsss);
-
-              for (let i = 1; i < classes.length; i++) {
-                getMyClassSubjects(classes[i].value);
-              }
-            } else {*/
             if (classesFor.length > 0) {
               let b = 0;
               for (let i = 0; i < classesFor.length; i++) {
@@ -283,7 +230,6 @@ export default function ControlOnlineExams(props) {
                 }
               }
               if (b == 0) {
-                //for (let i = 1; i < classes.length; i++) {
                 for (let i = 0; i < classes.length; i++) {
                   if (classes[i]['value'] == value) {
                     addClassHandler(value, classes[i]['label']);
@@ -294,7 +240,6 @@ export default function ControlOnlineExams(props) {
                 Alert.alert('Exam classes', 'Class added already !');
               }
             } else {
-              //for (let i = 1; i < classes.length; i++) {
               for (let i = 0; i < classes.length; i++) {
                 if (classes[i]['value'] == value) {
                   addClassHandler(value, classes[i]['label']);
@@ -302,8 +247,6 @@ export default function ControlOnlineExams(props) {
                 }
               }
             }
-
-            // }
           }}
         />
         <Dropdown
@@ -492,8 +435,30 @@ export default function ControlOnlineExams(props) {
                             'Select correct answer !',
                           );
                         } else {
-                          addQuestionHandler(
-                            //questions.length + 1,
+                          let nq = [];
+                          for (let i = 0; i < questions.length; i++) {
+                            nq.push(questions[i]);
+                          }
+                          nq.push({
+                            questionText: questionTxt,
+                            answer1: ans1,
+                            answer2: ans2,
+                            answer3: ans3,
+                            answer4: ans4,
+                            Tanswer: Tans,
+                          });
+                          setQuestions(nq);
+                          setQuestionTxt('');
+                          setAns1('');
+                          setAns2('');
+                          setAns3('');
+                          setAns4('');
+                          setTans('');
+                          Alert.alert(
+                            'Add Question',
+                            'question added successfully!',
+                          );
+                          /*addQuestionHandler(
                             questionTxt,
                             ans1,
                             ans2,
@@ -507,7 +472,7 @@ export default function ControlOnlineExams(props) {
                           setAns3('');
                           setAns4('');
                           setTans('');
-                          /*alert(
+                          alert(
                             'Question : ' +
                               questionTxt +
                               '\nAnswer 1 : ' +
@@ -586,7 +551,7 @@ export default function ControlOnlineExams(props) {
                 onPress={(value) => {
                   item.Tanswer = value;
                 }}
-                initial={item.Tanswer}
+                initial={item.Tanswer - 1}
               />
               <Text />
               <Button
@@ -610,28 +575,6 @@ export default function ControlOnlineExams(props) {
         <Button
           title="update exam"
           onPress={() => {
-            //submitExam();
-            /*console.log('////////////////////////');
-            console.log(props.navigation.state.params.exam.ExamEndDate);
-            console.log(endDate);
-            console.log('////////////////////////');
-            console.log(props.navigation.state.params.exam.examDate);
-            console.log(date);
-            console.log('////////////////////////');
-            console.log(props.navigation.state.params.exam.examTitle);
-            console.log(title);
-            console.log('////////////////////////');
-            console.log(props.navigation.state.params.exam.examDescription);
-            console.log(description);
-            console.log('////////////////////////');
-            console.log(props.navigation.state.params.exam.subjectId);
-            console.log(subject);
-            console.log('////////////////////////');
-            console.log(props.navigation.state.params.exam.examClass);
-            console.log(classesFor.map((obj) => obj.value));
-            console.log('////////////////////////');
-            console.log(props.navigation.state.params.exam.examQuestion);
-            console.log(questions);*/
             let b = 1;
             for (
               let i = 0;
@@ -648,7 +591,6 @@ export default function ControlOnlineExams(props) {
             if (
               props.navigation.state.params.exam.ExamEndDate === endDate &&
               props.navigation.state.params.exam.subjectId === subject &&
-              // props.navigation.state.params.exam.examClass === classe &&
               b == 0 &&
               props.navigation.state.params.exam.examDate === date &&
               props.navigation.state.params.exam.examDescription ===
@@ -660,13 +602,6 @@ export default function ControlOnlineExams(props) {
             } else {
               submitExam();
             }
-          }}
-        />
-        <Text />
-        <Button
-          title="qs"
-          onPress={() => {
-            console.log(questions);
           }}
         />
         <Text />
