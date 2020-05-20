@@ -1,5 +1,5 @@
-import React from 'react';
-import {Text, ScrollView, View, Button} from 'react-native';
+import React, {useState} from 'react';
+import {Text, ScrollView, View, Button, Modal, Alert} from 'react-native';
 import {Header, Left, Right, Icon} from 'native-base';
 import {fetchPollsForAll, fetchUserPolls, fetchPolls} from './api/fetchPolls';
 import {useAuth} from '../../context/Authentication';
@@ -32,7 +32,7 @@ export default function Polls(props) {
         </Text>
         <Text style={{width: '15%'}} />
       </Header>
-      <ScrollView style={{margin: 20}}>
+      <ScrollView>
         <Text />
         <View>
           <Text style={{alignSelf: 'center'}}>Polls</Text>

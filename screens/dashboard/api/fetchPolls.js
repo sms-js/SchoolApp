@@ -85,16 +85,75 @@ export async function fetchPolls(role) {
     });
     const responseJson = await response.json();
     if (response.ok) {
+      console.log('///////////////////////////');
       console.log(responseJson['polls']);
-      let polls = [];
-      //for (let i = 0; i < responseJson['polls'].length; i++) {
+      let poll = [];
       let options = [];
       let users = [];
       let opts = responseJson['polls'][0]['pollOptions'];
-      console.log(opts);
-      let usrs = responseJson['polls'][0]['userVoted'];
-      //}
-      return polls;
+      opts = opts.extract('[', ']');
+      //console.log(opts);
+      while (opts != '') {
+        let opt = opts.extract('', '}');
+        opts = opts.substring(opt.length + 2);
+        opt = opt.extract('{', '');
+        //console.log(opt);
+        let title = opt.extract('', ',');
+        let count = '';
+        let perc = '';
+        if (title != '') {
+          opt = opt.substring(title.length + 1);
+          title = title.extract('"title":', '');
+          title = title.extract('"', '"');
+          // console.log(title);
+          count = opt.extract('', ',');
+          opt = opt.substring(count.length + 1);
+          count = count.extract('"count":');
+          //console.log(count);
+          perc = opt.extract('"perc":', '');
+          //console.log(opts);
+          let usrs = responseJson['polls'][0]['userVoted'];
+          //console.log(usrs);
+          usrs = usrs.extract('[', ']');
+          while (usrs != '') {
+            //console.log(usrs);
+            let usr = usrs.extract('', ',');
+            if (usr == '') {
+              users.push(usrs);
+              usrs = usrs.substring(usrs.length);
+            } else {
+              users.push(usrs);
+              usrs = usrs.substring(usr.length + 1);
+            }
+          }
+          //console.log(users);
+          //console.log(usrs);
+          //poll['usersVote'] = 1;
+          poll.push({
+            title: title,
+            count: count,
+            perc: perc,
+            usersVoted: 1,
+            users: users,
+          });
+          //poll['users'] = users;
+        } else {
+          title = opt.extract('"title":', '');
+          title = title.extract('"', '"');
+          opt = opt.substring(title.length + 1);
+
+          //poll['usersVote'] = 0;
+          poll.push({title: title, usersVoted: 0});
+          // console.log(title);
+        }
+      }
+      /*let usrs = responseJson['polls'][0]['userVoted'];
+      console.log(usrs);
+      if (usrs != '') {
+      } else {
+      }*/
+      console.log(poll);
+      return poll;
     } else {
       //return 'error !';
       alert(responseJson['polls']['error']);

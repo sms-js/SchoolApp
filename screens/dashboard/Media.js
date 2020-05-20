@@ -11,6 +11,19 @@ import {
 export default function Media(props) {
   const [Media, setMedia] = useState('');
 
+  const getMedia = async () => {
+    try {
+      const albums = await fetchAlbums();
+      const images = await fetchItems();
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  React.useEffect(() => {
+    getMedia();
+  }, []);
+
   return (
     <View>
       <Header
@@ -40,21 +53,6 @@ export default function Media(props) {
       <ScrollView style={{margin: 20}}>
         <Text />
         <View>
-          <Text style={{alignSelf: 'center'}}>Media</Text>
-          <Text />
-          <Button
-            title="Show albums"
-            onPress={() => {
-              fetchAlbums();
-            }}
-          />
-          <Text />
-          <Button
-            title="Show items"
-            onPress={() => {
-              fetchItems();
-            }}
-          />
           <Text />
           <Button
             title="Show album children"
